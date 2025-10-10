@@ -1,0 +1,131 @@
+@import "tailwindcss";
+
+:root {
+  --brand-from: #0ea5e9; /* fallback if logo not processed */
+  --brand-to: #6366f1;   /* fallback if logo not processed */
+  --chat-user-bg: #E0E0E0;       /* light gray */
+  --chat-user-text: #212121;     /* soft black */
+  --chat-bot-bg: #A3203B;        /* burgundy */
+  --chat-bot-text: #FFFFFF;      /* white */
+  --color-success: #4CAF50;      /* soft green */
+  --color-warning: #FFC107;      /* golden yellow */
+  --color-error: #E53935;        /* light red */
+  --header-bg: #A3203B;          /* match bot color */
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
+  line-height: 1.6;
+  font-weight: 400;
+
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-size-adjust: 100%;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(156, 163, 175, 0.3);
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(156, 163, 175, 0.5);
+}
+
+/* Smooth animations */
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideInRight {
+  from {
+    opacity: 0;
+    transform: translateX(100%);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes popIn {
+  from {
+    opacity: 0;
+    transform: translateY(8px) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.message-bubble {
+  animation: slideUp 0.3s ease-out;
+}
+
+.sidebar-enter {
+  animation: slideInRight 0.3s ease-out;
+}
+
+/* Brand helpers using extracted colors */
+.brand-bg {
+  background: linear-gradient(90deg, var(--brand-from), var(--brand-to));
+}
+
+.brand-text-gradient {
+  background: linear-gradient(90deg, var(--brand-from), var(--brand-to));
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+/* Subtle glass and noise effects */
+.glass {
+  backdrop-filter: saturate(180%) blur(16px);
+  -webkit-backdrop-filter: saturate(180%) blur(16px);
+}
+
+.bg-noise {
+  background-image:
+    radial-gradient(rgba(255,255,255,0.08) 1px, transparent 1px),
+    radial-gradient(rgba(0,0,0,0.04) 1px, transparent 1px);
+  background-position: 0 0, 10px 10px;
+  background-size: 20px 20px;
+}
+
+.popup-animate {
+  animation: popIn 180ms ease-out;
+}
+
+/* Focus ring improvements */
+*:focus-visible {
+  outline: 2px solid rgb(59, 130, 246);
+  outline-offset: 2px;
+}
+
