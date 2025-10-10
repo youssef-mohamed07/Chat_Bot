@@ -1,4 +1,4 @@
-import { Language } from '../types'
+import type { Language } from '../types'
 
 export const WELCOME_MESSAGES: Record<Language, string> = {
   ar: "مرحباً! أنا مساعدك الذكي في Quick Air للطيران والسفر. كيف يمكنني مساعدتك اليوم؟",
