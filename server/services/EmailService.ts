@@ -1,14 +1,14 @@
 import nodemailer from 'nodemailer'
-import type { EmailConfig } from '../types'
-import { config } from '../config'
-import { EMAIL_TEMPLATES } from '../constants'
+import type { EmailConfig } from '../types/index.js'
+import { config } from '../config/index.js'
+import { EMAIL_TEMPLATES } from '../constants/index.js'
 
 export class EmailService {
   private transporter?: nodemailer.Transporter
 
   constructor() {
     if (config.emailConfig) {
-      this.transporter = nodemailer.createTransporter({
+      this.transporter = nodemailer.createTransport({
         host: config.emailConfig.host,
         port: config.emailConfig.port,
         secure: config.emailConfig.secure,

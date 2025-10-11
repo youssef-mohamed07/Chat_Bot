@@ -44,7 +44,8 @@ export const ChatWindow = ({
       <MessagesList 
         messages={messages} 
         lang={lang} 
-        messagesEndRef={messagesEndRef} 
+        messagesEndRef={messagesEndRef}
+        isLoading={isLoading}
       />
       
       <ChatFooter

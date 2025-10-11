@@ -1,6 +1,6 @@
 import type { Request, Response } from 'express'
-import type { ChatRequest, ChatResponse } from '../types'
-import { OpenRouterService, SessionManager } from '../services'
+import type { ChatRequest, ChatResponse } from '../types/index.js'
+import { OpenRouterService, SessionManager } from '../services/index.js'
 
 export class ChatController {
   private openRouterService: OpenRouterService

@@ -4,10 +4,10 @@
 import express from 'express'
 import cors from 'cors'
 import bodyParser from 'body-parser'
-import { config, validateConfig } from './server/config/index.js'
-import { setupErrorHandlers, logServerStart } from './server/utils/index.js'
-import { errorHandler, notFoundHandler, requestLogger } from './server/middleware/index.js'
-import routes from './server/routes/index.js'
+import { config, validateConfig } from './config/index.js'
+import { setupErrorHandlers, logServerStart } from './utils/index.js'
+import { errorHandler, notFoundHandler, requestLogger } from './middleware/index.js'
+import routes from './routes/index.js'
 
 // Initialize Express app
 const app = express()

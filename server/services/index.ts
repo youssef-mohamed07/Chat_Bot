@@ -1,3 +1,3 @@
-export { OpenRouterService } from './OpenRouterService'
-export { EmailService } from './EmailService'
-export { SessionManager } from './SessionManager'
+export { OpenRouterService } from './OpenRouterService.js'
+export { EmailService } from './EmailService.js'
+export { SessionManager } from './SessionManager.js'

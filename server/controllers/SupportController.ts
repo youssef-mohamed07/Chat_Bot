@@ -1,6 +1,6 @@
 import type { Request, Response } from 'express'
-import type { SupportRequest, SupportResponse } from '../types'
-import { EmailService } from '../services'
+import type { SupportRequest, SupportResponse } from '../types/index.js'
+import { EmailService } from '../services/index.js'
 
 export class SupportController {
   private emailService: EmailService

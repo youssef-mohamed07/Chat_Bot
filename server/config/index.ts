@@ -1,5 +1,5 @@
 import dotenv from 'dotenv'
-import type { ServerConfig, EmailConfig } from './types'
+import type { ServerConfig, EmailConfig } from '../types'
 
 dotenv.config()
 

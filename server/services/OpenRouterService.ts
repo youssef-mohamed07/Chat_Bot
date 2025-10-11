@@ -1,7 +1,7 @@
 import fetch from 'node-fetch'
-import type { ChatMessage, OpenRouterResponse } from '../types'
-import { config } from '../config'
-import { API_ENDPOINTS, SYSTEM_PROMPTS, LANGUAGE_INSTRUCTIONS, LANGUAGE_SYSTEM_MESSAGES } from '../constants'
+import type { ChatMessage, OpenRouterResponse } from '../types/index.js'
+import { config } from '../config/index.js'
+import { API_ENDPOINTS, SYSTEM_PROMPTS, LANGUAGE_INSTRUCTIONS, LANGUAGE_SYSTEM_MESSAGES } from '../constants/index.js'
 
 export class OpenRouterService {
   private readonly apiKey: string
@@ -32,7 +32,7 @@ export class OpenRouterService {
       throw new Error(`OpenRouter API Error: ${JSON.stringify(errorData)}`)
     }
 
-    const data: OpenRouterResponse = await response.json()
+    const data = await response.json() as OpenRouterResponse
     return data.choices?.[0]?.message?.content || '❌ لم يتم الحصول على رد من الذكاء الاصطناعي.'
   }
 
