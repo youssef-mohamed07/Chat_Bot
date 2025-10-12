@@ -106,7 +106,7 @@ export const useChatWidget = () => {
 
   const sendSupportRequest = async (supportData: Omit<SupportRequest, 'userId' | 'lang'>) => {
     try {
-      await fetch(API_ENDPOINTS.SUPPORT_REQUEST, {
+      const response = await fetch(API_ENDPOINTS.SUPPORT_REQUEST, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -116,12 +116,24 @@ export const useChatWidget = () => {
         })
       })
       
-      const successMessage = LABELS[lang ?? 'en'].requestSent
-      setMessages(prev => [...prev, { 
-        text: successMessage, 
-        isUser: false, 
-        timestamp: new Date() 
-      }])
+      const result = await response.json()
+      
+      if (result.ok) {
+        // Show success message instead of opening WhatsApp link
+        const successMessage = result.message || LABELS[lang ?? 'en'].requestSent
+        setMessages(prev => [...prev, { 
+          text: successMessage, 
+          isUser: false, 
+          timestamp: new Date() 
+        }])
+      } else {
+        const errorMessage = result.error || LABELS[lang ?? 'en'].requestFailed
+        setMessages(prev => [...prev, { 
+          text: errorMessage, 
+          isUser: false, 
+          timestamp: new Date() 
+        }])
+      }
     } catch (e) {
       const errorMessage = LABELS[lang ?? 'en'].requestFailed
       setMessages(prev => [...prev, { 

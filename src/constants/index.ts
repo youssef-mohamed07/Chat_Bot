@@ -45,8 +45,8 @@ export const LABELS: Record<Language, Record<string, string>> = {
     customerSupportRequest: 'طلب دعم عملاء',
     sending: 'جارٍ الإرسال...',
     send: 'إرسال',
-    requestSent: '✅ تم إرسال طلبك إلى فريق الدعم. سنتواصل معك قريبًا.',
-    requestFailed: '❌ تعذّر إرسال الطلب. حاول لاحقًا.'
+    requestSent: '✅ تم إرسال رسالتك إلى فريق الدعم عبر واتساب. سيتواصل معك أحد موظفي الدعم قريباً.',
+    requestFailed: '❌ تعذّر إرسال الرسالة إلى فريق الدعم. حاول لاحقًا.'
   },
   en: {
     chooseLanguage: 'Choose your language',
@@ -57,12 +57,12 @@ export const LABELS: Record<Language, Record<string, string>> = {
     customerSupportRequest: 'Customer Support Request',
     sending: 'Sending...',
     send: 'Send',
-    requestSent: '✅ Your request has been sent to support. We will contact you soon.',
-    requestFailed: '❌ Failed to send request. Please try later.'
+    requestSent: '✅ Your message has been sent to our support team via WhatsApp. A support agent will contact you soon.',
+    requestFailed: '❌ Failed to send message to support team. Please try later.'
   }
 }
 
 export const API_ENDPOINTS = {
   CHAT_STREAM: 'http://localhost:3000/chat/stream',
-  SUPPORT_REQUEST: 'http://localhost:3000/support/request'
+  SUPPORT_REQUEST: 'http://localhost:3000/whatsapp/support'
 } as const

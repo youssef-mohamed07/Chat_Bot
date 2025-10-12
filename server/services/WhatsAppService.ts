@@ -1,0 +1,118 @@
+import fetch from 'node-fetch'
+import type { SupportRequest } from '../types/index.js'
+import { config } from '../config/index.js'
+
+export interface WhatsAppMessage {
+  messaging_product: string
+  to: string
+  type: string
+  text: {
+    body: string
+  }
+}
+
+export interface WhatsAppResponse {
+  messaging_product: string
+  contacts: Array<{
+    input: string
+    wa_id: string
+  }>
+  messages: Array<{
+    id: string
+  }>
+}
+
+export class WhatsAppService {
+  private readonly accessToken: string
+  private readonly phoneNumberId: string
+  private readonly businessPhoneNumber: string
+
+  constructor() {
+    this.accessToken = config.whatsappAccessToken || ''
+    this.phoneNumberId = config.whatsappPhoneNumberId || ''
+    this.businessPhoneNumber = config.whatsappBusinessPhoneNumber || ''
+  }
+
+  isConfigured(): boolean {
+    return !!(this.accessToken && this.phoneNumberId && this.businessPhoneNumber)
+  }
+
+  async sendSupportMessage(supportData: SupportRequest): Promise<WhatsAppResponse> {
+    if (!this.isConfigured()) {
+      throw new Error('WhatsApp is not configured on the server.')
+    }
+
+    const message = this.formatSupportMessage(supportData)
+    
+    const whatsappMessage: WhatsAppMessage = {
+      messaging_product: 'whatsapp',
+      to: supportData.phone || this.businessPhoneNumber,
+      type: 'text',
+      text: {
+        body: message
+      }
+    }
+
+    const response = await fetch(
+      `https://graph.facebook.com/v18.0/${this.phoneNumberId}/messages`,
+      {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${this.accessToken}`,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(whatsappMessage)
+      }
+    )
+
+    if (!response.ok) {
+      const errorData = await response.json()
+      throw new Error(`WhatsApp API Error: ${JSON.stringify(errorData)}`)
+    }
+
+    return await response.json() as WhatsAppResponse
+  }
+
+  private formatSupportMessage(supportData: SupportRequest): string {
+    const { name, email, phone, message, userId, lang } = supportData
+    
+    if (lang === 'ar') {
+      return `🆘 طلب دعم عملاء جديد من Quick Air
+
+👤 الاسم: ${name}
+📧 البريد الإلكتروني: ${email || 'غير محدد'}
+📱 الهاتف: ${phone || 'غير محدد'}
+🆔 معرف المستخدم: ${userId}
+
+💬 الرسالة:
+${message}
+
+---
+تم إرسال هذا الطلب عبر نظام الدعم الآلي في Quick Air`
+    } else {
+      return `🆘 New Customer Support Request from Quick Air
+
+👤 Name: ${name}
+📧 Email: ${email || 'Not provided'}
+📱 Phone: ${phone || 'Not provided'}
+🆔 User ID: ${userId}
+
+💬 Message:
+${message}
+
+---
+This request was sent through Quick Air's automated support system`
+    }
+  }
+
+  generateWhatsAppLink(phoneNumber: string, message?: string): string {
+    const cleanPhone = phoneNumber.replace(/\D/g, '')
+    const encodedMessage = message ? encodeURIComponent(message) : ''
+    return `https://wa.me/${cleanPhone}${encodedMessage ? `?text=${encodedMessage}` : ''}`
+  }
+
+  generateSupportWhatsAppLink(supportData: SupportRequest): string {
+    const message = this.formatSupportMessage(supportData)
+    return this.generateWhatsAppLink(this.businessPhoneNumber, message)
+  }
+}

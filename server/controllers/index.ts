@@ -1,2 +1,5 @@
 export { ChatController } from './ChatController.js'
 export { SupportController } from './SupportController.js'
+export { WhatsAppController } from './WhatsAppController.js'
+export { SupportTicketController } from './SupportTicketController.js'
+export { PlatformController } from './PlatformController.js'

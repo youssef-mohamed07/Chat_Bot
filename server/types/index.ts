@@ -20,6 +20,8 @@ export interface SupportRequest {
 export interface SupportResponse {
   ok: boolean
   error?: string
+  whatsappLink?: string
+  message?: string
 }
 
 export interface ChatMessage {
@@ -52,4 +54,12 @@ export interface ServerConfig {
   openRouterKey: string
   emailConfig?: EmailConfig
   supportEmail?: string
+  whatsappAccessToken?: string
+  whatsappPhoneNumberId?: string
+  whatsappBusinessPhoneNumber?: string
+  instagramAccessToken?: string
+  facebookPageId?: string
+  instagramAccountId?: string
+  messengerAccessToken?: string
+  messengerUserId?: string
 }

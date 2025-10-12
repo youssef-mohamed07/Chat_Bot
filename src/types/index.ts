@@ -15,6 +15,13 @@ export type SupportRequest = {
   lang: Language
 }
 
+export type SupportResponse = {
+  ok: boolean
+  error?: string
+  whatsappLink?: string
+  message?: string
+}
+
 export type ChatStreamResponse = {
   choices: Array<{
     delta?: {
