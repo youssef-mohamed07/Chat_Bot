@@ -46,7 +46,17 @@ export const LABELS: Record<Language, Record<string, string>> = {
     sending: 'جارٍ الإرسال...',
     send: 'إرسال',
     requestSent: '✅ تم إرسال رسالتك إلى فريق الدعم عبر واتساب. سيتواصل معك أحد موظفي الدعم قريباً.',
-    requestFailed: '❌ تعذّر إرسال الرسالة إلى فريق الدعم. حاول لاحقًا.'
+    requestFailed: '❌ تعذّر إرسال الرسالة إلى فريق الدعم. حاول لاحقًا.',
+    contactInfo: 'معلومات التواصل',
+    contactDescription: 'نحتاج معلوماتك للتواصل معك بشكل أفضل',
+    phoneNumber: 'رقم الهاتف',
+    emailAddress: 'البريد الإلكتروني',
+    continue: 'متابعة',
+    secureInfo: 'معلوماتك آمنة ومحمية',
+    phoneRequired: 'رقم الهاتف مطلوب',
+    emailRequired: 'البريد الإلكتروني مطلوب',
+    invalidPhone: 'رقم هاتف غير صحيح',
+    invalidEmail: 'بريد إلكتروني غير صحيح'
   },
   en: {
     chooseLanguage: 'Choose your language',
@@ -58,7 +68,17 @@ export const LABELS: Record<Language, Record<string, string>> = {
     sending: 'Sending...',
     send: 'Send',
     requestSent: '✅ Your message has been sent to our support team via WhatsApp. A support agent will contact you soon.',
-    requestFailed: '❌ Failed to send message to support team. Please try later.'
+    requestFailed: '❌ Failed to send message to support team. Please try later.',
+    contactInfo: 'Contact Information',
+    contactDescription: 'We need your contact info to serve you better',
+    phoneNumber: 'Phone Number',
+    emailAddress: 'Email Address',
+    continue: 'Continue',
+    secureInfo: 'Your information is safe and secure',
+    phoneRequired: 'Phone number is required',
+    emailRequired: 'Email is required',
+    invalidPhone: 'Invalid phone number',
+    invalidEmail: 'Invalid email address'
   }
 }
 

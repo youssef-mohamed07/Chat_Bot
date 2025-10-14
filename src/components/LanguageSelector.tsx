@@ -1,4 +1,3 @@
-import { useState } from 'react'
 import type { Language } from '../types'
 import { LABELS } from '../constants'
 import { useSoundEffects } from '../utils'
@@ -28,9 +27,16 @@ export const LanguageSelector = ({ onSelectLanguage }: LanguageSelectorProps) =>
   ]
 
   return (
-    <div className="flex-1 p-6 bg-white flex items-center justify-center">
+    <div className="flex-1 p-6 bg-gradient-to-br from-red-50 to-red-100 flex items-center justify-center">
       <div className="w-full max-w-sm">
         <div className="text-center mb-8">
+          <div className="w-16 h-16 rounded-full overflow-hidden mx-auto mb-4 shadow-lg">
+            <img 
+              src="/logo.jpg" 
+              alt="Quick Air" 
+              className="w-full h-full object-cover" 
+            />
+          </div>
           <div className="text-2xl font-bold text-gray-800 mb-3">
             Choose your language
           </div>
@@ -40,14 +46,14 @@ export const LanguageSelector = ({ onSelectLanguage }: LanguageSelectorProps) =>
         </div>
         
         <div className="space-y-4">
-          {languages.map((lang, index) => (
+          {languages.map((lang) => (
             <button 
               key={lang.code}
               onClick={() => {
                 playClick()
                 onSelectLanguage(lang.code)
               }}
-              className="w-full border-2 rounded-xl py-5 px-5 font-medium transition-all duration-200 hover:border-blue-400 hover:bg-blue-50 hover:shadow-md border-gray-200 group"
+              className="w-full border-2 rounded-xl py-5 px-5 font-medium transition-all duration-200 hover:border-red-600 hover:bg-red-50 hover:shadow-lg border-gray-200 group bg-white"
               dir={lang.dir}
             >
               <div className="flex items-center justify-center gap-4">

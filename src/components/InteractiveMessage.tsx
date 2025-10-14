@@ -14,7 +14,7 @@ export const InteractiveMessage = ({ message, onButtonClick }: InteractiveMessag
   if (message.type === 'buttons' && message.buttons) {
     return (
       <div className="space-y-3">
-        <p className="text-sm text-gray-700">{message.text}</p>
+        <p className="text-sm">{message.text}</p>
         <div className="flex flex-wrap gap-2">
           {message.buttons.map((button) => (
             <button
@@ -75,7 +75,7 @@ export const InteractiveMessage = ({ message, onButtonClick }: InteractiveMessag
   if (message.type === 'quick_replies' && message.quickReplies) {
     return (
       <div className="space-y-3">
-        <p className="text-sm text-gray-700">{message.text}</p>
+        <p className="text-sm">{message.text}</p>
         <div className="flex flex-wrap gap-2">
           {message.quickReplies.map((reply, index) => (
             <button
@@ -86,7 +86,7 @@ export const InteractiveMessage = ({ message, onButtonClick }: InteractiveMessag
                 action: 'postback',
                 value: reply
               })}
-              className="px-3 py-2 bg-blue-50 text-blue-700 border border-blue-200 rounded-full text-sm hover:bg-blue-100 transition-all duration-150 hover:scale-105 active:scale-95"
+              className="px-3 py-2 bg-white text-gray-800 border border-gray-300 rounded-full text-sm hover:bg-gray-50 hover:border-gray-400 transition-all duration-150 hover:scale-105 active:scale-95"
             >
               {reply}
             </button>
@@ -97,20 +97,10 @@ export const InteractiveMessage = ({ message, onButtonClick }: InteractiveMessag
   }
 
   // Default text message
-  return <p className="text-sm text-gray-700">{message.text}</p>
+  return <p className="text-sm">{message.text}</p>
 }
 
 function getButtonStyle(style?: string) {
-  switch (style) {
-    case 'primary':
-      return 'bg-blue-600 text-white hover:bg-blue-700'
-    case 'secondary':
-      return 'bg-gray-200 text-gray-800 hover:bg-gray-300'
-    case 'success':
-      return 'bg-green-600 text-white hover:bg-green-700'
-    case 'danger':
-      return 'bg-red-600 text-white hover:bg-red-700'
-    default:
-      return 'bg-blue-600 text-white hover:bg-blue-700'
-  }
+  // جميع الأزرار ستكون بيضاء مع نص داكن
+  return 'bg-white text-gray-800 border border-gray-300 hover:bg-gray-50 hover:border-gray-400'
 }

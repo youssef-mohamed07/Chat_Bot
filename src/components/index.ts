@@ -1,4 +1,6 @@
 export { LanguageSelector } from './LanguageSelector'
+export { ContactInfo } from './ContactInfo'
+export { ChatEndedState } from './ChatEndedState'
 export { MessageBubble } from './MessageBubble'
 export { InteractiveMessage } from './InteractiveMessage'
 export { ChatInput } from './ChatInput'

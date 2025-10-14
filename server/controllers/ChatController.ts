@@ -34,35 +34,20 @@ export class ChatController {
         'human agent', 'talk to agent', 'speak to agent',
         'contact support', 'need help', 'want help',
         'human help', 'live agent', 'real person',
-        'support', 'help', 'agent', 'human', 'contact'
+        'support', 'help', 'agent', 'human', 'contact',
+        'deals', 'offers', 'special offers', 'discounts'
       ]
     }
 
     const keywords = supportKeywords[lang]
     
-    console.log(`🔍 Checking support keywords for message: "${message}"`)
-    console.log(`🔍 Language: ${lang}`)
-    console.log(`🔍 Keywords to check:`, keywords)
-    
     if (lang === 'ar') {
       // For Arabic, don't use toLowerCase as it doesn't work well with Arabic text
-      const found = keywords.some(keyword => {
-        const contains = message.includes(keyword)
-        console.log(`🔍 Checking "${keyword}": ${contains}`)
-        return contains
-      })
-      console.log(`🔍 Arabic support detection result: ${found}`)
-      return found
+      return keywords.some(keyword => message.includes(keyword))
     } else {
       // For English, use toLowerCase for case-insensitive matching
       const lowerMessage = message.toLowerCase()
-      const found = keywords.some(keyword => {
-        const contains = lowerMessage.includes(keyword.toLowerCase())
-        console.log(`🔍 Checking "${keyword}": ${contains}`)
-        return contains
-      })
-      console.log(`🔍 English support detection result: ${found}`)
-      return found
+      return keywords.some(keyword => lowerMessage.includes(keyword.toLowerCase()))
     }
   }
 
@@ -71,14 +56,11 @@ export class ChatController {
       const { message, userId = 'default-user', lang = 'en' }: ChatRequest = req.body
       const history = this.sessionManager.getSession(userId)
 
-      console.log(`🟢 [${userId}] Received message:`, message)
-      console.log(`🟢 [${userId}] Language:`, lang)
-      console.log(`🟢 [${userId}] Is support request:`, this.isSupportRequest(message, lang as 'ar' | 'en'))
+      // Log only important info
+      const isSupport = this.isSupportRequest(message, lang as 'ar' | 'en')
 
       // Check if this is a support request
       if (this.isSupportRequest(message, lang as 'ar' | 'en')) {
-        console.log(`🆘 [${userId}] Support request detected:`, message)
-        console.log(`🆘 [${userId}] Language:`, lang)
         
         let supportReply: string
         let platformResults: any[] = []
@@ -141,10 +123,7 @@ export class ChatController {
 
         // Log platform results
         if (platformResults.length > 0) {
-          console.log(`📊 Platform Results for Ticket #${ticketId}:`)
-          platformResults.forEach(result => {
-            console.log(`  ${result.platform}: ${result.success ? '✅' : '❌'} ${result.messageId || result.error || ''}`)
-          })
+        // Platform results logged silently
         }
 
         // Add user message to history
@@ -162,14 +141,10 @@ export class ChatController {
       // Add user message to history
       this.sessionManager.addMessage(userId, { role: 'user', content: message })
 
-      console.log(`🟢 [${userId}] User:`, message)
-
       const reply = await this.openRouterService.sendChatRequest(messages)
       
       // Add assistant response to history
       this.sessionManager.addMessage(userId, { role: 'assistant', content: reply })
-
-      console.log(`🤖 [${userId}] Reply:`, reply)
 
       const response: ChatResponse = { reply }
       res.json(response)
@@ -183,9 +158,8 @@ export class ChatController {
     const { message, userId = 'default-user', lang = 'en' }: ChatRequest = req.body || {}
     const history = this.sessionManager.getSession(userId)
 
-    console.log(`🟢 [${userId}] Received streaming message:`, message)
-    console.log(`🟢 [${userId}] Language:`, lang)
-    console.log(`🟢 [${userId}] Is support request:`, this.isSupportRequest(message, lang as 'ar' | 'en'))
+    // Log only important info
+    const isSupport = this.isSupportRequest(message, lang as 'ar' | 'en')
 
     res.writeHead(200, {
       'Content-Type': 'text/event-stream; charset=utf-8',
@@ -196,8 +170,6 @@ export class ChatController {
     try {
       // Check if this is a support request
       if (this.isSupportRequest(message, lang as 'ar' | 'en')) {
-        console.log(`🆘 [${userId}] Support request detected (streaming):`, message)
-        console.log(`🆘 [${userId}] Language:`, lang)
         
         let supportReply: string
         let platformResults: any[] = []
@@ -260,10 +232,7 @@ export class ChatController {
 
         // Log platform results
         if (platformResults.length > 0) {
-          console.log(`📊 Platform Results for Ticket #${ticketId}:`)
-          platformResults.forEach(result => {
-            console.log(`  ${result.platform}: ${result.success ? '✅' : '❌'} ${result.messageId || result.error || ''}`)
-          })
+        // Platform results logged silently
         }
 
         // Add user message to history

@@ -27,10 +27,11 @@ export const config: ServerConfig = {
 
 export const validateConfig = (): void => {
   if (!config.openRouterKey) {
-    console.error('\n❌ ERROR: OPENROUTER_KEY is not set!')
-    console.error('📝 Please create a .env file in the root directory with:')
-    console.error('   OPENROUTER_KEY=your_api_key_here')
-    console.error('\n🔑 Get your API key from: https://openrouter.ai/keys\n')
-    process.exit(1)
+    console.warn('\n⚠️  WARNING: OPENROUTER_KEY is not set!')
+    console.warn('📝 Please create a .env file in the root directory with:')
+    console.warn('   OPENROUTER_KEY=your_api_key_here')
+    console.warn('\n🔑 Get your API key from: https://openrouter.ai/keys')
+    console.warn('🚀 Server will start with demo mode (limited functionality)\n')
+    // Don't exit, just warn
   }
 }

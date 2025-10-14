@@ -20,6 +20,7 @@ interface ChatWindowProps {
   isSupportOpen: boolean
   isSupportSending: boolean
   onButtonClick?: (button: ButtonOption) => void
+  contactInfo?: { phone: string; email: string }
 }
 
 export const ChatWindow = ({
@@ -37,7 +38,8 @@ export const ChatWindow = ({
   onSendSupport,
   isSupportOpen,
   isSupportSending,
-  onButtonClick
+  onButtonClick,
+  contactInfo
 }: ChatWindowProps) => {
   return (
     <div className="w-[380px] sm:w-[400px] h-[600px] bg-white rounded-xl shadow-lg border border-gray-200 overflow-hidden flex flex-col">
@@ -67,6 +69,7 @@ export const ChatWindow = ({
         onSubmit={onSendSupport}
         isSending={isSupportSending}
         lang={lang}
+        contactInfo={contactInfo}
       />
     </div>
   )

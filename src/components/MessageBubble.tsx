@@ -11,7 +11,6 @@ interface MessageBubbleProps {
 
 export const MessageBubble = ({ message, lang, onButtonClick }: MessageBubbleProps) => {
   const [isCopied, setIsCopied] = useState(false)
-  const [showReactions, setShowReactions] = useState(false)
   const { playClick, playSuccess } = useSoundEffects()
 
   const handleCopy = async () => {
@@ -95,33 +94,8 @@ export const MessageBubble = ({ message, lang, onButtonClick }: MessageBubblePro
             >
               {isCopied ? '✓ Copied' : 'Copy'}
             </button>
-            
-            {!message.isUser && (
-              <button 
-                title="React" 
-                onClick={() => setShowReactions(!showReactions)}
-                className="text-xs text-gray-400 hover:text-gray-600 hover:bg-gray-50 px-2 py-1 rounded-full transition-colors duration-200"
-              >
-                😊
-              </button>
-            )}
           </div>
         </div>
-
-        {/* Reaction picker */}
-        {showReactions && !message.isUser && (
-          <div className="flex gap-2 mt-3">
-            {['👍', '❤️', '😂', '😮', '😢', '😡'].map((reaction) => (
-              <button
-                key={reaction}
-                onClick={() => handleReaction(reaction)}
-                className="text-lg px-3 py-2 bg-gray-100 rounded-full hover:bg-gray-200 transition-colors duration-200"
-              >
-                {reaction}
-              </button>
-            ))}
-          </div>
-        )}
       </div>
     </div>
   )

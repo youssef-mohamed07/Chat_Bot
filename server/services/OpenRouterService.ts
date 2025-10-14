@@ -13,6 +13,11 @@ export class OpenRouterService {
   }
 
   async sendChatRequest(messages: ChatMessage[]): Promise<string> {
+    // If no API key, return demo response
+    if (!this.apiKey || this.apiKey === 'your_api_key_here') {
+      return this.getDemoResponse(messages)
+    }
+
     const response = await fetch(API_ENDPOINTS.OPENROUTER_CHAT, {
       method: 'POST',
       headers: {
@@ -37,6 +42,11 @@ export class OpenRouterService {
   }
 
   async sendStreamingRequest(messages: ChatMessage[]): Promise<NodeJS.ReadableStream> {
+    // If no API key, return demo streaming response
+    if (!this.apiKey || this.apiKey === 'your_api_key_here') {
+      return this.getDemoStreamingResponse(messages)
+    }
+
     const response = await fetch(API_ENDPOINTS.OPENROUTER_CHAT, {
       method: 'POST',
       headers: {
@@ -72,5 +82,63 @@ export class OpenRouterService {
       ...history,
       { role: 'user', content: message },
     ]
+  }
+
+  private getDemoResponse(messages: ChatMessage[]): string {
+    const lastMessage = messages[messages.length - 1]?.content || ''
+    const lowerMessage = lastMessage.toLowerCase()
+    
+    // Check language from system messages
+    const isArabic = messages.some(msg => 
+      msg.content.includes('العربية') || 
+      msg.content.includes('Arabic') ||
+      msg.content.includes('اللغة العربية')
+    )
+    
+    if (lowerMessage.includes('hello') || lowerMessage.includes('hi') || lowerMessage.includes('مرحبا') || lowerMessage.includes('السلام')) {
+      return isArabic ? 'مرحباً! أنا مساعدك الذكي لشركة Quick Air. كيف يمكنني مساعدتك اليوم؟' : 'Hello! I\'m your intelligent assistant for Quick Air. How can I help you today?'
+    }
+    
+    if (lowerMessage.includes('flight') || lowerMessage.includes('رحل') || lowerMessage.includes('طيران')) {
+      return isArabic ? 'يمكنني مساعدتك في البحث عن أفضل الرحلات الجوية. ما هي وجهتك المفضلة؟' : 'I can help you find the best flights. What\'s your preferred destination?'
+    }
+    
+    if (lowerMessage.includes('deal') || lowerMessage.includes('offer') || lowerMessage.includes('عرض') || lowerMessage.includes('خصم')) {
+      return isArabic ? 'لدينا عروض رائعة متاحة! يمكنك زيارة موقعنا لمشاهدة أحدث العروض والخصومات.' : 'We have great deals available! You can visit our website to see the latest offers and discounts.'
+    }
+    
+    if (lowerMessage.includes('visa') || lowerMessage.includes('تأشيرة')) {
+      return isArabic ? 'يمكنني مساعدتك في معلومات التأشيرة. ما نوع التأشيرة التي تحتاجها؟' : 'I can help you with visa information. What type of visa do you need?'
+    }
+    
+    // Default response
+    return isArabic ? 'شكراً لك! هل هناك شيء آخر يمكنني مساعدتك فيه؟' : 'Thank you! Is there anything else I can help you with?'
+  }
+
+  private getDemoStreamingResponse(messages: ChatMessage[]): NodeJS.ReadableStream {
+    const response = this.getDemoResponse(messages)
+    const { Readable } = require('stream')
+    
+    return new Readable({
+      read() {
+        // Simulate streaming by sending response in chunks
+        const chunks = response.split(' ')
+        let index = 0
+        
+        const sendChunk = () => {
+          if (index < chunks.length) {
+            const chunk = chunks[index] + (index < chunks.length - 1 ? ' ' : '')
+            this.push(`data: ${JSON.stringify({ choices: [{ delta: { content: chunk } }] })}\n\n`)
+            index++
+            setTimeout(sendChunk, 100) // Simulate delay
+          } else {
+            this.push('data: [DONE]\n\n')
+            this.push(null)
+          }
+        }
+        
+        sendChunk()
+      }
+    })
   }
 }

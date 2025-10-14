@@ -60,11 +60,11 @@ export const ChatInput = ({
     playClick()
   }
 
-  const handleSuggestionClick = (suggestion: string) => {
+  const handleSuggestionClick = () => {
     setShowSuggestions(false)
     playClick()
     // Auto-send the suggestion immediately
-    handleSend(suggestion)
+    onSend()
   }
 
   const handleSendClick = () => {
@@ -179,10 +179,10 @@ export const ChatInput = ({
       {/* Smart Suggestion Chips */}
       {showSuggestions && (
         <div className="mt-3 flex flex-wrap gap-2">
-          {SUGGESTION_CHIPS[lang].map((suggestion, index) => (
+          {SUGGESTION_CHIPS[lang].map((suggestion) => (
             <button 
               key={suggestion} 
-              onClick={() => handleSuggestionClick(suggestion)}
+              onClick={() => handleSuggestionClick()}
               className="px-4 py-2 text-sm bg-blue-50 text-blue-700 border border-blue-200 rounded-full transition-all duration-150 hover:bg-blue-100 hover:border-blue-300 hover:shadow-sm hover:scale-105 active:scale-95"
             >
               {suggestion}

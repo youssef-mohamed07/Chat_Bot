@@ -28,6 +28,11 @@ export type CardData = {
 
 export type Language = 'ar' | 'en'
 
+export type ContactInfo = {
+  phone: string
+  email: string
+}
+
 export type SupportRequest = {
   name: string
   email: string

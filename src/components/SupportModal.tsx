@@ -8,6 +8,7 @@ interface SupportModalProps {
   onSubmit: (data: { name: string; email: string; phone: string; message: string }) => Promise<void>
   isSending: boolean
   lang: Language
+  contactInfo?: { phone: string; email: string }
 }
 
 export const SupportModal = ({ 
@@ -15,12 +16,13 @@ export const SupportModal = ({
   onClose, 
   onSubmit, 
   isSending, 
-  lang 
+  lang,
+  contactInfo
 }: SupportModalProps) => {
   const [formData, setFormData] = useState({
     name: '',
-    email: '',
-    phone: '',
+    email: contactInfo?.email || '',
+    phone: contactInfo?.phone || '',
     message: ''
   })
 

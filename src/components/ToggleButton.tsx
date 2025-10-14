@@ -1,5 +1,3 @@
-import { useState, useEffect } from 'react'
-import type { Language } from '../types'
 import { useSoundEffects } from '../utils'
 
 interface ToggleButtonProps {
@@ -17,14 +15,17 @@ export const ToggleButton = ({ onOpen }: ToggleButtonProps) => {
   return (
     <button
       onClick={handleClick}
-      className="flex items-center gap-3 px-5 py-4 rounded-xl shadow-lg bg-white border border-gray-200 transition-all duration-200 hover:bg-gray-50 hover:shadow-xl hover:-translate-y-1"
+      className="flex items-center gap-3 px-5 py-4 rounded-2xl shadow-lg bg-white border border-gray-100 transition-all duration-200 hover:bg-gray-50 hover:shadow-xl hover:-translate-y-1"
     >
       <div className="relative">
-        <img 
-          src="/logo.jpg" 
-          alt="Quick Air" 
-          className="w-10 h-10 rounded-xl object-cover shadow-sm" 
-        />
+        {/* Logo */}
+        <div className="w-10 h-10 rounded-full overflow-hidden shadow-lg">
+          <img 
+            src="/logo.jpg" 
+            alt="Quick Air" 
+            className="w-full h-full object-cover" 
+          />
+        </div>
         <span className="absolute -bottom-0.5 -right-0.5 w-3 h-3 bg-green-500 rounded-full border-2 border-white animate-pulse" />
       </div>
       <div className="text-left">
