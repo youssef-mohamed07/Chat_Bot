@@ -26,7 +26,7 @@ export const ChatInput = ({
   const textareaRef = useRef<HTMLTextAreaElement>(null)
   const { playClick, playSend, playTyping } = useSoundEffects()
 
-  const emojis = ['😊', '👍', '❤️', '😂', '😮', '😢', '😡', '🎉', '🚀', '💡', '⭐', '🔥']
+  const emojis = ['👍', '❤️', '😂', '😮', '😢', '😡', '🎉', '🚀', '💡', '⭐', '🔥', '✅']
 
   const handleInputChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     setInput(e.target.value)
@@ -61,10 +61,10 @@ export const ChatInput = ({
   }
 
   const handleSuggestionClick = (suggestion: string) => {
-    setInput(suggestion)
     setShowSuggestions(false)
-    textareaRef.current?.focus()
     playClick()
+    // Auto-send the suggestion immediately
+    handleSend(suggestion)
   }
 
   const handleSendClick = () => {
@@ -81,8 +81,8 @@ export const ChatInput = ({
   }, [input])
 
   return (
-    <div className="border-t border-gray-200 bg-white p-3">
-      <div className="flex items-end gap-2">
+    <div className="border-t border-gray-200 bg-white p-4">
+      <div className="flex items-end gap-3">
         <div className="flex-1 relative">
           <textarea
             ref={textareaRef}
@@ -95,10 +95,10 @@ export const ChatInput = ({
             rows={1}
             placeholder={PLACEHOLDERS[lang].message}
             className={`
-              w-full resize-none rounded-xl border-2 px-3.5 py-2.5 text-sm transition-all duration-300
+              w-full resize-none rounded-lg border-2 px-4 py-3 text-sm transition-colors duration-200
               ${isFocused 
-                ? 'border-blue-500 shadow-lg shadow-blue-500/20' 
-                : 'border-gray-200 hover:border-gray-300'
+                ? 'border-blue-500' 
+                : 'border-gray-200'
               }
               focus:outline-none focus:ring-2 focus:ring-blue-500/20
             `}
@@ -109,7 +109,7 @@ export const ChatInput = ({
           
           {/* Character count */}
           {isFocused && (
-            <div className="absolute -top-6 right-0 text-xs text-gray-400 fade-in-up">
+            <div className="absolute -top-6 right-0 text-xs text-gray-400">
               {input.length}/500
             </div>
           )}
@@ -119,12 +119,11 @@ export const ChatInput = ({
         <button
           onClick={() => setShowEmojis(!showEmojis)}
           className={`
-            h-10 w-10 rounded-xl flex items-center justify-center transition-all duration-300
+            h-11 w-11 rounded-lg flex items-center justify-center transition-colors duration-200
             ${showEmojis 
               ? 'bg-blue-100 text-blue-600' 
               : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
             }
-            hover-scale
           `}
           aria-label="Add emoji"
         >
@@ -136,10 +135,10 @@ export const ChatInput = ({
           onClick={handleSendClick}
           disabled={isLoading || !input.trim()}
           className={`
-            h-10 w-10 rounded-xl text-white flex items-center justify-center transition-all duration-300
+            h-11 w-11 rounded-lg text-white flex items-center justify-center transition-colors duration-200
             ${isLoading || !input.trim() 
               ? 'opacity-50 cursor-not-allowed' 
-              : 'hover:scale-105 active:scale-95 btn-interactive'
+              : 'hover:opacity-90'
             }
           `}
           style={{ background: 'var(--chat-bot-bg)' }}
@@ -162,13 +161,13 @@ export const ChatInput = ({
 
       {/* Emoji picker */}
       {showEmojis && (
-        <div className="mt-2 p-3 bg-gray-50 rounded-xl fade-in-up">
+        <div className="mt-3 p-3 bg-gray-50 rounded-lg">
           <div className="grid grid-cols-6 gap-2">
             {emojis.map((emoji) => (
               <button
                 key={emoji}
                 onClick={() => handleEmojiClick(emoji)}
-                className="text-xl hover:scale-125 transition-transform duration-200 p-1 rounded-lg hover:bg-white"
+                className="text-lg p-2 bg-white rounded-lg hover:bg-gray-100 transition-colors duration-200"
               >
                 {emoji}
               </button>
@@ -179,17 +178,12 @@ export const ChatInput = ({
       
       {/* Smart Suggestion Chips */}
       {showSuggestions && (
-        <div className="mt-2 flex flex-wrap gap-2 fade-in-up">
+        <div className="mt-3 flex flex-wrap gap-2">
           {SUGGESTION_CHIPS[lang].map((suggestion, index) => (
             <button 
               key={suggestion} 
               onClick={() => handleSuggestionClick(suggestion)}
-              className={`
-                px-3 py-1.5 text-xs border rounded-full transition-all duration-300
-                hover:border-blue-500 hover:bg-blue-50 hover:text-blue-600
-                hover-scale btn-interactive
-              `}
-              style={{ animationDelay: `${index * 0.1}s` }}
+              className="px-4 py-2 text-sm bg-blue-50 text-blue-700 border border-blue-200 rounded-full transition-all duration-150 hover:bg-blue-100 hover:border-blue-300 hover:shadow-sm hover:scale-105 active:scale-95"
             >
               {suggestion}
             </button>

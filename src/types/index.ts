@@ -1,7 +1,29 @@
+export type MessageType = 'text' | 'buttons' | 'card' | 'quick_replies'
+
 export type ChatMessage = {
   text: string
   isUser: boolean
   timestamp: Date
+  type?: MessageType
+  buttons?: ButtonOption[]
+  card?: CardData
+  quickReplies?: string[]
+}
+
+export type ButtonOption = {
+  id: string
+  text: string
+  action: 'url' | 'postback' | 'phone' | 'email'
+  value: string
+  style?: 'primary' | 'secondary' | 'success' | 'danger'
+}
+
+export type CardData = {
+  title: string
+  subtitle?: string
+  image?: string
+  description?: string
+  buttons?: ButtonOption[]
 }
 
 export type Language = 'ar' | 'en'

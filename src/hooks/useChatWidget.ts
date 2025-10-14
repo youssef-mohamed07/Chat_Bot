@@ -21,80 +21,159 @@ export const useChatWidget = () => {
   const handleSelectLang = (selected: Language) => {
     setLang(selected)
     const text = WELCOME_MESSAGES[selected]
-    setMessages([{ text, isUser: false, timestamp: new Date() }])
+    
+    // Add welcome message with interactive buttons
+    const welcomeMessage: ChatMessage = {
+      text: text,
+      isUser: false,
+      timestamp: new Date(),
+      type: 'buttons',
+      buttons: [
+        {
+          id: 'flights',
+          text: selected === 'ar' ? 'البحث عن رحلات' : 'Search Flights',
+          action: 'postback',
+          value: selected === 'ar' ? 'البحث عن رحلات' : 'Search Flights',
+          style: 'primary'
+        },
+        {
+          id: 'deals',
+          text: selected === 'ar' ? 'العروض والخصومات' : 'Deals & Offers',
+          action: 'postback',
+          value: selected === 'ar' ? 'العروض والخصومات' : 'Deals & Offers',
+          style: 'secondary'
+        },
+        {
+          id: 'visa',
+          text: selected === 'ar' ? 'معلومات التأشيرة' : 'Visa Information',
+          action: 'postback',
+          value: selected === 'ar' ? 'معلومات التأشيرة' : 'Visa Information',
+          style: 'success'
+        }
+      ]
+    }
+    
+    setMessages([welcomeMessage])
   }
 
-  const handleSend = async () => {
-    if (!input.trim() || isLoading) return
+  const createInteractiveResponse = (userMessage: string, lang: Language): ChatMessage => {
+    const lowerMessage = userMessage.toLowerCase()
     
-    const userMessage = input.trim()
-    setMessages(prev => [...prev, { text: userMessage, isUser: true, timestamp: new Date() }])
-    setInput('')
-    setIsLoading(true)
-
-    try {
-      const response = await fetch(API_ENDPOINTS.CHAT_STREAM, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ 
-          message: userMessage, 
-          userId, 
-          lang: (lang ?? 'en') 
-        })
-      })
-
-      if (!response.body) {
-        throw new Error('No stream')
+    // Flight search response
+    if (lowerMessage.includes('flight') || lowerMessage.includes('رحل') || lowerMessage.includes('search flights') || lowerMessage.includes('البحث عن رحلات')) {
+      return {
+        text: lang === 'ar' ? 'أين تريد السفر؟ اختر وجهتك المفضلة:' : 'Where would you like to travel? Choose your destination:',
+        isUser: false,
+        timestamp: new Date(),
+        type: 'buttons',
+        buttons: [
+          {
+            id: 'dubai',
+            text: '🇦🇪 Dubai',
+            action: 'postback',
+            value: lang === 'ar' ? 'رحلات إلى دبي' : 'Flights to Dubai',
+            style: 'primary'
+          },
+          {
+            id: 'london',
+            text: '🇬🇧 London',
+            action: 'postback',
+            value: lang === 'ar' ? 'رحلات إلى لندن' : 'Flights to London',
+            style: 'primary'
+          },
+          {
+            id: 'paris',
+            text: '🇫🇷 Paris',
+            action: 'postback',
+            value: lang === 'ar' ? 'رحلات إلى باريس' : 'Flights to Paris',
+            style: 'primary'
+          },
+          {
+            id: 'tokyo',
+            text: '🇯🇵 Tokyo',
+            action: 'postback',
+            value: lang === 'ar' ? 'رحلات إلى طوكيو' : 'Flights to Tokyo',
+            style: 'primary'
+          }
+        ]
       }
-
-      let assistantText = ''
-      setMessages(prev => [...prev, { text: '', isUser: false, timestamp: new Date() }])
-
-      const reader = response.body.getReader()
-      const decoder = new TextDecoder('utf-8')
-      
-      while (true) {
-        const { done, value } = await reader.read()
-        if (done) break
-        
-        const chunk = decoder.decode(value, { stream: true })
-        const lines = chunk.split(/\r?\n/)
-        
-        for (const line of lines) {
-          if (!line.trim() || !line.startsWith('data:')) continue
-          
-          const data = line.slice(5).trim()
-          if (data === '[DONE]') continue
-          
-          try {
-            const json = JSON.parse(data)
-            const delta = json?.choices?.[0]?.delta?.content || json?.choices?.[0]?.message?.content || ''
-            
-            if (delta) {
-              assistantText += delta
-              setMessages(prev => {
-                const cloned = [...prev]
-                for (let i = cloned.length - 1; i >= 0; i--) {
-                  if (!cloned[i].isUser) {
-                    cloned[i] = { ...cloned[i], text: assistantText }
-                    break
-                  }
-                }
-                return cloned
-              })
+    }
+    
+    // Deals response
+    if (lowerMessage.includes('deal') || lowerMessage.includes('offer') || lowerMessage.includes('عرض') || lowerMessage.includes('خصم')) {
+      return {
+        text: lang === 'ar' ? 'إليك أفضل العروض المتاحة الآن:' : 'Here are the best deals available now:',
+        isUser: false,
+        timestamp: new Date(),
+        type: 'card',
+        card: {
+          title: lang === 'ar' ? 'عرض خاص - دبي' : 'Special Offer - Dubai',
+          subtitle: lang === 'ar' ? 'توفير حتى 40%' : 'Save up to 40%',
+          description: lang === 'ar' ? 'رحلات إلى دبي مع إقامة فندقية مجانية' : 'Flights to Dubai with free hotel stay',
+          image: '/logo.jpg',
+          buttons: [
+            {
+              id: 'book_dubai',
+              text: lang === 'ar' ? 'احجز الآن' : 'Book Now',
+              action: 'url',
+              value: 'https://example.com/book-dubai',
+              style: 'success'
+            },
+            {
+              id: 'more_info',
+              text: lang === 'ar' ? 'مزيد من التفاصيل' : 'More Info',
+              action: 'postback',
+              value: lang === 'ar' ? 'مزيد من التفاصيل عن عرض دبي' : 'More details about Dubai offer',
+              style: 'secondary'
             }
-          } catch {}
+          ]
         }
       }
-    } catch (e) {
-      setMessages(prev => [...prev, { 
-        text: 'Connection error. Please check server.', 
-        isUser: false, 
-        timestamp: new Date() 
-      }])
-    } finally {
-      setIsLoading(false)
     }
+    
+    // Visa information response
+    if (lowerMessage.includes('visa') || lowerMessage.includes('تأشيرة') || lowerMessage.includes('visa information')) {
+      return {
+        text: lang === 'ar' ? 'ما نوع التأشيرة التي تحتاجها؟' : 'What type of visa do you need?',
+        isUser: false,
+        timestamp: new Date(),
+        type: 'quick_replies',
+        quickReplies: lang === 'ar' 
+          ? ['تأشيرة سياحة', 'تأشيرة عمل', 'تأشيرة دراسة', 'تأشيرة عائلية']
+          : ['Tourist Visa', 'Work Visa', 'Student Visa', 'Family Visa']
+      }
+    }
+    
+    // Default response with quick replies
+    return {
+      text: lang === 'ar' ? 'كيف يمكنني مساعدتك أكثر؟' : 'How else can I help you?',
+      isUser: false,
+      timestamp: new Date(),
+      type: 'quick_replies',
+      quickReplies: lang === 'ar' 
+        ? ['البحث عن رحلات', 'العروض والخصومات', 'معلومات التأشيرة', 'الدعم الفني']
+        : ['Search Flights', 'Deals & Offers', 'Visa Information', 'Technical Support']
+    }
+  }
+
+  const handleSend = async (customMessage?: string) => {
+    const messageToSend = customMessage || input.trim()
+    if (!messageToSend || isLoading) return
+    
+    const userMessage = messageToSend
+    
+    // Clear input immediately if it's from user typing
+    if (!customMessage) {
+      setInput('')
+    }
+    
+    setMessages(prev => [...prev, { text: userMessage, isUser: true, timestamp: new Date() }])
+    setIsLoading(true)
+
+    // Immediate interactive response
+    const interactiveResponse = createInteractiveResponse(userMessage, lang ?? 'en')
+    setMessages(prev => [...prev, interactiveResponse])
+    setIsLoading(false)
   }
 
   const handleKeyPress = (e: React.KeyboardEvent) => {

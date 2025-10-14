@@ -1,4 +1,4 @@
-import type { Language, ChatMessage } from '../types'
+import type { Language, ChatMessage, ButtonOption } from '../types'
 import { ChatHeader } from './ChatHeader'
 import { MessagesList } from './MessagesList'
 import { ChatFooter } from './ChatFooter'
@@ -19,6 +19,7 @@ interface ChatWindowProps {
   onSendSupport: (data: { name: string; email: string; phone: string; message: string }) => Promise<void>
   isSupportOpen: boolean
   isSupportSending: boolean
+  onButtonClick?: (button: ButtonOption) => void
 }
 
 export const ChatWindow = ({
@@ -35,10 +36,11 @@ export const ChatWindow = ({
   onCloseSupport,
   onSendSupport,
   isSupportOpen,
-  isSupportSending
+  isSupportSending,
+  onButtonClick
 }: ChatWindowProps) => {
   return (
-    <div className="popup-animate w-[360px] sm:w-[380px] h-[560px] bg-white rounded-2xl shadow-2xl border border-gray-200 overflow-hidden flex flex-col">
+    <div className="w-[380px] sm:w-[400px] h-[600px] bg-white rounded-xl shadow-lg border border-gray-200 overflow-hidden flex flex-col">
       <ChatHeader onClose={onClose} lang={lang} />
       
       <MessagesList 
@@ -46,6 +48,7 @@ export const ChatWindow = ({
         lang={lang} 
         messagesEndRef={messagesEndRef}
         isLoading={isLoading}
+        onButtonClick={onButtonClick}
       />
       
       <ChatFooter

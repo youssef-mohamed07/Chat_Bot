@@ -7,11 +7,12 @@ class SoundManager {
   private isEnabled: boolean = true
 
   constructor() {
-    // Initialize audio context on first user interaction
-    this.initAudioContext()
+    // Audio context will be initialized on first user interaction
   }
 
   private async initAudioContext() {
+    if (this.audioContext) return // Already initialized
+    
     try {
       this.audioContext = new (window.AudioContext || (window as any).webkitAudioContext)()
     } catch (error) {
@@ -52,7 +53,12 @@ class SoundManager {
   }
 
   private async playSound(buffer: AudioBuffer | null) {
-    if (!this.audioContext || !buffer || !this.isEnabled) return
+    if (!buffer || !this.isEnabled) return
+
+    // Initialize audio context on first use (after user interaction)
+    await this.initAudioContext()
+    
+    if (!this.audioContext) return
 
     try {
       const source = this.audioContext.createBufferSource()

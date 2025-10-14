@@ -1,5 +1,5 @@
 import { useEffect, useRef } from 'react'
-import type { ChatMessage, Language } from '../types'
+import type { ChatMessage, Language, ButtonOption } from '../types'
 import { MessageBubble } from './MessageBubble'
 import { TypingIndicator } from './TypingIndicator'
 
@@ -8,9 +8,10 @@ interface MessagesListProps {
   lang: Language
   messagesEndRef: React.RefObject<HTMLDivElement | null>
   isLoading?: boolean
+  onButtonClick?: (button: ButtonOption) => void
 }
 
-export const MessagesList = ({ messages, lang, messagesEndRef, isLoading = false }: MessagesListProps) => {
+export const MessagesList = ({ messages, lang, messagesEndRef, isLoading = false, onButtonClick }: MessagesListProps) => {
   const containerRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
@@ -26,7 +27,7 @@ export const MessagesList = ({ messages, lang, messagesEndRef, isLoading = false
   return (
     <div 
       ref={containerRef}
-      className="flex-1 overflow-y-auto bg-gradient-to-b from-white to-gray-50 bg-noise p-4 space-y-4 scroll-smooth" 
+      className="flex-1 overflow-y-auto bg-white p-4 space-y-4 scroll-smooth" 
       dir={lang === 'ar' ? 'rtl' : 'ltr'}
       style={{
         scrollbarWidth: 'thin',
@@ -35,9 +36,12 @@ export const MessagesList = ({ messages, lang, messagesEndRef, isLoading = false
     >
       {messages.length === 0 ? (
         <div className="flex-1 flex items-center justify-center">
-          <div className="text-center fade-in-up">
-            <div className="text-4xl mb-4">💬</div>
-            <div className="text-gray-500 text-sm">
+          <div className="text-center">
+            <div className="text-6xl mb-4">💬</div>
+            <div className="text-gray-500 text-lg font-medium mb-2">
+              {lang === 'ar' ? 'مرحباً! كيف يمكنني مساعدتك؟' : 'Hello! How can I help you?'}
+            </div>
+            <div className="text-gray-400 text-sm">
               {lang === 'ar' ? 'ابدأ محادثة جديدة' : 'Start a new conversation'}
             </div>
           </div>
@@ -47,12 +51,12 @@ export const MessagesList = ({ messages, lang, messagesEndRef, isLoading = false
           <div
             key={index}
             className="message-bubble"
-            style={{ 
-              animationDelay: `${index * 0.1}s`,
-              animationFillMode: 'both'
-            }}
           >
-            <MessageBubble message={message} lang={lang} />
+            <MessageBubble 
+              message={message} 
+              lang={lang} 
+              onButtonClick={onButtonClick}
+            />
           </div>
         ))
       )}

@@ -1,5 +1,6 @@
 export { LanguageSelector } from './LanguageSelector'
 export { MessageBubble } from './MessageBubble'
+export { InteractiveMessage } from './InteractiveMessage'
 export { ChatInput } from './ChatInput'
 export { SupportModal } from './SupportModal'
 export { MessagesList } from './MessagesList'

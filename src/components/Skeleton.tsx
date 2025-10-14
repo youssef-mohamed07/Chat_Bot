@@ -16,7 +16,7 @@ export const Skeleton = ({
   return (
     <div
       className={`
-        bg-gray-200 animate-pulse shimmer
+        bg-gray-200 animate-pulse
         ${rounded ? 'rounded' : ''}
         ${className}
       `}
@@ -31,12 +31,12 @@ interface MessageSkeletonProps {
 
 export const MessageSkeleton = ({ isUser = false }: MessageSkeletonProps) => {
   return (
-    <div className={`flex items-end gap-3 ${isUser ? 'flex-row-reverse' : 'flex-row'} fade-in-up`}>
-      <div className="w-7 h-7 rounded-full bg-gray-200 animate-pulse" />
+    <div className={`flex items-end gap-3 ${isUser ? 'flex-row-reverse' : 'flex-row'}`}>
+      <div className="w-8 h-8 rounded-full bg-gray-200 animate-pulse" />
       
       <div className={`max-w-[72%] ${isUser ? 'items-end' : 'items-start'} flex flex-col`}>
         <div className={`
-          px-4 py-2.5 rounded-2xl shadow-md bg-gray-200 animate-pulse
+          px-4 py-3 rounded-xl shadow-sm bg-gray-200 animate-pulse
           ${isUser ? 'rounded-br-md' : 'rounded-bl-md'}
         `}>
           <div className="space-y-2">
@@ -47,7 +47,7 @@ export const MessageSkeleton = ({ isUser = false }: MessageSkeletonProps) => {
             )}
           </div>
         </div>
-        <Skeleton width="3rem" height="0.625rem" className="mt-1" />
+        <Skeleton width="3rem" height="0.75rem" className="mt-2" />
       </div>
     </div>
   )

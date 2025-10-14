@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import type { Language } from './types'
+import type { Language, ButtonOption } from './types'
 import { useChatWidget } from './hooks/useChatWidget'
 import { useSupportModal } from './hooks/useSupportModal'
 import { LanguageSelector, ToggleButton, ChatWindow } from './components'
@@ -34,6 +34,27 @@ function ChatWidget() {
     handleSelectLang(selected)
   }
 
+  const handleButtonClick = (button: ButtonOption) => {
+    console.log('Button clicked:', button)
+    
+    // Handle different button actions immediately
+    switch (button.action) {
+      case 'url':
+        window.open(button.value, '_blank')
+        break
+      case 'phone':
+        window.open(`tel:${button.value}`)
+        break
+      case 'email':
+        window.open(`mailto:${button.value}`)
+        break
+      case 'postback':
+        // Send the button value as a message immediately
+        handleSend(button.value)
+        break
+    }
+  }
+
   const handleSupportSubmit = async (data: { name: string; email: string; phone: string; message: string }) => {
     setIsSupportSending(true)
     try {
@@ -50,7 +71,7 @@ function ChatWidget() {
       {!isOpen && <ToggleButton onOpen={() => setIsOpen(true)} />}
       
       {isOpen && (
-        <div className="popup-animate w-[360px] sm:w-[380px] h-[560px] bg-white rounded-2xl shadow-2xl border border-gray-200 overflow-hidden flex flex-col">
+        <div className="w-[380px] sm:w-[400px] h-[600px] bg-white rounded-xl shadow-lg border border-gray-200 overflow-hidden flex flex-col">
           {lang === null ? (
             <LanguageSelector onSelectLanguage={handleLanguageSelect} />
           ) : (
@@ -69,6 +90,7 @@ function ChatWidget() {
               onSendSupport={handleSupportSubmit}
               isSupportOpen={isSupportOpen}
               isSupportSending={isSupportSending}
+              onButtonClick={handleButtonClick}
             />
           )}
         </div>
@@ -80,15 +102,7 @@ function ChatWidget() {
 export default function App() {
   return (
     <ThemeProvider>
-      <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 relative overflow-hidden transition-colors duration-300">
-        {/* Animated background elements */}
-        <div className="absolute inset-0 overflow-hidden pointer-events-none">
-          <div className="absolute top-20 left-20 w-32 h-32 bg-blue-200 dark:bg-blue-800 rounded-full opacity-20 animate-pulse"></div>
-          <div className="absolute top-40 right-32 w-24 h-24 bg-purple-200 dark:bg-purple-800 rounded-full opacity-20 animate-pulse" style={{ animationDelay: '1s' }}></div>
-          <div className="absolute bottom-32 left-40 w-40 h-40 bg-pink-200 dark:bg-pink-800 rounded-full opacity-20 animate-pulse" style={{ animationDelay: '2s' }}></div>
-          <div className="absolute bottom-20 right-20 w-28 h-28 bg-indigo-200 dark:bg-indigo-800 rounded-full opacity-20 animate-pulse" style={{ animationDelay: '0.5s' }}></div>
-        </div>
-        
+      <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-indigo-50">
         <ChatWidget />
       </div>
     </ThemeProvider>
