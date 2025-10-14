@@ -1,9 +1,7 @@
 import { useState } from 'react'
-import type { Language, ButtonOption, ContactInfo } from './types'
-import { useChatWidget } from './hooks/useChatWidget'
-import { useSupportModal } from './hooks/useSupportModal'
+import type { Language, ContactInfo } from './types'
+import { useChatWidget, useSupportModal } from './hooks/useChatWidget'
 import { LanguageSelector, ContactInfo as ContactInfoComponent, ToggleButton, ChatWindow, ChatEndedState, ChatHeader } from './components'
-import { ThemeProvider } from './contexts/ThemeContext'
 
 function ChatWidget() {
   const [isOpen, setIsOpen] = useState(false)
@@ -29,7 +27,7 @@ function ChatWidget() {
     isSending: isSupportSending,
     setIsSending: setIsSupportSending,
     resetForm
-  } = useSupportModal(lang)
+  } = useSupportModal()
 
   const handleLanguageSelect = (selected: Language) => {
     setLang(selected)
@@ -52,31 +50,9 @@ function ChatWidget() {
     setLang(null)
   }
 
-  const handleButtonClick = (button: ButtonOption) => {
-    console.log('Button clicked:', button)
-    
-    // Handle different button actions immediately
-    switch (button.action) {
-      case 'url':
-        window.open(button.value, '_blank')
-        break
-      case 'phone':
-        window.open(`tel:${button.value}`)
-        break
-      case 'email':
-        window.open(`mailto:${button.value}`)
-        break
-      case 'postback':
-        // Send the button value as a message immediately
-        handleSend(button.value)
-        break
-    }
-  }
-
   const handleSupportSubmit = async (data: { name: string; email: string; phone: string; message: string }) => {
     setIsSupportSending(true)
     try {
-      // Use pre-collected contact info if available, otherwise use form data
       const supportData = contactInfo ? {
         ...data,
         email: contactInfo.email,
@@ -123,20 +99,18 @@ function ChatWidget() {
                 onSendSupport={handleSupportSubmit}
                 isSupportOpen={isSupportOpen}
                 isSupportSending={isSupportSending}
-                onButtonClick={handleButtonClick}
                 contactInfo={contactInfo || undefined}
               />
             )}
             {currentStep === 'ended' && lang && (
               <div className="flex flex-col h-full">
-                <ChatHeader onClose={() => setIsOpen(false)} lang={lang} isChatEnded={true} />
+                <ChatHeader onClose={() => setIsOpen(false)} isChatEnded={true} />
                 <div className="flex-1 overflow-y-auto">
                   <ChatEndedState lang={lang} onRestartChat={handleRestartChat} />
                 </div>
               </div>
             )}
           </div>
-          {/* Floating Action Button */}
           <button
             onClick={() => setIsOpen(false)}
             className="absolute -bottom-6 left-1/2 transform -translate-x-1/2 w-12 h-12 bg-red-800 rounded-full shadow-xl hover:bg-red-900 transition-all duration-200 flex items-center justify-center hover:scale-110"
@@ -153,11 +127,9 @@ function ChatWidget() {
 
 export default function App() {
   return (
-    <ThemeProvider>
-      <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-indigo-50">
-        <ChatWidget />
-      </div>
-    </ThemeProvider>
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-indigo-50">
+      <ChatWidget />
+    </div>
   )
 }
 

@@ -1,7 +1,5 @@
-import { useState } from 'react'
 import type { ChatMessage, Language, ButtonOption } from '../types'
-import { formatTime, copyToClipboard, useSoundEffects } from '../utils'
-import { InteractiveMessage } from './InteractiveMessage'
+import { formatTime } from '../utils'
 
 interface MessageBubbleProps {
   message: ChatMessage
@@ -9,24 +7,7 @@ interface MessageBubbleProps {
   onButtonClick?: (button: ButtonOption) => void
 }
 
-export const MessageBubble = ({ message, lang, onButtonClick }: MessageBubbleProps) => {
-  const [isCopied, setIsCopied] = useState(false)
-  const { playClick, playSuccess } = useSoundEffects()
-
-  const handleCopy = async () => {
-    await copyToClipboard(message.text)
-    setIsCopied(true)
-    playSuccess()
-    setTimeout(() => setIsCopied(false), 2000)
-  }
-
-  const handleButtonClick = (button: ButtonOption) => {
-    if (onButtonClick) {
-      onButtonClick(button)
-    }
-    playClick()
-  }
-
+export const MessageBubble = ({ message, lang }: MessageBubbleProps) => {
   return (
     <div 
       className={`flex items-end gap-3 ${message.isUser ? 'flex-row-reverse' : 'flex-row'} message-bubble`}
@@ -36,8 +17,10 @@ export const MessageBubble = ({ message, lang, onButtonClick }: MessageBubblePro
           <img src="/logo.jpg" alt="AI" className="w-full h-full object-cover" />
         </div>
       ) : (
-        <div className="w-8 h-8 rounded-full bg-gray-800 text-white flex items-center justify-center text-xs font-medium">
-          You
+        <div className="w-8 h-8 rounded-full bg-gray-800 text-white flex items-center justify-center">
+          <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+            <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
+          </svg>
         </div>
       )}
       
@@ -59,10 +42,7 @@ export const MessageBubble = ({ message, lang, onButtonClick }: MessageBubblePro
                 }
           }
         >
-          <InteractiveMessage 
-            message={message} 
-            onButtonClick={handleButtonClick}
-          />
+          <p className="text-sm">{message.text}</p>
           <span
             className={`absolute ${
               message.isUser ? 'right-1 -bottom-1 rotate-45' : 'left-1 -bottom-1 -rotate-45'
@@ -79,22 +59,6 @@ export const MessageBubble = ({ message, lang, onButtonClick }: MessageBubblePro
           <span className="text-xs text-gray-400">
             {formatTime(message.timestamp, lang)}
           </span>
-          
-          <div className="flex items-center gap-1">
-            <button 
-              title={isCopied ? "Copied!" : "Copy"} 
-              onClick={handleCopy} 
-              className={`
-                text-xs px-2 py-1 rounded-full transition-colors duration-200
-                ${isCopied 
-                  ? 'text-green-600 bg-green-50' 
-                  : 'text-gray-400 hover:text-gray-600 hover:bg-gray-50'
-                }
-              `}
-            >
-              {isCopied ? '✓ Copied' : 'Copy'}
-            </button>
-          </div>
         </div>
       </div>
     </div>

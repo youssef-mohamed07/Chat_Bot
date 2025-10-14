@@ -1,8 +1,7 @@
 import type { Language, ChatMessage, ButtonOption } from '../types'
-import { ChatHeader } from './ChatHeader'
+import { ChatHeader, ChatFooter } from './ChatComponents'
 import { MessagesList } from './MessagesList'
-import { ChatFooter } from './ChatFooter'
-import { SupportModal } from './SupportModal'
+import { SupportModal } from './FormComponents'
 
 interface ChatWindowProps {
   lang: Language
@@ -43,7 +42,7 @@ export const ChatWindow = ({
 }: ChatWindowProps) => {
   return (
     <div className="w-[380px] sm:w-[400px] h-[600px] bg-white rounded-xl shadow-lg border border-gray-200 overflow-hidden flex flex-col">
-      <ChatHeader onClose={onClose} lang={lang} />
+      <ChatHeader onClose={onClose} />
       
       <MessagesList 
         messages={messages} 

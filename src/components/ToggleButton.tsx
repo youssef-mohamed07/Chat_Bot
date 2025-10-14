@@ -1,20 +1,11 @@
-import { useSoundEffects } from '../utils'
-
 interface ToggleButtonProps {
   onOpen: () => void
 }
 
 export const ToggleButton = ({ onOpen }: ToggleButtonProps) => {
-  const { playClick } = useSoundEffects()
-
-  const handleClick = () => {
-    playClick()
-    onOpen()
-  }
-
   return (
     <button
-      onClick={handleClick}
+      onClick={onOpen}
       className="flex items-center gap-3 px-5 py-4 rounded-2xl shadow-lg bg-white border border-gray-100 transition-all duration-200 hover:bg-gray-50 hover:shadow-xl hover:-translate-y-1"
     >
       <div className="relative">

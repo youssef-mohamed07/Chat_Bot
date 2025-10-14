@@ -1,7 +1,7 @@
 import fetch from 'node-fetch'
 import type { ChatMessage, OpenRouterResponse } from '../types/index.js'
 import { config } from '../config/index.js'
-import { API_ENDPOINTS, SYSTEM_PROMPTS, LANGUAGE_INSTRUCTIONS, LANGUAGE_SYSTEM_MESSAGES } from '../constants/index.js'
+import { API_ENDPOINTS, SYSTEM_PROMPTS, LANGUAGE_INSTRUCTIONS, LANGUAGE_SYSTEM_MESSAGES } from '../utils/index.js'
 
 export class OpenRouterService {
   private readonly apiKey: string
@@ -13,7 +13,6 @@ export class OpenRouterService {
   }
 
   async sendChatRequest(messages: ChatMessage[]): Promise<string> {
-    // If no API key, return demo response
     if (!this.apiKey || this.apiKey === 'your_api_key_here') {
       return this.getDemoResponse(messages)
     }
@@ -42,7 +41,6 @@ export class OpenRouterService {
   }
 
   async sendStreamingRequest(messages: ChatMessage[]): Promise<NodeJS.ReadableStream> {
-    // If no API key, return demo streaming response
     if (!this.apiKey || this.apiKey === 'your_api_key_here') {
       return this.getDemoStreamingResponse(messages)
     }
@@ -88,7 +86,6 @@ export class OpenRouterService {
     const lastMessage = messages[messages.length - 1]?.content || ''
     const lowerMessage = lastMessage.toLowerCase()
     
-    // Check language from system messages
     const isArabic = messages.some(msg => 
       msg.content.includes('العربية') || 
       msg.content.includes('Arabic') ||
@@ -111,7 +108,6 @@ export class OpenRouterService {
       return isArabic ? 'يمكنني مساعدتك في معلومات التأشيرة. ما نوع التأشيرة التي تحتاجها؟' : 'I can help you with visa information. What type of visa do you need?'
     }
     
-    // Default response
     return isArabic ? 'شكراً لك! هل هناك شيء آخر يمكنني مساعدتك فيه؟' : 'Thank you! Is there anything else I can help you with?'
   }
 
@@ -121,7 +117,6 @@ export class OpenRouterService {
     
     return new Readable({
       read() {
-        // Simulate streaming by sending response in chunks
         const chunks = response.split(' ')
         let index = 0
         
@@ -130,7 +125,7 @@ export class OpenRouterService {
             const chunk = chunks[index] + (index < chunks.length - 1 ? ' ' : '')
             this.push(`data: ${JSON.stringify({ choices: [{ delta: { content: chunk } }] })}\n\n`)
             index++
-            setTimeout(sendChunk, 100) // Simulate delay
+            setTimeout(sendChunk, 100)
           } else {
             this.push('data: [DONE]\n\n')
             this.push(null)

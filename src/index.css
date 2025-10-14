@@ -102,13 +102,3 @@ body {
   border: 1px solid rgba(255, 255, 255, 0.2);
 }
 
-/* Dark theme support */
-.dark {
-  --bg-primary: #1a1a1a;
-  --bg-secondary: #2d2d2d;
-  --text-primary: #ffffff;
-  --text-secondary: #a0a0a0;
-  --border-color: #404040;
-  --shadow-color: rgba(0, 0, 0, 0.3);
-}
-

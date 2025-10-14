@@ -1,14 +1,11 @@
 import type { Language } from '../types'
-import { LABELS } from '../constants'
-import { useSoundEffects } from '../utils'
+import { LABELS } from '../utils'
 
 interface LanguageSelectorProps {
   onSelectLanguage: (lang: Language) => void
 }
 
 export const LanguageSelector = ({ onSelectLanguage }: LanguageSelectorProps) => {
-  const { playClick } = useSoundEffects()
-
   const languages = [
     { 
       code: 'en' as Language, 
@@ -49,10 +46,7 @@ export const LanguageSelector = ({ onSelectLanguage }: LanguageSelectorProps) =>
           {languages.map((lang) => (
             <button 
               key={lang.code}
-              onClick={() => {
-                playClick()
-                onSelectLanguage(lang.code)
-              }}
+              onClick={() => onSelectLanguage(lang.code)}
               className="w-full border-2 rounded-xl py-5 px-5 font-medium transition-all duration-200 hover:border-red-600 hover:bg-red-50 hover:shadow-lg border-gray-200 group bg-white"
               dir={lang.dir}
             >

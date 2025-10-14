@@ -15,21 +15,6 @@ export default defineConfig({
         target: 'http://localhost:3000',
         changeOrigin: true,
         secure: false,
-      },
-      '/tickets': {
-        target: 'http://localhost:3000',
-        changeOrigin: true,
-        secure: false,
-      },
-      '/platforms': {
-        target: 'http://localhost:3000',
-        changeOrigin: true,
-        secure: false,
-      },
-      '/whatsapp': {
-        target: 'http://localhost:3000',
-        changeOrigin: true,
-        secure: false,
       }
     }
   }

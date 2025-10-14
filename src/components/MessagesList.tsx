@@ -1,7 +1,7 @@
 import { useEffect, useRef } from 'react'
 import type { ChatMessage, Language, ButtonOption } from '../types'
 import { MessageBubble } from './MessageBubble'
-import { TypingIndicator } from './TypingIndicator'
+import { TypingIndicator } from './UIComponents'
 
 interface MessagesListProps {
   messages: ChatMessage[]
