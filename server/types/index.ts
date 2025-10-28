@@ -28,13 +28,12 @@ export interface ChatMessage {
   content: string
 }
 
-export interface OpenRouterResponse {
-  choices: Array<{
-    delta?: {
-      content?: string
-    }
-    message?: {
-      content?: string
+export interface GeminiResponse {
+  candidates?: Array<{
+    content?: {
+      parts?: Array<{
+        text?: string
+      }>
     }
   }>
 }
@@ -50,7 +49,7 @@ export interface EmailConfig {
 export interface ServerConfig {
   port: number
   model: string
-  openRouterKey: string
+  geminiKey: string
   emailConfig?: EmailConfig
   supportEmail?: string
 }

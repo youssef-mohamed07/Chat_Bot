@@ -5,8 +5,8 @@ dotenv.config()
 
 export const config: ServerConfig = {
   port: Number(process.env.PORT) || 3000,
-  model: process.env.MODEL || 'openai/gpt-4o-mini',
-  openRouterKey: process.env.OPENROUTER_KEY || '',
+  model: process.env.MODEL || 'gemini-2.0-flash-001',
+  geminiKey: process.env.GEMINI_KEY || 'AIzaSyDktGPEDjr2NJytQReJFu6nFkL31XuSDo4',
   supportEmail: process.env.SUPPORT_TO,
   emailConfig: process.env.SMTP_HOST ? {
     host: process.env.SMTP_HOST,
@@ -18,11 +18,11 @@ export const config: ServerConfig = {
 }
 
 export const validateConfig = (): void => {
-  if (!config.openRouterKey) {
-    console.warn('\n⚠️  WARNING: OPENROUTER_KEY is not set!')
+  if (!config.geminiKey) {
+    console.warn('\n⚠️  WARNING: GEMINI_KEY is not set!')
     console.warn('📝 Please create a .env file in the root directory with:')
-    console.warn('   OPENROUTER_KEY=your_api_key_here')
-    console.warn('\n🔑 Get your API key from: https://openrouter.ai/keys')
+    console.warn('   GEMINI_KEY=your_api_key_here')
+    console.warn('\n🔑 Get your API key from: https://makersuite.google.com/app/apikey')
     console.warn('🚀 Server will start with demo mode (limited functionality)\n')
     // Don't exit, just warn
   }

@@ -1,13 +1,13 @@
 import type { Request, Response } from 'express'
 import type { ChatRequest, ChatResponse } from '../types/index.js'
-import { OpenRouterService, SessionManager } from '../services/index.js'
+import { GeminiService, SessionManager } from '../services/index.js'
 
 export class ChatController {
-  private openRouterService: OpenRouterService
+  private geminiService: GeminiService
   private sessionManager: SessionManager
 
   constructor() {
-    this.openRouterService = new OpenRouterService()
+    this.geminiService = new GeminiService()
     this.sessionManager = new SessionManager()
   }
 
@@ -16,12 +16,12 @@ export class ChatController {
       const { message, userId = 'default-user', lang = 'en' }: ChatRequest = req.body
       const history = this.sessionManager.getSession(userId)
 
-      const messages = this.openRouterService.buildMessages(message, history, lang as 'ar' | 'en')
+      const messages = this.geminiService.buildMessages(message, history, lang as 'ar' | 'en')
       
       // Add user message to history
       this.sessionManager.addMessage(userId, { role: 'user', content: message })
 
-      const reply = await this.openRouterService.sendChatRequest(messages)
+      const reply = await this.geminiService.sendChatRequest(messages)
       
       // Add assistant response to history
       this.sessionManager.addMessage(userId, { role: 'assistant', content: reply })
@@ -45,45 +45,113 @@ export class ChatController {
     })
 
     try {
-      const messages = this.openRouterService.buildMessages(message, history, lang as 'ar' | 'en')
+      const messages = this.geminiService.buildMessages(message, history, lang as 'ar' | 'en')
       
       // Add user message to history
       this.sessionManager.addMessage(userId, { role: 'user', content: message })
 
-      const stream = await this.openRouterService.sendStreamingRequest(messages)
+      const stream = await this.geminiService.sendStreamingRequest(messages)
       
       let buffer = ''
-      let assistantContent = ''
+      let fullResponse = ''
 
       stream.on('data', (chunk) => {
         buffer += chunk.toString()
-        const lines = buffer.split(/\r?\n/)
-        buffer = lines.pop() || ''
         
-        for (const line of lines) {
-          if (!line.trim()) continue
-          // Forward upstream SSE lines as-is
-          res.write(line + '\n')
-
-          // Extract content for local history accumulation
-          if (line.startsWith('data: ')) {
-            const payload = line.slice(6).trim()
-            if (payload === '[DONE]') continue
-            try {
-              const json = JSON.parse(payload)
-              const delta = json?.choices?.[0]?.delta?.content || json?.choices?.[0]?.message?.content || ''
-              if (delta) {
-                assistantContent += delta
+        // Look for complete JSON objects using brace matching
+        while (true) {
+          const start = buffer.indexOf('{')
+          if (start === -1) break
+          
+          let depth = 0
+          let inString = false
+          let escapeNext = false
+          let end = -1
+          
+          for (let i = start; i < buffer.length; i++) {
+            const char = buffer[i]
+            
+            if (escapeNext) {
+              escapeNext = false
+              continue
+            }
+            
+            if (char === '\\') {
+              escapeNext = true
+              continue
+            }
+            
+            if (char === '"' && !escapeNext) {
+              inString = !inString
+              continue
+            }
+            
+            if (!inString) {
+              if (char === '{') depth++
+              if (char === '}') {
+                depth--
+                if (depth === 0) {
+                  end = i + 1
+                  break
+                }
               }
-            } catch {}
+            }
+          }
+          
+          if (end > start) {
+            // Complete object found
+            try {
+              const jsonStr = buffer.substring(start, end)
+              const obj = JSON.parse(jsonStr)
+              const text = obj?.candidates?.[0]?.content?.parts?.[0]?.text
+              if (text && typeof text === 'string') {
+              // Check if this is the same or longer response
+              if (text !== fullResponse && text.length >= fullResponse.length) {
+                const newText = text.substring(fullResponse.length)
+                fullResponse = text
+                
+                // Send text with slight delay to group words together
+                if (newText.length > 0) {
+                  console.log('Sending chunk:', newText.substring(0, 100))
+                  // Add small spaces or words together
+                  res.write(`data: ${JSON.stringify({ choices: [{ delta: { content: newText } }] })}\n\n`)
+                }
+              }
+              }
+            } catch (e) {
+              console.log('Parse error')
+            }
+            
+            // Remove processed part from buffer
+            buffer = buffer.substring(end)
+          } else {
+            // Incomplete object, wait for more data
+            break
           }
         }
       })
 
       stream.on('end', () => {
+        // Process any remaining buffer
+        const start = buffer.indexOf('{')
+        if (start !== -1) {
+          try {
+            const jsonStr = buffer.substring(start)
+            const obj = JSON.parse(jsonStr)
+            const text = obj?.candidates?.[0]?.content?.parts?.[0]?.text
+            if (text && typeof text === 'string') {
+              const newText = text.substring(fullResponse.length)
+              if (newText.length > 0) {
+                fullResponse = text
+                res.write(`data: ${JSON.stringify({ choices: [{ delta: { content: newText } }] })}\n\n`)
+              }
+            }
+          } catch (e) {}
+        }
+        
         // Save complete assistant message to history
-        if (assistantContent) {
-          this.sessionManager.addMessage(userId, { role: 'assistant', content: assistantContent })
+        if (fullResponse) {
+          this.sessionManager.addMessage(userId, { role: 'assistant', content: fullResponse })
         }
         res.write('data: [DONE]\n\n')
         res.end()
