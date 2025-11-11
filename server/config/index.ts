@@ -6,7 +6,8 @@ dotenv.config()
 export const config: ServerConfig = {
   port: Number(process.env.PORT) || 3000,
   model: process.env.MODEL || 'gemini-2.0-flash-001',
-  geminiKey: process.env.GEMINI_KEY || 'AIzaSyDktGPEDjr2NJytQReJFu6nFkL31XuSDo4',
+  // Never hard-code API keys; require from environment
+  geminiKey: process.env.GEMINI_KEY ?? '',
   supportEmail: process.env.SUPPORT_TO,
   emailConfig: process.env.SMTP_HOST ? {
     host: process.env.SMTP_HOST,

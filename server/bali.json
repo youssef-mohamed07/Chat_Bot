@@ -1,0 +1,125 @@
+{
+  "title_ar": "عطلة شهر العسل الفاخرة في بالي - حيث يلتقي الأناقة بالفردوس الاستوائي",
+  "title_en": "Luxury Honeymoon in Bali – where elegance meets tropical paradise",
+  "validity": {
+    "ar": "يسري العرض خلال شهري أكتوبر ونوفمبر",
+    "en": "This offer is valid during October and November months"
+  },
+  "hotels": [
+    {
+      "hotel_name": "Harris Hotel Seminyak",
+      "rating": "4*",
+      "area": "Seminyak",
+      "room_type": "Harris Room",
+      "meal": "Breakfast",
+      "price_usd": 350
+    },
+    {
+      "hotel_name": "KajaNe Yangloni",
+      "rating": "4*",
+      "area": "Ubud",
+      "room_type": "Deluxe Room",
+      "meal": "Breakfast",
+      "price_usd": 620
+    },
+    {
+      "hotel_name": "Mercure Kuta Bali",
+      "rating": "4*",
+      "area": "Kuta",
+      "room_type": "Superior Double Room",
+      "meal": "Breakfast",
+      "price_usd": 530
+    },
+    {
+      "hotel_name": "Montigo Resorts Seminyak",
+      "rating": "5*",
+      "area": "Seminyak",
+      "room_type": "Deluxe Room",
+      "meal": "Breakfast",
+      "price_usd": 600
+    },
+    {
+      "hotel_name": "Ramayana Suites and Resort",
+      "rating": "5*",
+      "area": "Kuta",
+      "room_type": "Deluxe Room",
+      "meal": "Breakfast",
+      "price_usd": 655
+    }
+  ],
+  "price_includes": {
+    "ar": [
+      "الإقامة للفردين لمدة 6 أيام / 5 ليالٍ في أحد الفنادق المذكورة أعلاه أو ما يماثلها.",
+      "الوجبات تشمل الإفطار فقط.",
+      "الانتقالات من المطار إلى الفندق والعكس."
+    ],
+    "en": [
+      "Accommodation for two persons for 6 days / 5 nights at one of the above-mentioned hotels or similar.",
+      "Meals include breakfast only.",
+      "Transfers from airport to hotel and back."
+    ]
+  },
+  "price_excludes": {
+    "ar": [
+      "أي بنود غير مدرجة في البرنامج.",
+      "تأشيرة دخول إندونيسيا عند الوصول.",
+      "تذاكر الطيران."
+    ],
+    "en": [
+      "Any items not mentioned in the program.",
+      "Visa upon arrival in Indonesia.",
+      "Flight tickets."
+    ]
+  },
+  "optional_tours": [
+    {
+      "name_en": "UNESCO Temples Tour",
+      "name_ar": "جولة معابد التراث العالمي لليونسكو",
+      "price_usd": 55,
+      "description_ar": "زيارة معابد المياه الملكية Taman Ayun وحقول أرز Jatiluwih ومعبد Pura Ulun Danu Bratan ومشاهدة غروب الشمس في Tanah Lot.",
+      "description_en": "Visit Taman Ayun royal water temple, Jatiluwih rice terraces, Pura Ulun Danu Bratan, and enjoy the sunset at Tanah Lot."
+    },
+    {
+      "name_en": "Snorkeling with Manta Rays at Nusa Penida",
+      "name_ar": "جولة غطس في جزيرة نوسا بينيدا مع أسماك مانتا راي",
+      "price_usd": 65,
+      "description_ar": "رحلة غطس تشمل ثلاث مواقع مميزة ومغامرة في خليج مانتا وGamat Bay وCrystal Bay مع غداء على شاطئ Paradise Beach.",
+      "description_en": "Snorkeling adventure at Manta Bay, Gamat Bay, and Crystal Bay with lunch on Paradise Beach."
+    },
+    {
+      "name_en": "Ubud Waterfalls Tour",
+      "name_ar": "جولة شلالات أوبود",
+      "price_usd": 65,
+      "description_ar": "رحلة إلى شلالات Tibumana وTukad Cepung وTegenungan مع الغداء في أحد المقاهي البالية.",
+      "description_en": "Explore Tibumana, Tukad Cepung, and Tegenungan waterfalls with lunch at a local Balinese café."
+    },
+    {
+      "name_en": "Sunrise Trek to Mount Batur",
+      "name_ar": "رحلة شروق الشمس إلى جبل باتور",
+      "price_usd": 60,
+      "description_ar": "تسلق جبل باتور للاستمتاع بمشاهدة شروق الشمس والمناظر البركانية الخلابة.",
+      "description_en": "Trek up Mount Batur to witness sunrise and enjoy stunning volcanic views."
+    },
+    {
+      "name_en": "Bali Highlights Tour",
+      "name_ar": "جولة معالم بالي الشهيرة",
+      "price_usd": 90,
+      "description_ar": "زيارة معبد Lempuyang، حدائق Tirta Gangga، كهف Tukad Cepung، والتجربة المميزة لأرجوحات الغابة في أوبود.",
+      "description_en": "Visit Lempuyang Temple, Tirta Gangga Gardens, Tukad Cepung Cave, and experience Ubud Jungle Swings."
+    }
+  ],
+  "notes": {
+    "ar": [
+      "تسجيل الوصول المبكر أو المغادرة المتأخرة يخضع للتوافر.",
+      "الغرف تخضع للتوافر أو لفئة مشابهة عند وقت الحجز الفعلي.",
+      "الأسعار بالدولار والدفع بالجنيه المصري حسب سعر الصرف وقت السداد.",
+      "الأسعار قابلة للتغيير حسب التوافر وتغيرات أسعار العملات."
+    ],
+    "en": [
+      "Early check-in or late check-out subject to availability.",
+      "Rooms subject to availability or similar category upon booking.",
+      "Prices are in USD, payment in EGP according to exchange rate at payment time.",
+      "Prices may vary based on hotel availability and currency fluctuations."
+    ]
+  }
+}

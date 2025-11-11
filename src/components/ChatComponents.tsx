@@ -1,6 +1,6 @@
-import { useState, useRef } from 'react'
+import { useState, useRef, useEffect } from 'react'
 import type { Language } from '../types'
-import { PLACEHOLDERS } from '../utils'
+import { PLACEHOLDERS, eventBus } from '../utils'
 import { SupportCTA } from './UIComponents'
 
 // Chat Header Component
@@ -74,7 +74,7 @@ export const ChatInput = ({
   const [showEmojis, setShowEmojis] = useState(false)
   const textareaRef = useRef<HTMLTextAreaElement>(null)
 
-  const emojis = ['👍', '❤️', '😂', '😮', '😢', '😡', '🎉', '🚀', '💡', '⭐', '🔥', '✅']
+  const emojis = ['👍', '❤️', '😂', '😮', '😢', '😡', '🎉', '🚀', '💡', '⭐', '🔥', '']
 
   const handleInputChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     setInput(e.target.value)
@@ -222,21 +222,126 @@ export const ChatFooter = ({
   lang, 
   onOpenSupport 
 }: ChatFooterProps) => {
+  const [showEmojis, setShowEmojis] = useState(false)
+  const [mask, setMask] = useState(false)
+  const [isListening, setIsListening] = useState(false)
+  const fileRef = useRef<HTMLInputElement>(null)
+
+  const emojis = ['👍','❤️','😂','😮','😢','😡','🎉','🚀','💡','⭐','🔥','']
+
+  // Voice input (Web Speech API)
+  const recognitionRef = useRef<any>(null)
+  useEffect(() => {
+    const w = window as any
+    const SR = w.SpeechRecognition || w.webkitSpeechRecognition
+    if (SR) {
+      const rec = new SR()
+      rec.lang = lang === 'ar' ? 'ar-EG' : 'en-US'
+      rec.interimResults = true
+      rec.maxAlternatives = 1
+      rec.onresult = (e: any) => {
+        const transcript = Array.from(e.results).map((r: any) => r[0]?.transcript || '').join(' ')
+        setInput(transcript)
+      }
+      rec.onend = () => setIsListening(false)
+      recognitionRef.current = rec
+    }
+  }, [lang, setInput])
+
+  const toggleMic = () => {
+    const rec = recognitionRef.current
+    if (!rec) return
+    if (isListening) {
+      try { rec.stop() } catch {}
+      setIsListening(false)
+    } else {
+      try { rec.start(); setIsListening(true) } catch {}
+    }
+  }
+
+  const onPickFiles = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const files = Array.from(e.target.files || [])
+    if (!files.length) return
+    // Create previews for images only
+    const withPreviews = await Promise.all(files.map(async f => ({
+      name: f.name,
+      size: f.size,
+      type: f.type,
+      previewUrl: f.type.startsWith('image/') ? await new Promise<string>((resolve) => {
+        const reader = new FileReader()
+        reader.onload = () => resolve(String(reader.result))
+        reader.readAsDataURL(f)
+      }) : undefined
+    })))
+    eventBus.emit('attachments:add', { files: withPreviews })
+    // Optionally hint in input
+    setInput('')
+    e.target.value = ''
+  }
+
+  const onEmojiClick = (emoji: string) => {
+    const cursorEnd = input.length
+    setInput(input.slice(0, cursorEnd) + emoji + input.slice(cursorEnd))
+    setShowEmojis(false)
+  }
+
   return (
     <div className="border-t border-gray-100 bg-white p-4">
-      <div className="flex items-center gap-3">
+      <div className="flex items-center gap-2">
+        {/* Emoji button */}
+        <button
+          onClick={() => setShowEmojis(v => !v)}
+          className={`h-10 w-10 rounded-lg flex items-center justify-center ${showEmojis? 'bg-blue-100 text-blue-600':'bg-gray-100 text-gray-600 hover:bg-gray-200'}`}
+          aria-label="Add emoji"
+        >
+          <span className="text-lg">😊</span>
+        </button>
+
+        {/* File button */}
+        <input ref={fileRef} type="file" multiple className="hidden" onChange={onPickFiles} />
+        <button
+          onClick={() => fileRef.current?.click()}
+          className="h-10 w-10 rounded-lg flex items-center justify-center bg-gray-100 text-gray-600 hover:bg-gray-200"
+          aria-label="Attach files"
+        >
+          <svg className="w-5 h-5" viewBox="0 0 20 20" fill="currentColor"><path d="M8 4a4 4 0 00-4 4v5a6 6 0 0012 0V8a2 2 0 10-4 0v6a2 2 0 11-4 0V8a4 4 0 118 0v5a8 8 0 11-16 0V8a6 6 0 1112 0v5a6 6 0 11-12 0V8a4 4 0 118 0v5a4 4 0 11-8 0V8a6 6 0 1112 0v5a6 6 0 11-12 0V8z"/></svg>
+        </button>
+
+        {/* Mic button */}
+        <button
+          onClick={toggleMic}
+          className={`h-10 w-10 rounded-lg flex items-center justify-center ${isListening? 'bg-red-100 text-red-600':'bg-gray-100 text-gray-600 hover:bg-gray-200'}`}
+          aria-label="Voice input"
+          title={isListening ? 'Listening…' : 'Voice input'}
+        >
+          <svg className="w-5 h-5" viewBox="0 0 20 20" fill="currentColor"><path d="M10 2a3 3 0 00-3 3v5a3 3 0 106 0V5a3 3 0 00-3-3z"/><path d="M4 9a1 1 0 112 0 4 4 0 008 0 1 1 0 112 0 6 6 0 11-12 0z"/></svg>
+        </button>
+
+        {/* Text input */}
         <div className="flex-1">
           <input
-            type="text"
+            type={mask ? 'password' : 'text'}
             value={input}
             onChange={(e) => setInput(e.target.value)}
             onKeyPress={onKeyPress}
-            placeholder="Type your message"
+            placeholder={PLACEHOLDERS[lang].message}
             disabled={isLoading}
             className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-red-800/20 focus:border-red-600 text-sm"
             dir={lang === 'ar' ? 'rtl' : 'ltr'}
           />
         </div>
+
+        {/* Mask toggle */}
+        <button
+          onClick={() => setMask(m => !m)}
+          className={`h-10 w-10 rounded-lg flex items-center justify-center ${mask? 'bg-gray-200 text-gray-700':'bg-gray-100 text-gray-600 hover:bg-gray-200'}`}
+          aria-label="Toggle sensitive input"
+          title={mask ? 'Masked' : 'Mask input'}
+        >
+          <svg className="w-5 h-5" viewBox="0 0 20 20" fill="currentColor"><path d="M10 3C5 3 2 10 2 10s3 7 8 7 8-7 8-7-3-7-8-7zm0 2a5 5 0 110 10A5 5 0 0110 5zm0 2a3 3 0 100 6 3 3 0 000-6z"/></svg>
+        </button>
+
+        {/* Send button */}
         <button
           onClick={() => onSend()}
           disabled={isLoading || !input.trim()}
@@ -247,7 +352,24 @@ export const ChatFooter = ({
           </svg>
         </button>
       </div>
-      
+
+      {/* Emoji picker */}
+      {showEmojis && (
+        <div className="mt-3 p-3 bg-gray-50 rounded-lg">
+          <div className="grid grid-cols-6 gap-2">
+            {emojis.map((emoji) => (
+              <button
+                key={emoji}
+                onClick={() => onEmojiClick(emoji)}
+                className="text-lg p-2 bg-white rounded-lg hover:bg-gray-100 transition-colors duration-200"
+              >
+                {emoji}
+              </button>
+            ))}
+          </div>
+        </div>
+      )}
+
       {/* Support CTA */}
       <div className="mt-3 text-center">
         <SupportCTA onOpenSupport={onOpenSupport} lang={lang} />

@@ -2,6 +2,20 @@ import type { ChatMessage } from '../types/index.js'
 
 export class SessionManager {
   private sessions = new Map<string, ChatMessage[]>()
+  private metadata = new Map<string, { 
+    lastDest?: string
+    lastTopic?: string
+    lastCardShownAt?: number
+    lastCardDest?: string
+    depCity?: string
+    startDate?: string
+    endDate?: string
+    pax?: number
+    budget?: number
+    step?: 'initial' | 'destination_selected' | 'dates_selected' | 'travelers_selected' | 'budget_selected' | 'ready_for_offers'
+    hasSeenDestinationButtons?: boolean
+    selectedHotel?: string
+  }>()
 
   getSession(userId: string): ChatMessage[] {
     if (!this.sessions.has(userId)) {
@@ -25,5 +39,43 @@ export class SessionManager {
 
   getSessionCount(): number {
     return this.sessions.size
+  }
+
+  getMeta(userId: string): { 
+    lastDest?: string
+    lastTopic?: string
+    lastCardShownAt?: number
+    lastCardDest?: string
+    depCity?: string
+    startDate?: string
+    endDate?: string
+    pax?: number
+    budget?: number
+    step?: 'initial' | 'destination_selected' | 'dates_selected' | 'travelers_selected' | 'budget_selected' | 'ready_for_offers'
+    hasSeenDestinationButtons?: boolean
+    selectedHotel?: string
+  } {
+    if (!this.metadata.has(userId)) {
+      this.metadata.set(userId, {})
+    }
+    return this.metadata.get(userId)!
+  }
+
+  updateMeta(userId: string, updates: Partial<{ 
+    lastDest?: string
+    lastTopic?: string
+    lastCardShownAt?: number
+    lastCardDest?: string
+    depCity?: string
+    startDate?: string
+    endDate?: string
+    pax?: number
+    budget?: number
+    step?: 'initial' | 'destination_selected' | 'dates_selected' | 'travelers_selected' | 'budget_selected' | 'ready_for_offers'
+    hasSeenDestinationButtons?: boolean
+    selectedHotel?: string
+  }>): void {
+    const current = this.getMeta(userId)
+    this.metadata.set(userId, { ...current, ...updates })
   }
 }

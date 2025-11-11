@@ -54,6 +54,20 @@ export const TypingIndicator = ({ isVisible, lang }: TypingIndicatorProps) => {
   )
 }
 
+  // Skeleton bubble to show loading placeholder
+  export const SkeletonBubble = () => {
+    return (
+      <div className="flex items-start gap-3 px-4">
+        <div className="w-8 h-8 bg-gray-200 rounded-full" />
+        <div className="bg-white border border-gray-200 rounded-2xl p-3 shadow-sm w-64">
+          <div className="h-3 bg-gray-200 rounded w-3/4 mb-2 animate-pulse" />
+          <div className="h-3 bg-gray-200 rounded w-full mb-2 animate-pulse" />
+          <div className="h-3 bg-gray-200 rounded w-5/6 animate-pulse" />
+        </div>
+      </div>
+    )
+  }
+
 // Skeleton Components
 interface SkeletonProps {
   className?: string

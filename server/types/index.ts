@@ -1,11 +1,23 @@
+export type Language = 'ar' | 'en'
+
 export interface ChatRequest {
   message: string
   userId?: string
-  lang?: 'ar' | 'en'
+  lang?: Language
 }
 
 export interface ChatResponse {
   reply: string
+  ui?: {
+    blocks?: Array<
+      | { type: 'text'; text: string }
+      | { type: 'buttons'; text?: string; buttons: Array<{ text: string; value: string }> }
+      | { type: 'card'; cardType: 'trip'; data: { dest: string; offer: any } }
+      | { type: 'images'; urls: string[] }
+      | { type: 'dateRange'; heading?: string; minDate?: string; maxDate?: string }
+      | { type: 'travellers'; heading?: string; min?: number; max?: number; default?: number }
+    >
+  }
 }
 
 export interface SupportRequest {
@@ -53,3 +65,30 @@ export interface ServerConfig {
   emailConfig?: EmailConfig
   supportEmail?: string
 }
+
+// RAG types
+export interface RAGChunk {
+  id: string
+  source: string
+  destination?: string
+  section?: string
+  lang: 'ar' | 'en'
+  title?: string
+  text: string
+  metadata?: {
+    category?: 'hotels' | 'tours' | 'visa' | 'includes' | 'excludes' | 'general'
+    hotels?: any[]
+    tours?: any[]
+    [key: string]: any
+  }
+}
+
+export interface RAGQueryOptions {
+  lang: 'ar' | 'en'
+  limit?: number
+}
+
+export interface RAGResult {
+  chunks: RAGChunk[]
+}
+

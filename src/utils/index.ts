@@ -46,7 +46,7 @@ export const LABELS: Record<Language, Record<string, string>> = {
     customerSupportRequest: 'طلب دعم عملاء',
     sending: 'جارٍ الإرسال...',
     send: 'إرسال',
-    requestSent: '✅ تم إرسال رسالتك إلى فريق الدعم. سيتواصل معك أحد موظفي الدعم قريباً.',
+    requestSent: ' تم إرسال رسالتك إلى فريق الدعم. سيتواصل معك أحد موظفي الدعم قريباً.',
     requestFailed: '❌ تعذّر إرسال الرسالة إلى فريق الدعم. حاول لاحقًا.',
     contactInfo: 'معلومات التواصل',
     contactDescription: 'نحتاج معلوماتك للتواصل معك بشكل أفضل',
@@ -68,7 +68,7 @@ export const LABELS: Record<Language, Record<string, string>> = {
     customerSupportRequest: 'Customer Support Request',
     sending: 'Sending...',
     send: 'Send',
-    requestSent: '✅ Your message has been sent to our support team. A support agent will contact you soon.',
+    requestSent: ' Your message has been sent to our support team. A support agent will contact you soon.',
     requestFailed: '❌ Failed to send message to support team. Please try later.',
     contactInfo: 'Contact Information',
     contactDescription: 'We need your contact info to serve you better',
@@ -87,3 +87,7 @@ export const API_ENDPOINTS = {
   CHAT_STREAM: 'http://localhost:3000/chat/stream',
   SUPPORT_REQUEST: 'http://localhost:3000/support/request'
 } as const
+
+// Re-exports for convenience
+export { eventBus } from './eventBus'
+export { applyTheme } from '../theme'

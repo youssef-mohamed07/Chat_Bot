@@ -271,3 +271,6 @@ export const SupportModal = ({
     </div>
   )
 }
+
+// Date range widget (inline in chat)
+// (Moved DateRangeWidget and TravellersWidget to ChatWidgets.tsx)

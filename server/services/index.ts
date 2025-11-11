@@ -1,3 +1,5 @@
 export { GeminiService } from './GeminiService.js'
 export { EmailService } from './EmailService.js'
 export { SessionManager } from './SessionManager.js'
+export { ragService, RAGService } from './RAGService.js'
+export { PromptService } from './PromptService.js'

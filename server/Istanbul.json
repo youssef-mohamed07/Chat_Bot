@@ -1,0 +1,177 @@
+{
+  "title_ar": "عروض إسطنبول لشهري نوفمبر وديسمبر",
+  "title_en": "Istanbul Travel Offers (Nov & Dec)",
+  "hotels": [
+    {
+      "hotel_name": "Grand Liza Hotel",
+      "rating": "3 نجوم",
+      "area": "Fatih",
+      "price_single_usd": 159,
+      "price_double_triple_usd": 289,
+      "child_price_usd": 100
+    },
+    {
+      "hotel_name": "Klas Hotel Old City",
+      "rating": "4 نجوم",
+      "area": "Old City",
+      "price_single_usd": 205,
+      "price_double_triple_usd": 379,
+      "child_price_usd": 155
+    },
+    {
+      "hotel_name": "Feronya Hotel Taksim",
+      "rating": "4 نجوم",
+      "area": "Taksim",
+      "price_single_usd": 239,
+      "price_double_triple_usd": 445,
+      "child_price_usd": 145
+    },
+    {
+      "hotel_name": "Central Palace Taksim",
+      "rating": "5 نجوم",
+      "area": "Taksim",
+      "price_single_usd": 250,
+      "price_double_triple_usd": 470,
+      "child_price_usd": 185
+    },
+    {
+      "hotel_name": "Ramada by Wyndham Pera",
+      "rating": "5 نجوم",
+      "area": "Pera",
+      "price_single_usd": 325,
+      "price_double_triple_usd": 620,
+      "child_price_usd": 210
+    },
+    {
+      "hotel_name": "Point Hotel Taksim",
+      "rating": "5 نجوم",
+      "area": "Taksim",
+      "price_single_usd": 400,
+      "price_double_triple_usd": 775,
+      "child_price_usd": 130
+    }
+  ],
+  "price_includes": {
+    "ar": [
+      "الإقامة للفرد لمدة 6 أيام / 5 ليالٍ مع الإفطار في أي من الفنادق المذكورة أعلاه أو ما يماثلها.",
+      "رحلة بحرية في مضيق البسفور.",
+      "الانتقالات من المطار إلى الفندق والعكس."
+    ],
+    "en": [
+      "Accommodation for 6 days / 5 nights with breakfast at any of the above hotels or similar.",
+      "Bosphorus cruise tour.",
+      "Transfers from airport to hotel and back."
+    ]
+  },
+  "price_excludes": {
+    "ar": [
+      "أي بنود غير مدرجة في البرنامج.",
+      "تذاكر الطيران ذهابًا وعودة على خطوط الطيران المنتظمة.",
+      "تأشيرة دخول تركيا (تكلفتها 208 دولار).",
+      "تأشيرة إلكترونية للأعمار تحت 15 سنة وفوق 45 سنة (تكلفتها 46 دولار).",
+      "سياسة الأطفال من 0 حتى 5.99 سنوات حسب الإمكانية وقت الحجز."
+    ],
+    "en": [
+      "Any items not included in the program.",
+      "Round-trip flight tickets on regular airlines.",
+      "Turkey entry visa (cost: $208).",
+      "E-visa for ages below 15 and above 45 (cost: $46).",
+      "Child policy: 0 to 5.99 years old, subject to availability at booking time."
+    ]
+  },
+  "visa_requirements": {
+    "ar": [
+      "من سن 15 حتى 45 سنة: استخراج التأشيرة من مكتب VoyaVisa (مكتب الخدمات التابع للقنصلية التركية).",
+      "من سن 12 حتى 40 سنة: يجب استخراج موافقة أمنية من العباسية بعد الحصول على التأشيرة.",
+      "المستندات المطلوبة لاستخراج التأشيرة:",
+      "1. كشف حساب بنكي لآخر 6 شهور.",
+      "2. سجل تجاري أو خطاب من جهة العمل.",
+      "3. حجز فندق وتذاكر طيران مبدئية.",
+      "4. تأمين صحي."
+    ],
+    "en": [
+      "Ages 15–45: Visa must be obtained via VoyaVisa (Turkish consulate service office).",
+      "Ages 12–40: Security approval required from Abbassia after obtaining visa.",
+      "Documents required for visa application:",
+      "1. Bank statement for the last 6 months.",
+      "2. Commercial registration or work certificate.",
+      "3. Preliminary hotel and flight booking.",
+      "4. Health insurance."
+    ]
+  },
+  "optional_tours": [
+    {
+      "name_en": "Princes’ Islands Tour (without lunch)",
+      "name_ar": "رحلة جزر الأميرات (بدون غداء)",
+      "price_usd": 25,
+      "description_ar": "رحلة بحرية إلى جزيرتي بيبيك أدا وهيبالي أدا للاستمتاع بالطبيعة والمناظر الخلابة.",
+      "description_en": "Boat trip to Büyükada and Heybeliada to enjoy the nature and beautiful scenery."
+    },
+    {
+      "name_en": "Bursa Tour with Cable Car & Lunch",
+      "name_ar": "رحلة بورصة شاملة الغذاء والتليفريك",
+      "price_usd": 45,
+      "description_ar": "رحلة إلى مدينة بورصة مع الصعود بالتليفريك إلى جبل أولوداغ وزيارة الشجرة القديمة والتسوق.",
+      "description_en": "Visit Bursa city with cable car to Mount Uludağ, old tree stop, lunch, and shopping."
+    },
+    {
+      "name_en": "Sapanca & Maşukiye Tour with Lunch",
+      "name_ar": "رحلة سبانجا والمعشوقية شاملة الغذاء",
+      "price_usd": 30,
+      "description_ar": "رحلة إلى المعشوقية وبحيرة صابنجا وزيارة حديقة حيوان داريكا والاستمتاع بالطبيعة.",
+      "description_en": "Visit Maşukiye waterfalls, Sapanca Lake, and Darıca Zoo with scenic nature views."
+    },
+    {
+      "name_en": "Half-Day Ottoman Mosques & Museums Tour",
+      "name_ar": "جولة نصف يوم (المساجد والمتاحف العثمانية)",
+      "price_usd": 35,
+      "description_ar": "زيارة مسجد السلطان أحمد وآيا صوفيا وسوق الجراند بازار التاريخي.",
+      "description_en": "Visit Sultan Ahmed Mosque, Hagia Sophia, and Grand Bazaar historical market."
+    },
+    {
+      "name_en": "Full-Day Historical Istanbul Tour",
+      "name_ar": "جولة سياحية ليوم كامل في إسطنبول",
+      "price_usd": 65,
+      "description_ar": "زيارة قصر توبكابي وساحة الهيبودروم ومسجد السلطان أحمد.",
+      "description_en": "Full-day tour including Topkapi Palace, Hippodrome Square, and Blue Mosque."
+    },
+    {
+      "name_en": "Bosphorus Cruise & Shopping",
+      "name_ar": "رحلة البوسفور مع التسوق",
+      "price_usd": 20,
+      "description_ar": "جولة بحرية لمدة ساعتين ونصف في مضيق البوسفور ومركز التسوق ومصنع الجلود.",
+      "description_en": "2.5-hour Bosphorus cruise with stops at leather factory and shopping center."
+    },
+    {
+      "name_en": "Dinner Cruise on Bosphorus (Show A)",
+      "name_ar": "سهرة عشاء على مضيق البوسفور (عرض شام)",
+      "price_usd": 25,
+      "description_ar": "سهرة على مركب فاخر تشمل عشاء وعروض رقص شرقي وفولكلور تركي.",
+      "description_en": "Luxury dinner cruise with oriental dance and Turkish folklore show."
+    },
+    {
+      "name_en": "Dinner Cruise on Bosphorus (Turkish Show)",
+      "name_ar": "سهرة عشاء على مضيق البوسفور (عرض تركي)",
+      "price_usd": 40,
+      "description_ar": "عرض تركي مميز مع رقص شرقي ورقصة العاشق والمعشوق على متن مركب فاخر.",
+      "description_en": "Turkish night with oriental dance and the Lover & Beloved performance onboard."
+    },
+    {
+      "name_en": "Viasea Theme Park & Aquarium Tour",
+      "name_ar": "رحلة فياسي الترفيهية (مدينة الملاهي + الأكواريوم)",
+      "price_usd": 50,
+      "description_ar": "زيارة مدينة الملاهي فياسي التي تضم 35 وحدة ترفيهية وأكواريوم يحتوي على أطول نفق في إسطنبول.",
+      "description_en": "Visit Viasea theme park with 35 attractions and the longest aquarium tunnel in Istanbul."
+    }
+  ],
+  "notes": {
+    "ar": [
+      "الأسعار بالدولار ويتم السداد بما يعادله بالجنيه المصري حسب سعر الصرف وقت السداد.",
+      "الأسعار قابلة للتغيير حسب الإمكانية في الفندق والتاريخ الفعلي للحجز ومتغيرات أسعار العملات."
+    ],
+    "en": [
+      "Prices are in USD and payable in EGP at the exchange rate on payment date.",
+      "Rates are subject to hotel availability, booking date, and currency fluctuation."
+    ]
+  }
+}
