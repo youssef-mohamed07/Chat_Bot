@@ -7,12 +7,12 @@ export default defineConfig({
   server: {
     proxy: {
       '/chat': {
-        target: 'http://localhost:3000',
+        target: 'http://localhost:9090',
         changeOrigin: true,
         secure: false,
       },
       '/support': {
-        target: 'http://localhost:3000',
+        target: 'http://localhost:9090',
         changeOrigin: true,
         secure: false,
       }

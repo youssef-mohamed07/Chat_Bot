@@ -164,25 +164,39 @@ export class ChatController {
           ? `اخترت فندق ${hotelDisplayName}`
           : `I chose ${hotelDisplayName} hotel`
       } else if (message.startsWith('meal:')) {
-        const mealPlan = message.replace('meal:', '')
+        const mealPlan = message.replace('meal:', '').trim()
+        console.log(`🍽️ User selected meal plan: ${mealPlan}`)
         this.sessionManager.updateMeta(userId, { 
           mealPlan,
           step: 'meal_selected',
           previousStep
         })
         userMessage = lang === 'ar'
-          ? `اخترت نظام ${mealPlan}`
-          : `I chose ${mealPlan} meal plan`
+          ? `اخترت نظام ${this.getMealPlanName(mealPlan, lang)}`
+          : `I chose ${this.getMealPlanName(mealPlan, lang)}`
       } else if (message.startsWith('room:')) {
-        const roomType = message.replace('room:', '')
+        const roomType = message.replace('room:', '').trim()
+        console.log(`🛏️ User selected room type: ${roomType}`)
         this.sessionManager.updateMeta(userId, { 
           roomType,
           step: 'room_selected',
           previousStep
         })
         userMessage = lang === 'ar'
-          ? `اخترت غرفة ${roomType}`
-          : `I chose ${roomType} room`
+          ? `اخترت ${this.getRoomTypeName(roomType, lang)}`
+          : `I chose ${this.getRoomTypeName(roomType, lang)}`
+      } else if (message === 'confirm_booking') {
+        console.log(`✅ User confirmed booking`)
+        this.sessionManager.updateMeta(userId, { step: 'booking_confirmed', previousStep })
+        userMessage = lang === 'ar' ? 'أريد تأكيد الحجز' : 'I want to confirm the booking'
+      } else if (message === 'modify_booking') {
+        console.log(`✏️ User wants to modify booking`)
+        this.sessionManager.updateMeta(userId, { step: 'booking_modification', previousStep })
+        userMessage = lang === 'ar' ? 'أريد تعديل الحجز' : 'I want to modify the booking'
+      } else if (message === 'contact_support') {
+        console.log(`📞 User wants to contact support`)
+        this.sessionManager.updateMeta(userId, { step: 'support_contact', previousStep })
+        userMessage = lang === 'ar' ? 'أريد التواصل مع الدعم' : 'I want to contact support'
       } else if (message.startsWith('filter:')) {
         const filterValue = message.replace('filter:', '')
         const [filterType, value] = filterValue.split('=')
@@ -234,14 +248,17 @@ export class ChatController {
     }))
 
     // Get welcome message with destinations context
-    const destList = destinations.map(d => d === 'bali' ? 'بالي (Bali)' : 'إسطنبول (Istanbul)').join(' و ')
+    const destList = lang === 'ar' 
+      ? destinations.map(d => d === 'bali' ? 'بالي' : d === 'istanbul' ? 'إسطنبول' : d === 'beirut' ? 'بيروت' : d).join(' و ')
+      : destinations.map(d => d.charAt(0).toUpperCase() + d.slice(1)).join(', ')
+    
     const contextMessage = lang === 'ar'
       ? `لدينا عروض سفر رائعة إلى: ${destList}. نقدم باقات شاملة تشمل الفنادق، الجولات السياحية، ومساعدة في التأشيرات.`
       : `We have amazing travel packages to: ${destList}. We offer complete packages including hotels, tours, and visa assistance.`
 
     const welcomePrompt = lang === 'ar'
-      ? `أنت مساعد Quick Air الذكي. رحب بالعميل بحرارة واذكر الوجهات المتاحة بطريقة جذابة ومشوقة. ${contextMessage}`
-      : `You are Quick Air's intelligent assistant. Welcome the customer warmly and mention available destinations in an attractive way. ${contextMessage}`
+      ? `أنت مساعد Quick Air الذكي. رحب بالعميل بحرارة واذكر الوجهات المتاحة بطريقة جذابة ومشوقة. ${contextMessage} تذكر: رد بالعربي فقط 100%، لا تستخدم أي كلمات إنجليزية.`
+      : `You are Quick Air's intelligent assistant. Welcome the customer warmly and mention available destinations in an attractive way. ${contextMessage} Remember: Respond in English ONLY 100%, do not use any Arabic words.`
 
     const messages = [
       { role: 'system' as const, content: PromptService.getSystemPrompt(lang) },
@@ -294,36 +311,72 @@ export class ChatController {
     try {
       console.log('🤖 Processing with AI...')
       
-      // Build rich context for AI
-      const enrichedContext = await this.buildEnrichedContext(message, lang, meta, contextData)
+      const step = meta.step || 'initial'
       
-      // Build messages with context
-      const messages = this.geminiService.buildMessages(message, history, lang, enrichedContext)
-
-      console.log('🚀 Calling Gemini API...')
-      const result = await this.geminiService.sendChatRequest(messages, lang, true)
+      // ✨ Use predefined responses for simple widget steps to save API quota
+      const simpleSteps = ['destination_selected', 'dates_selected', 'travelers_selected', 'hotel_selected', 'meal_selected', 'room_selected']
+      const isSimpleStep = simpleSteps.includes(step)
+      const isButtonAction = originalMessage.startsWith('dest:') || 
+                             originalMessage.startsWith('set_dates:') || 
+                             originalMessage.startsWith('set_pax:') ||
+                             originalMessage.startsWith('hotel:') ||
+                             originalMessage.startsWith('meal:') ||
+                             originalMessage.startsWith('room:')
       
-      console.log('✅ Got AI response:', result.text?.substring(0, 100))
+      let aiResponse = ''
+      
+      // Special case for budget selection - needs context from hotels
+      if (step === 'budget_selected' && originalMessage.startsWith('budget:')) {
+        aiResponse = lang === 'ar' 
+          ? `ممتاز! 🏨 إليك أفضل الفنادق المتاحة:`
+          : `Excellent! 🏨 Here are the best available hotels:`
+      }
+      // Use predefined response for simple button actions
+      else if (isButtonAction && isSimpleStep) {
+        const predefined = this.getPredefinedResponse(step, lang, meta)
+        if (predefined) {
+          console.log('✅ Using predefined response (saving API quota)')
+          aiResponse = predefined
+        }
+      }
+      
+      // Only call AI for complex queries or when no predefined response
+      if (!aiResponse) {
+        // Build rich context for AI
+        const enrichedContext = await this.buildEnrichedContext(message, lang, meta, contextData)
+        
+        // Build messages with context
+        const messages = this.geminiService.buildMessages(message, history, lang, enrichedContext)
 
-      // Handle function call
-      if (result.functionCall) {
-        console.log('🔧 Function called:', result.functionCall.name)
-        const functionResult = await this.executeFunctionCall(result.functionCall, lang, userId)
+        console.log('🚀 Calling Gemini API...')
+        const result = await this.geminiService.sendChatRequest(messages, lang, true)
         
-        this.sessionManager.addMessage(userId, { role: 'user', content: message })
-        this.sessionManager.addMessage(userId, { role: 'assistant', content: functionResult.text })
+        console.log('✅ Got AI response:', result.text?.substring(0, 100))
+
+        // Handle function call
+        if (result.functionCall) {
+          console.log('🔧 Function called:', result.functionCall.name)
+          const functionResult = await this.executeFunctionCall(result.functionCall, lang, userId)
+          
+          this.sessionManager.addMessage(userId, { role: 'user', content: message })
+          this.sessionManager.addMessage(userId, { role: 'assistant', content: functionResult.text })
+          
+          res.json({ reply: functionResult.text, ui: functionResult.ui })
+          return
+        }
         
-        res.json({ reply: functionResult.text, ui: functionResult.ui })
-        return
+        aiResponse = result.text
       }
 
-      // Generate smart UI based on AI response and context
-      const ui = await this.generateSmartUI(result.text, originalMessage, lang, meta, contextData, userId, isDetectedAction)
+      // Generate smart UI based on response and context
+      console.log(`📊 Current step: ${step}, Meta:`, JSON.stringify(meta, null, 2))
+      const ui = await this.generateSmartUI(aiResponse, originalMessage, lang, meta, contextData, userId, isDetectedAction)
       
       this.sessionManager.addMessage(userId, { role: 'user', content: message })
-      this.sessionManager.addMessage(userId, { role: 'assistant', content: result.text })
+      this.sessionManager.addMessage(userId, { role: 'assistant', content: aiResponse })
       
-      res.json({ reply: result.text, ui })
+      console.log(`✅ Sending response with ${ui?.blocks?.length || 0} UI blocks`)
+      res.json({ reply: aiResponse, ui })
 
     } catch (error) {
       console.error('❌ AI Chat Error:', error)
@@ -518,6 +571,31 @@ export class ChatController {
             )
           }
         }
+        break
+        
+      case 'meal_selected':
+        const mealHotelIdentifier = meta.selectedHotel
+        const mealHotelDest = meta.lastDest
+        const mealPlanName = this.getMealPlanName(meta.mealPlan, lang)
+        
+        contextParts.push(
+          `🏨 ${mealHotelIdentifier}`,
+          `🍽️ ${mealPlanName}`,
+          `\n${lang === 'ar' ? '✅ اسأل عن نوع الغرفة' : '✅ Ask about room type'}`
+        )
+        break
+        
+      case 'room_selected':
+        const roomHotelIdentifier = meta.selectedHotel
+        const roomMealPlan = this.getMealPlanName(meta.mealPlan, lang)
+        const roomTypeName = this.getRoomTypeName(meta.roomType, lang)
+        
+        contextParts.push(
+          `🏨 ${roomHotelIdentifier}`,
+          `🍽️ ${roomMealPlan}`,
+          `🛏️ ${roomTypeName}`,
+          `\n${lang === 'ar' ? '✅ اعرض ملخص الحجز النهائي' : '✅ Show final booking summary'}`
+        )
         break
     }
 
@@ -718,12 +796,12 @@ export class ChatController {
     }
     
     // Hotel selected but no meal plan
-    if (meta.selectedHotel && !meta.mealPlan && meta.step !== 'meal_selected') {
+    if (meta.selectedHotel && !meta.mealPlan && (meta.step === 'hotel_selected' || meta.previousStep === 'hotel_selected')) {
       return {
         type: 'mealPlan',
         message: lang === 'ar' ? 'اختيار موفق! 🌟 اختر نظام الوجبات:' : 'Great choice! 🌟 Select meal plan:',
         widget: {
-          type: 'mealPlan',
+          type: 'mealPlans',
           title_ar: 'نظام الوجبات',
           title_en: 'Meal Plan',
           options: [
@@ -765,10 +843,12 @@ export class ChatController {
     }
     
     // Meal plan selected but no room type
-    if (meta.mealPlan && !meta.roomType && meta.step !== 'room_selected') {
+    if (meta.mealPlan && !meta.roomType && (meta.step === 'meal_selected' || meta.previousStep === 'meal_selected')) {
       return {
         type: 'roomTypes',
-        message: lang === 'ar' ? 'ممتاز! 🛏️ اختر نوع الغرفة:' : 'Excellent! 🛏️ Select room type:',
+        message: lang === 'ar' 
+          ? `ممتاز! اخترت ${this.getMealPlanName(meta.mealPlan, lang)} 🛏️ الآن اختر نوع الغرفة:`
+          : `Excellent! You chose ${this.getMealPlanName(meta.mealPlan, lang)} 🛏️ Now select room type:`,
         widget: {
           type: 'roomTypes',
           title_ar: 'نوع الغرفة',
@@ -806,8 +886,92 @@ export class ChatController {
         }
       }
     }
+
+    // Room type selected - Show booking summary
+    if (meta.roomType && meta.step === 'room_selected') {
+      const dest = meta.lastDest || 'unknown'
+      const hotelName = meta.selectedHotel || 'Hotel'
+      
+      return {
+        type: 'bookingSummary',
+        message: lang === 'ar' 
+          ? '🎉 رائع! إليك ملخص حجزك:'
+          : '🎉 Perfect! Here\'s your booking summary:',
+        widget: {
+          type: 'bookingSummary',
+          title_ar: 'ملخص الحجز',
+          title_en: 'Booking Summary',
+          data: {
+            destination: dest,
+            hotel: hotelName,
+            mealPlan: this.getMealPlanName(meta.mealPlan, lang),
+            roomType: this.getRoomTypeName(meta.roomType, lang),
+            travelers: meta.pax || 1,
+            startDate: meta.startDate,
+            endDate: meta.endDate,
+            budget: meta.budget
+          },
+          actions: [
+            {
+              text_ar: '✅ تأكيد الحجز',
+              text_en: '✅ Confirm Booking',
+              value: 'confirm_booking',
+              variant: 'primary'
+            },
+            {
+              text_ar: '📞 التواصل مع الدعم',
+              text_en: '📞 Contact Support',
+              value: 'contact_support',
+              variant: 'secondary'
+            },
+            {
+              text_ar: '🔄 تعديل الاختيارات',
+              text_en: '🔄 Modify Choices',
+              value: 'modify_booking',
+              variant: 'outline'
+            }
+          ]
+        }
+      }
+    }
     
     return null
+  }
+
+  // Get predefined response for simple actions (to save API quota)
+  private getPredefinedResponse(step: string, lang: Language, meta: any): string | null {
+    const responses: Record<string, { ar: string; en: string }> = {
+      'destination_selected': {
+        ar: `اختيار رائع! 🎉 متى تفضل السفر؟`,
+        en: `Great choice! 🎉 When would you like to travel?`
+      },
+      'dates_selected': {
+        ar: `ممتاز! 👥 كم شخص سيسافر؟`,
+        en: `Excellent! 👥 How many people will be traveling?`
+      },
+      'travelers_selected': {
+        ar: `تمام! 💰 اختر الميزانية المناسبة:`,
+        en: `Perfect! 💰 Choose your budget range:`
+      },
+      'budget_selected': {
+        ar: `ممتاز! 🏨 إليك أفضل الفنادق المتاحة:`,
+        en: `Excellent! 🏨 Here are the best available hotels:`
+      },
+      'hotel_selected': {
+        ar: `اختيار موفق! 🌟 اختر نظام الوجبات:`,
+        en: `Great choice! 🌟 Select meal plan:`
+      },
+      'meal_selected': {
+        ar: `ممتاز! 🛏️ اختر نوع الغرفة:`,
+        en: `Excellent! 🛏️ Select room type:`
+      },
+      'room_selected': {
+        ar: `رائع! 🎊 إليك ملخص حجزك:`,
+        en: `Perfect! 🎊 Here's your booking summary:`
+      }
+    }
+    
+    return responses[step]?.[lang] || null
   }
 
   // Generate smart UI based on AI response AND conversation state
@@ -842,6 +1006,8 @@ export class ChatController {
     const step = meta.step || 'initial'
     const previousStep = meta.previousStep
     
+    console.log(`🎯 generateSmartUI called - step: ${step}, userMessage: ${userMessage}`)
+    
     // ✅ Detect if message is a button action (not free text)
     const isButtonAction = userMessage.startsWith('dest:') || 
                            userMessage.startsWith('hotel:') || 
@@ -855,6 +1021,8 @@ export class ChatController {
                            userMessage === 'contact_support'
     
     const isNewStep = previousStep !== step
+    
+    console.log(`🔍 isButtonAction: ${isButtonAction}, isDetectedAction: ${isDetectedAction}, step: ${step}`)
     
     // ✅ Don't show widgets for free text messages (except initial or detected actions)
     if (!isButtonAction && !isDetectedAction && step !== 'initial') {
@@ -1215,15 +1383,31 @@ export class ChatController {
       return { blocks }
     }
 
-    // 8️⃣ After room type - Show final booking options
+    // 8️⃣ After room type - Show final booking summary
     if (step === 'room_selected') {
+      const dest = meta.lastDest || 'unknown'
+      const hotelName = meta.selectedHotel || 'Hotel'
+      const mealPlan = this.getMealPlanName(meta.mealPlan, lang)
+      const roomType = this.getRoomTypeName(meta.roomType, lang)
+      
       blocks.push({
-        type: 'buttons',
-        text: lang === 'ar' ? 'الخطوة التالية؟' : 'Next step?',
-        buttons: [
-          { text: lang === 'ar' ? '✅ تأكيد الحجز' : '✅ Confirm Booking', value: 'confirm_booking' },
-          { text: lang === 'ar' ? '📞 واتساب' : '📞 WhatsApp', value: 'whatsapp' },
-          { text: lang === 'ar' ? '🔙 تعديل الاختيارات' : '🔙 Modify Selections', value: 'modify_booking' }
+        type: 'bookingSummary',
+        title_ar: 'ملخص الحجز',
+        title_en: 'Booking Summary',
+        data: {
+          destination: dest,
+          hotel: hotelName,
+          mealPlan: mealPlan,
+          roomType: roomType,
+          travelers: meta.pax,
+          startDate: meta.startDate,
+          endDate: meta.endDate,
+          budget: meta.budget
+        },
+        actions: [
+          { text_ar: '✅ تأكيد الحجز', text_en: '✅ Confirm Booking', value: 'confirm_booking', variant: 'primary' },
+          { text_ar: '📞 واتساب', text_en: '📞 WhatsApp', value: 'whatsapp', variant: 'secondary' },
+          { text_ar: '🔙 تعديل', text_en: '🔙 Modify', value: 'modify_booking', variant: 'outline' }
         ]
       })
       return { blocks }
@@ -1543,6 +1727,35 @@ export class ChatController {
       excludes: 'ما لا يشمله العرض'
     }
     return map[topic] || topic
+  }
+
+  // Get meal plan display name
+  private getMealPlanName(value: string, lang: Language): string {
+    const names: Record<string, { ar: string; en: string }> = {
+      'room_only': { ar: 'غرفة فقط (بدون وجبات)', en: 'Room Only' },
+      'breakfast': { ar: 'مع الإفطار', en: 'Breakfast' },
+      'BB': { ar: 'إفطار فقط', en: 'Breakfast Only' },
+      'half_board': { ar: 'نصف إقامة (إفطار + عشاء)', en: 'Half Board' },
+      'HB': { ar: 'نصف إقامة', en: 'Half Board' },
+      'full_board': { ar: 'إقامة كاملة (جميع الوجبات)', en: 'Full Board' },
+      'FB': { ar: 'إقامة كاملة', en: 'Full Board' },
+      'all_inclusive': { ar: 'شامل كلياً (وجبات + مشروبات + أنشطة)', en: 'All Inclusive' },
+      'AI': { ar: 'شامل كلياً', en: 'All Inclusive' }
+    }
+    return names[value]?.[lang] || value
+  }
+
+  // Get room type display name
+  private getRoomTypeName(value: string, lang: Language): string {
+    const names: Record<string, { ar: string; en: string }> = {
+      'single': { ar: 'غرفة فردية', en: 'Single Room' },
+      'double': { ar: 'غرفة مزدوجة', en: 'Double Room' },
+      'twin': { ar: 'غرفة توأم', en: 'Twin Room' },
+      'triple': { ar: 'غرفة ثلاثية', en: 'Triple Room' },
+      'family': { ar: 'غرفة عائلية', en: 'Family Room' },
+      'suite': { ar: 'جناح', en: 'Suite' }
+    }
+    return names[value]?.[lang] || value
   }
 
   // ✨ NEW: Detect destination from natural language text

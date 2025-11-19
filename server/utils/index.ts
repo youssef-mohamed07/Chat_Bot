@@ -1,33 +1,33 @@
 // Server utilities
 export const setupErrorHandlers = (): void => {
-  process.on('unhandledRejection', (reason) => {
-    console.error('⚠️ Unhandled Rejection:', reason)
-    // Don't exit on unhandled rejection during development
-  })
+ process.on('unhandledRejection', (reason) => {
+ console.error(' Unhandled Rejection:', reason)
+ // Don't exit on unhandled rejection during development
+ })
 
-  process.on('uncaughtException', (err) => {
-    console.error('💥 Uncaught Exception:', err)
-    // Don't exit immediately - log and continue
-  })
+ process.on('uncaughtException', (err) => {
+ console.error(' Uncaught Exception:', err)
+ // Don't exit immediately - log and continue
+ })
 }
 
 export const validateEnvironment = (): void => {
-  const requiredEnvVars = ['GEMINI_KEY']
-  const missingVars = requiredEnvVars.filter(varName => !process.env[varName])
-  
-  if (missingVars.length > 0) {
-    console.error(`❌ Missing required environment variables: ${missingVars.join(', ')}`)
-    process.exit(1)
-  }
+ const requiredEnvVars = ['GEMINI_KEY']
+ const missingVars = requiredEnvVars.filter(varName => !process.env[varName])
+ 
+ if (missingVars.length > 0) {
+ console.error(` Missing required environment variables: ${missingVars.join(', ')}`)
+ process.exit(1)
+ }
 }
 
 export const logServerStart = (port: number): void => {
-  console.log(` Quick Air AI Agent running on http://localhost:${port}`)
+ console.log(` Quick Air AI Agent running on http://localhost:${port}`)
 }
 
 // Server constants
 export const SYSTEM_PROMPTS = {
-  ar: `أنت مساعد لشركة Quick Air مختص بالسفر والطيران فقط.
+ ar: `أنت مساعد لشركة Quick Air مختص بالسفر والطيران فقط.
 
 السياسة:
 - المجال المسموح: الرحلات، التأشيرات، العروض، الفنادق، وخدمات Quick Air.
@@ -41,7 +41,7 @@ export const SYSTEM_PROMPTS = {
 
 إن كان الطلب خارج النطاق، استخدم الرد التحويلي القصير المذكور بالأعلى.`,
 
-  en: `You are the Quick Air assistant. Scope is airline and travel only (flights, visas, offers, hotels, Quick Air services).
+ en: `You are the Quick Air assistant. Scope is airline and travel only (flights, visas, offers, hotels, Quick Air services).
 
 Policy:
 - If the user asks about anything outside this scope (sports, politics, coding, etc.), do not answer that topic. Instead reply briefly: "I can help with flights, visas, offers, and hotels for Quick Air."
@@ -52,39 +52,39 @@ When asked for hotels or flights, list options and prices concisely. If off-topi
 }
 
 export const LANGUAGE_INSTRUCTIONS = {
-  ar: 'أجب باللغة العربية الفصحى فقط في جميع الحالات، حتى لو كتب المستخدم بلغة أخرى. لا تستخدم الإنجليزية إطلاقًا، ولا تعتذر عن اللغة.',
-  en: 'Always respond in English only, even if the user writes in another language. Do not use Arabic and do not apologize about language.'
+ ar: 'أجب باللغة العربية الفصحى فقط في جميع الحالات، حتى لو كتب المستخدم بلغة أخرى. لا تستخدم الإنجليزية إطلاقًا، ولا تعتذر عن اللغة.',
+ en: 'Always respond in English only, even if the user writes in another language. Do not use Arabic and do not apologize about language.'
 }
 
 export const LANGUAGE_SYSTEM_MESSAGES = {
-  ar: 'اللغة: العربية. استخدم العربية الفصحى حصراً. لا تُدرج نصوصاً بلغات أخرى.',
-  en: 'Language: English. Use English exclusively. Do not include other languages.'
+ ar: 'اللغة: العربية. استخدم العربية الفصحى حصراً. لا تُدرج نصوصاً بلغات أخرى.',
+ en: 'Language: English. Use English exclusively. Do not include other languages.'
 }
 
 export const EMAIL_TEMPLATES = {
-  subject: {
-    ar: 'طلب دعم عملاء - Quick Air',
-    en: 'Quick Air - Customer Support Request'
-  },
-  
-  generateHtml: (data: {
-    userId: string
-    name: string
-    email: string
-    phone: string
-    message: string
-  }) => `
-    <h2>Quick Air - Customer Support Request</h2>
-    <p><strong>User ID:</strong> ${data.userId}</p>
-    <p><strong>Name:</strong> ${data.name}</p>
-    <p><strong>Email:</strong> ${data.email}</p>
-    <p><strong>Phone:</strong> ${data.phone}</p>
-    <p><strong>Message:</strong></p>
-    <p>${data.message.replace(/\n/g, '<br/>')}</p>
-  `
+ subject: {
+ ar: 'طلب دعم عملاء - Quick Air',
+ en: 'Quick Air - Customer Support Request'
+ },
+ 
+ generateHtml: (data: {
+ userId: string
+ name: string
+ email: string
+ phone: string
+ message: string
+ }) => `
+ <h2>Quick Air - Customer Support Request</h2>
+ <p><strong>User ID:</strong> ${data.userId}</p>
+ <p><strong>Name:</strong> ${data.name}</p>
+ <p><strong>Email:</strong> ${data.email}</p>
+ <p><strong>Phone:</strong> ${data.phone}</p>
+ <p><strong>Message:</strong></p>
+ <p>${data.message.replace(/\n/g, '<br/>')}</p>
+ `
 }
 
 export const API_ENDPOINTS = {
-  GEMINI_CHAT: 'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash-001:generateContent',
-  GEMINI_STREAM: 'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash-001:streamGenerateContent'
+ GEMINI_CHAT: 'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash-001:generateContent',
+ GEMINI_STREAM: 'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash-001:streamGenerateContent'
 } as const

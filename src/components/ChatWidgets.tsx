@@ -309,24 +309,24 @@ export const MealPlanWidget = ({
   onSelect: (value: string, label: string) => void
 }) => {
   return (
-    <div className="mt-3 p-4 border-2 rounded-xl shadow-sm" style={{
+    <div className="mt-2 p-3 border-2 rounded-xl shadow-sm" style={{
       borderColor: '#7A0C2E20',
       background: 'linear-gradient(135deg, #FFF5F7 0%, #ffffff 100%)'
     }}>
       {(title_ar || title_en) && (
-        <div className="mb-4" dir={lang === 'ar' ? 'rtl' : 'ltr'}>
-          <span className="text-sm font-semibold" style={{ color: '#7A0C2E' }}>
+        <div className="mb-2" dir={lang === 'ar' ? 'rtl' : 'ltr'}>
+          <span className="text-xs font-semibold" style={{ color: '#7A0C2E' }}>
             {lang === 'ar' ? title_ar : title_en}
           </span>
         </div>
       )}
       
-      <div className="space-y-2">
+      <div className="space-y-1">
         {options.map((option, index) => (
           <button
             key={index}
             onClick={() => onSelect(option.value, lang === 'ar' ? option.label_ar : option.label_en)}
-            className="w-full flex items-center gap-3 px-4 py-3 rounded-lg border-2 bg-white transition-all hover:shadow-md"
+            className="w-full flex items-center gap-2 px-3 py-2 rounded-lg border-2 bg-white transition-all hover:shadow-md"
             style={{ borderColor: '#7A0C2E30' }}
             dir={lang === 'ar' ? 'rtl' : 'ltr'}
             onMouseEnter={(e) => {
@@ -338,13 +338,13 @@ export const MealPlanWidget = ({
               e.currentTarget.style.backgroundColor = 'white'
             }}
           >
-            <span className="text-2xl">{option.icon}</span>
+            <span className="text-xl">{option.icon}</span>
             <div className="flex-1 text-left" dir={lang === 'ar' ? 'rtl' : 'ltr'}>
-              <div className="text-sm font-semibold" style={{ color: '#374151' }}>
+              <div className="text-[10px] font-semibold" style={{ color: '#374151' }}>
                 {lang === 'ar' ? option.label_ar : option.label_en}
               </div>
               {(option.description_ar || option.description_en) && (
-                <div className="text-xs text-gray-500 mt-0.5">
+                <div className="text-[9px] text-gray-500 mt-0.5">
                   {lang === 'ar' ? option.description_ar : option.description_en}
                 </div>
               )}
@@ -379,13 +379,13 @@ export const RoomTypesWidget = ({
   onSelect: (value: string, label: string) => void
 }) => {
   return (
-    <div className="mt-3 p-4 border-2 rounded-xl shadow-sm" style={{
+    <div className="mt-2 p-3 border-2 rounded-xl shadow-sm" style={{
       borderColor: '#7A0C2E20',
       background: 'linear-gradient(135deg, #FFF5F7 0%, #ffffff 100%)'
     }}>
       {(title_ar || title_en) && (
-        <div className="mb-4" dir={lang === 'ar' ? 'rtl' : 'ltr'}>
-          <span className="text-sm font-semibold" style={{ color: '#7A0C2E' }}>
+        <div className="mb-2" dir={lang === 'ar' ? 'rtl' : 'ltr'}>
+          <span className="text-xs font-semibold" style={{ color: '#7A0C2E' }}>
             {lang === 'ar' ? title_ar : title_en}
           </span>
         </div>
@@ -396,7 +396,7 @@ export const RoomTypesWidget = ({
           <button
             key={index}
             onClick={() => onSelect(option.value, lang === 'ar' ? option.label_ar : option.label_en)}
-            className="flex flex-col items-center gap-2 px-3 py-4 rounded-lg border-2 bg-white transition-all hover:shadow-md"
+            className="flex flex-col items-center gap-1 px-2 py-2 rounded-lg border-2 bg-white transition-all hover:shadow-md"
             style={{ borderColor: '#7A0C2E30' }}
             onMouseEnter={(e) => {
               e.currentTarget.style.borderColor = '#7A0C2E'
@@ -407,13 +407,13 @@ export const RoomTypesWidget = ({
               e.currentTarget.style.backgroundColor = 'white'
             }}
           >
-            <span className="text-2xl">{option.icon}</span>
+            <span className="text-xl">{option.icon}</span>
             <div className="text-center">
-              <div className="text-xs font-semibold" style={{ color: '#374151' }}>
+              <div className="text-[10px] font-semibold" style={{ color: '#374151' }}>
                 {lang === 'ar' ? option.label_ar : option.label_en}
               </div>
               {option.capacity && (
-                <div className="text-xs text-gray-500 mt-0.5">
+                <div className="text-[9px] text-gray-500 mt-0.5">
                   {option.capacity} {lang === 'ar' ? 'شخص' : 'person'}
                   {option.capacity > 1 && lang === 'en' ? 's' : ''}
                 </div>
@@ -577,22 +577,22 @@ export const BudgetWidget = ({
   onSelect
 }: BudgetWidgetProps) => {
   return (
-    <div className="my-3 w-full max-w-2xl mx-auto" dir={lang === 'ar' ? 'rtl' : 'ltr'}>
+    <div className="my-2 w-full max-w-2xl mx-auto" dir={lang === 'ar' ? 'rtl' : 'ltr'}>
       {/* Header */}
-      <div className="mb-4 text-center px-2">
-        <div className="inline-flex items-center gap-2 bg-gradient-to-r from-[#7A0C2E] to-[#991B1B] text-white px-4 py-2 rounded-full shadow-lg mb-2">
-          <span className="text-lg">💰</span>
-          <h3 className="text-sm md:text-base font-bold">
+      <div className="mb-2 text-center px-2">
+        <div className="inline-flex items-center gap-1.5 bg-gradient-to-r from-[#7A0C2E] to-[#991B1B] text-white px-3 py-1.5 rounded-full shadow-md mb-1.5">
+          <span className="text-sm">💰</span>
+          <h3 className="text-xs font-bold">
             {lang === 'ar' ? title_ar : title_en}
           </h3>
         </div>
-        <p className="text-xs md:text-sm text-gray-600 mt-2">
+        <p className="text-[10px] text-gray-600 mt-1">
           {lang === 'ar' ? 'السعر شامل الإقامة والإفطار (بالجنيه المصري)' : 'Price includes accommodation and breakfast (in EGP)'}
         </p>
       </div>
 
       {/* Budget Cards Grid - 2x2 Modern Grid */}
-      <div className="grid grid-cols-2 gap-3 px-2">
+      <div className="grid grid-cols-2 gap-2 px-2">
         {ranges.map((range, index) => (
           <button
             key={index}
@@ -604,38 +604,38 @@ export const BudgetWidget = ({
               })
             }
             className={`
-              relative p-4 rounded-2xl transition-all duration-300 overflow-hidden
+              relative p-2.5 rounded-xl transition-all duration-300 overflow-hidden
               ${range.popular 
-                ? 'bg-gradient-to-br from-[#7A0C2E] to-[#991B1B] text-white shadow-xl scale-105' 
-                : 'bg-white border-2 border-gray-200 hover:border-[#7A0C2E] hover:shadow-lg'
+                ? 'bg-gradient-to-br from-[#7A0C2E] to-[#991B1B] text-white shadow-lg scale-[1.02]' 
+                : 'bg-white border-2 border-gray-200 hover:border-[#7A0C2E] hover:shadow-md'
               }
-              hover:scale-[1.02] active:scale-95
-              flex flex-col items-center gap-2
+              hover:scale-[1.01] active:scale-95
+              flex flex-col items-center gap-1
             `}
           >
             {/* Popular Ribbon */}
             {range.popular && (
-              <div className="absolute -right-8 top-3 w-24 bg-yellow-400 text-[#7A0C2E] text-[10px] font-bold py-1 text-center rotate-45 shadow-lg">
+              <div className="absolute -right-6 top-2 w-20 bg-yellow-400 text-[#7A0C2E] text-[8px] font-bold py-0.5 text-center rotate-45 shadow-md">
                 BEST
               </div>
             )}
 
             {/* Icon Circle */}
-            <div className={`w-14 h-14 rounded-full flex items-center justify-center text-2xl ${
+            <div className={`w-10 h-10 rounded-full flex items-center justify-center text-lg ${
               range.popular ? 'bg-white/20' : 'bg-gradient-to-br from-[#7A0C2E]/10 to-[#991B1B]/10'
             }`}>
               {range.icon}
             </div>
 
             {/* Title */}
-            <h4 className={`font-bold text-sm text-center leading-tight ${
+            <h4 className={`font-bold text-[10px] text-center leading-tight ${
               range.popular ? 'text-white' : 'text-gray-800'
             }`}>
               {lang === 'ar' ? range.label_ar : range.label_en}
             </h4>
 
             {/* Price Range - K Format */}
-            <div className={`text-lg font-bold text-center ${
+            <div className={`text-sm font-bold text-center ${
               range.popular ? 'text-white' : 'text-[#7A0C2E]'
             }`}>
               {range.max === 999999
@@ -647,7 +647,7 @@ export const BudgetWidget = ({
             </div>
             
             {/* Currency Label */}
-            <div className={`text-[10px] ${
+            <div className={`text-[9px] ${
               range.popular ? 'text-white/80' : 'text-gray-500'
             }`}>
               {lang === 'ar' ? 'ج.م' : 'EGP'}
@@ -731,15 +731,15 @@ export const HotelCardsWidget = ({ hotels, lang, onSelectHotel, responsive }: Ho
   }
 
   return (
-    <div className="my-3 w-full" dir={lang === 'ar' ? 'rtl' : 'ltr'}>
+    <div className="my-2 w-full" dir={lang === 'ar' ? 'rtl' : 'ltr'}>
       {/* Header */}
-      <div className="mb-4 text-center px-2">
-        <div className="inline-flex items-center gap-2 bg-gradient-to-r from-[#7A0C2E] to-[#991B1B] text-white px-4 py-2 rounded-full shadow-lg">
-          <span className="text-lg">🏨</span>
-          <h3 className="text-sm md:text-base font-bold">
+      <div className="mb-2 text-center px-2">
+        <div className="inline-flex items-center gap-1.5 bg-gradient-to-r from-[#7A0C2E] to-[#991B1B] text-white px-3 py-1.5 rounded-full shadow-md">
+          <span className="text-sm">🏨</span>
+          <h3 className="text-xs font-bold">
             {lang === 'ar' ? 'الفنادق المتاحة' : 'Available Hotels'}
           </h3>
-          <span className="bg-white/20 text-xs px-2 py-0.5 rounded-full">({hotels.length})</span>
+          <span className="bg-white/20 text-[10px] px-1.5 py-0.5 rounded-full">({hotels.length})</span>
         </div>
       </div>
 
@@ -752,7 +752,7 @@ export const HotelCardsWidget = ({ hotels, lang, onSelectHotel, responsive }: Ho
             className={getCardClasses()}
           >
             {/* Hotel Image with Gradient Overlay */}
-            <div className="relative h-48 bg-gradient-to-br from-gray-200 to-gray-300 overflow-hidden">
+            <div className="relative h-32 bg-gradient-to-br from-gray-200 to-gray-300 overflow-hidden">
               {hotel.image ? (
                 <img
                   src={hotel.image}
@@ -764,7 +764,7 @@ export const HotelCardsWidget = ({ hotels, lang, onSelectHotel, responsive }: Ho
                   }}
                 />
               ) : (
-                <div className="w-full h-full flex items-center justify-center text-5xl">
+                <div className="w-full h-full flex items-center justify-center text-3xl">
                   🏨
                 </div>
               )}
@@ -773,48 +773,48 @@ export const HotelCardsWidget = ({ hotels, lang, onSelectHotel, responsive }: Ho
               <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
               
               {/* Price Badge - Floating */}
-              <div className="absolute bottom-3 right-3 bg-gradient-to-r from-[#7A0C2E] to-[#991B1B] text-white px-3 py-2 rounded-xl shadow-lg">
-                <div className="text-xs opacity-90">{lang === 'ar' ? 'من' : 'From'}</div>
-                <div className="text-xl font-bold">{(hotel.priceEGP / 1000).toFixed(0)}K</div>
-                <div className="text-[10px] opacity-80">{lang === 'ar' ? 'ج.م' : 'EGP'}</div>
+              <div className="absolute bottom-2 right-2 bg-gradient-to-r from-[#7A0C2E] to-[#991B1B] text-white px-2 py-1 rounded-lg shadow-md">
+                <div className="text-[9px] opacity-90">{lang === 'ar' ? 'من' : 'From'}</div>
+                <div className="text-sm font-bold">{(hotel.priceEGP / 1000).toFixed(0)}K</div>
+                <div className="text-[8px] opacity-80">{lang === 'ar' ? 'ج.م' : 'EGP'}</div>
               </div>
               
               {/* Stars Badge - Top Left */}
-              <div className="absolute top-3 left-3 bg-white/90 backdrop-blur-sm px-2 py-1 rounded-lg flex items-center gap-0.5">
+              <div className="absolute top-2 left-2 bg-white/90 backdrop-blur-sm px-1.5 py-0.5 rounded-md flex items-center gap-0.5">
                 {renderStars(hotel.rating)}
               </div>
             </div>
 
             {/* Hotel Info */}
-            <div className="p-4">
+            <div className="p-2.5">
               {/* Name */}
-              <h4 className="font-bold text-base text-gray-800 mb-2 line-clamp-1">
+              <h4 className="font-bold text-xs text-gray-800 mb-1 line-clamp-1">
                 {lang === 'ar' ? hotel.hotel_name_ar : hotel.hotel_name_en}
               </h4>
 
               {/* Location with SVG Icon */}
               {(hotel.area_ar || hotel.area_en) && (
-                <div className="flex items-center gap-1 mb-3 text-gray-600">
-                  <svg className="w-4 h-4 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                <div className="flex items-center gap-1 mb-2 text-gray-600">
+                  <svg className="w-3 h-3 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
                     <path fillRule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clipRule="evenodd" />
                   </svg>
-                  <span className="text-xs line-clamp-1">{lang === 'ar' ? hotel.area_ar : hotel.area_en}</span>
+                  <span className="text-[10px] line-clamp-1">{lang === 'ar' ? hotel.area_ar : hotel.area_en}</span>
                 </div>
               )}
 
               {/* Amenities Pills */}
               {hotel.amenities && hotel.amenities.length > 0 && (
-                <div className="flex flex-wrap gap-1 mb-3">
+                <div className="flex flex-wrap gap-1 mb-2">
                   {hotel.amenities.slice(0, 2).map((amenity, idx) => (
                     <span
                       key={idx}
-                      className="text-[10px] bg-gradient-to-r from-[#7A0C2E]/10 to-[#991B1B]/10 text-[#7A0C2E] border border-[#7A0C2E]/20 px-2 py-1 rounded-full font-medium"
+                      className="text-[9px] bg-gradient-to-r from-[#7A0C2E]/10 to-[#991B1B]/10 text-[#7A0C2E] border border-[#7A0C2E]/20 px-1.5 py-0.5 rounded-full font-medium"
                     >
                       {amenity}
                     </span>
                   ))}
                   {hotel.amenities.length > 2 && (
-                    <span className="text-[10px] text-gray-500 px-2 py-1">
+                    <span className="text-[9px] text-gray-500 px-1.5 py-0.5">
                       +{hotel.amenities.length - 2}
                     </span>
                   )}
@@ -822,7 +822,7 @@ export const HotelCardsWidget = ({ hotels, lang, onSelectHotel, responsive }: Ho
               )}
 
               {/* CTA Button with Arrow Icon */}
-              <button className="w-full bg-gradient-to-r from-[#7A0C2E] to-[#991B1B] text-white py-3 rounded-xl text-sm font-semibold hover:shadow-lg transition-all duration-200 group-hover:scale-[1.02] flex items-center justify-center gap-2">
+              <button className="w-full bg-gradient-to-r from-[#7A0C2E] to-[#991B1B] text-white py-2 rounded-lg text-[10px] font-semibold hover:shadow-md transition-all duration-200 group-hover:scale-[1.01] flex items-center justify-center gap-1.5">
                 <span>{lang === 'ar' ? 'اختر الفندق' : 'Select Hotel'}</span>
                 <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
@@ -839,6 +839,164 @@ export const HotelCardsWidget = ({ hotels, lang, onSelectHotel, responsive }: Ho
           <div key={idx} className="w-1.5 h-1.5 rounded-full bg-gray-300" />
         ))}
       </div>
+    </div>
+  )
+}
+
+// Booking Summary Widget
+export const BookingSummaryWidget = ({
+  title_ar,
+  title_en,
+  data,
+  actions,
+  lang,
+  onActionClick
+}: {
+  title_ar?: string
+  title_en?: string
+  data: {
+    destination: string
+    hotel: string
+    mealPlan: string
+    roomType: string
+    travelers?: number
+    startDate?: string
+    endDate?: string
+    budget?: any
+  }
+  actions?: Array<{ text_ar: string; text_en: string; value: string; variant?: string }>
+  lang: Language
+  onActionClick: (value: string, text: string) => void
+}) => {
+  const title = lang === 'ar' ? (title_ar || 'ملخص الحجز') : (title_en || 'Booking Summary')
+  
+  const formatDestination = (dest: string) => {
+    const names: Record<string, { ar: string; en: string }> = {
+      'bali': { ar: 'بالي', en: 'Bali' },
+      'istanbul': { ar: 'إسطنبول', en: 'Istanbul' },
+      'beirut': { ar: 'بيروت', en: 'Beirut' },
+      'dahab': { ar: 'دهب', en: 'Dahab' },
+      'sharm_el_sheikh': { ar: 'شرم الشيخ', en: 'Sharm El Sheikh' },
+      'hurghada': { ar: 'الغردقة', en: 'Hurghada' },
+      'ain_sokhna': { ar: 'العين السخنة', en: 'Ain Sokhna' },
+      'sahl_hashish': { ar: 'سهل حشيش', en: 'Sahl Hasheesh' }
+    }
+    return names[dest]?.[lang] || dest
+  }
+
+  const calculateNights = () => {
+    if (!data.startDate || !data.endDate) return null
+    const start = new Date(data.startDate)
+    const end = new Date(data.endDate)
+    const diff = Math.ceil((end.getTime() - start.getTime()) / (1000 * 60 * 60 * 24))
+    return diff
+  }
+
+  const nights = calculateNights()
+
+  return (
+    <div className="bg-gradient-to-br from-white to-gray-50 rounded-xl p-2 border-2 border-[#7A0C2E]/20 shadow-lg">
+      {/* Header */}
+      <div className="flex items-center gap-2 mb-2 pb-2 border-b-2 border-[#7A0C2E]/10">
+        <div className="bg-gradient-to-br from-[#7A0C2E] to-[#991B1B] p-1.5 rounded-lg">
+          <svg className="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+          </svg>
+        </div>
+        <h3 className="text-xs font-bold text-gray-800">{title}</h3>
+      </div>
+
+      {/* Summary Items */}
+      <div className="space-y-1 mb-2">
+        {/* Destination */}
+        <div className="flex items-start gap-2 bg-white rounded-lg p-2 shadow-sm">
+          <span className="text-lg">🌍</span>
+          <div className="flex-1">
+            <p className="text-[9px] text-gray-500 mb-0.5">{lang === 'ar' ? 'الوجهة' : 'Destination'}</p>
+            <p className="font-semibold text-[10px] text-gray-800">{formatDestination(data.destination)}</p>
+          </div>
+        </div>
+
+        {/* Hotel */}
+        <div className="flex items-start gap-2 bg-white rounded-lg p-2 shadow-sm">
+          <span className="text-lg">🏨</span>
+          <div className="flex-1">
+            <p className="text-[9px] text-gray-500 mb-0.5">{lang === 'ar' ? 'الفندق' : 'Hotel'}</p>
+            <p className="font-semibold text-[10px] text-gray-800">{data.hotel}</p>
+          </div>
+        </div>
+
+        {/* Meal Plan */}
+        <div className="flex items-start gap-2 bg-white rounded-lg p-2 shadow-sm">
+          <span className="text-lg">🍽️</span>
+          <div className="flex-1">
+            <p className="text-[9px] text-gray-500 mb-0.5">{lang === 'ar' ? 'نظام الوجبات' : 'Meal Plan'}</p>
+            <p className="font-semibold text-[10px] text-gray-800">{data.mealPlan}</p>
+          </div>
+        </div>
+
+        {/* Room Type */}
+        <div className="flex items-start gap-2 bg-white rounded-lg p-2 shadow-sm">
+          <span className="text-lg">🛏️</span>
+          <div className="flex-1">
+            <p className="text-[9px] text-gray-500 mb-0.5">{lang === 'ar' ? 'نوع الغرفة' : 'Room Type'}</p>
+            <p className="font-semibold text-[10px] text-gray-800">{data.roomType}</p>
+          </div>
+        </div>
+
+        {/* Dates */}
+        {data.startDate && data.endDate && (
+          <div className="flex items-start gap-2 bg-white rounded-lg p-2 shadow-sm">
+            <span className="text-lg">📅</span>
+            <div className="flex-1">
+              <p className="text-[9px] text-gray-500 mb-0.5">{lang === 'ar' ? 'تواريخ السفر' : 'Travel Dates'}</p>
+              <p className="font-semibold text-[10px] text-gray-800">
+                {data.startDate} → {data.endDate}
+                {nights && <span className="text-[9px] text-gray-500 ml-2">({nights} {lang === 'ar' ? 'ليلة' : 'nights'})</span>}
+              </p>
+            </div>
+          </div>
+        )}
+
+        {/* Travelers */}
+        {data.travelers && (
+          <div className="flex items-start gap-2 bg-white rounded-lg p-2 shadow-sm">
+            <span className="text-lg">👥</span>
+            <div className="flex-1">
+              <p className="text-[9px] text-gray-500 mb-0.5">{lang === 'ar' ? 'عدد المسافرين' : 'Travelers'}</p>
+              <p className="font-semibold text-[10px] text-gray-800">
+                {data.travelers} {lang === 'ar' ? (data.travelers > 1 ? 'مسافرين' : 'مسافر') : (data.travelers > 1 ? 'travelers' : 'traveler')}
+              </p>
+            </div>
+          </div>
+        )}
+      </div>
+
+      {/* Actions */}
+      {actions && actions.length > 0 && (
+        <div className="flex flex-col gap-1 pt-2 border-t-2 border-gray-100">
+          {actions.map((action, idx) => {
+            const text = lang === 'ar' ? action.text_ar : action.text_en
+            const isPrimary = action.variant === 'primary'
+            const isSecondary = action.variant === 'secondary'
+            
+            return (
+              <button
+                key={idx}
+                onClick={() => onActionClick(action.value, text)}
+                className={`
+                  w-full py-2 px-3 rounded-lg font-semibold text-[10px] transition-all duration-200
+                  ${isPrimary ? 'bg-gradient-to-r from-[#7A0C2E] to-[#991B1B] text-white hover:shadow-lg hover:scale-[1.02]' : ''}
+                  ${isSecondary ? 'bg-green-600 text-white hover:bg-green-700 hover:shadow-md' : ''}
+                  ${!isPrimary && !isSecondary ? 'bg-white border-2 border-gray-200 text-gray-700 hover:border-[#7A0C2E]/30 hover:bg-gray-50' : ''}
+                `}
+              >
+                {text}
+              </button>
+            )
+          })}
+        </div>
+      )}
     </div>
   )
 }
