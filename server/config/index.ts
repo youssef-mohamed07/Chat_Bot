@@ -4,7 +4,7 @@ import type { ServerConfig, EmailConfig } from '../types'
 dotenv.config()
 
 export const config: ServerConfig = {
-  port: Number(process.env.PORT) || 3000,
+  port: Number(process.env.PORT) || 9090,
   model: process.env.MODEL || 'gemini-2.0-flash-001',
   // Never hard-code API keys; require from environment
   geminiKey: process.env.GEMINI_KEY ?? '',

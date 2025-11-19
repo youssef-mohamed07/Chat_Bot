@@ -84,8 +84,8 @@ export const LABELS: Record<Language, Record<string, string>> = {
 }
 
 export const API_ENDPOINTS = {
-  CHAT_STREAM: 'http://localhost:3000/chat/stream',
-  SUPPORT_REQUEST: 'http://localhost:3000/support/request'
+  CHAT_STREAM: 'http://localhost:9090/chat/stream',
+  SUPPORT_REQUEST: 'http://localhost:9090/support/request'
 } as const
 
 // Re-exports for convenience
