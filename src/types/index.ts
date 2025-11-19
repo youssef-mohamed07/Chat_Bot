@@ -66,6 +66,12 @@ export type ChatMessage = {
       }>
     }
     hotelCards?: {
+      layout?: 'grid' | 'carousel'
+      responsive?: {
+        mobile?: { layout: 'carousel' | 'grid'; showCount?: number; columns?: number }
+        tablet?: { layout: 'carousel' | 'grid'; columns?: number }
+        desktop?: { layout: 'carousel' | 'grid'; columns?: number }
+      }
       hotels: Array<{
         hotel_id?: string
         hotel_name_ar: string
@@ -78,6 +84,7 @@ export type ChatMessage = {
         description_en?: string
         image?: string
         area_ar?: string
+        lazy?: boolean
         area_en?: string
       }>
     }

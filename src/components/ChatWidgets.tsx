@@ -674,18 +674,60 @@ interface HotelCardsWidgetProps {
     image?: string
     area_ar?: string
     area_en?: string
+    lazy?: boolean
   }>
   lang: 'ar' | 'en'
   onSelectHotel: (hotel: any) => void
+  layout?: 'grid' | 'carousel'
+  responsive?: {
+    mobile?: { layout: 'carousel' | 'grid'; showCount?: number; columns?: number }
+    tablet?: { layout: 'carousel' | 'grid'; columns?: number }
+    desktop?: { layout: 'carousel' | 'grid'; columns?: number }
+  }
 }
 
-export const HotelCardsWidget = ({ hotels, lang, onSelectHotel }: HotelCardsWidgetProps) => {
+export const HotelCardsWidget = ({ hotels, lang, onSelectHotel, responsive }: HotelCardsWidgetProps) => {
   const renderStars = (rating: number = 4) => {
     return Array.from({ length: 5 }, (_, i) => (
       <svg key={i} className="w-4 h-4 inline" fill={i < rating ? '#fbbf24' : '#d1d5db'} viewBox="0 0 20 20">
         <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
       </svg>
     ))
+  }
+
+  // Determine layout classes based on responsive config
+  const getLayoutClasses = () => {
+    // Default to carousel on mobile
+    let baseClass = "flex overflow-x-auto gap-4 px-4 pb-2 snap-x snap-mandatory hide-scrollbar"
+    
+    // Apply desktop/tablet grid if configured
+    if (responsive?.desktop?.layout === 'grid') {
+      baseClass += " lg:grid lg:gap-4 lg:overflow-x-visible"
+      const cols = responsive.desktop.columns || 3
+      baseClass += ` lg:grid-cols-${cols}`
+    }
+    
+    if (responsive?.tablet?.layout === 'grid') {
+      baseClass += " md:grid md:gap-4 md:overflow-x-visible"
+      const cols = responsive.tablet.columns || 2
+      baseClass += ` md:grid-cols-${cols}`
+    }
+    
+    if (responsive?.mobile?.layout === 'grid') {
+      baseClass = "grid gap-4 px-4"
+      const cols = responsive.mobile.columns || 1
+      baseClass += ` grid-cols-${cols}`
+    }
+    
+    return baseClass
+  }
+
+  const getCardClasses = () => {
+    // Default carousel card width
+    if (responsive?.mobile?.layout === 'grid') {
+      return "bg-white rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300 cursor-pointer group"
+    }
+    return "w-[280px] flex-shrink-0 snap-start bg-white rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300 cursor-pointer group"
   }
 
   return (
@@ -701,13 +743,13 @@ export const HotelCardsWidget = ({ hotels, lang, onSelectHotel }: HotelCardsWidg
         </div>
       </div>
 
-      {/* Hotels Horizontal Carousel */}
-      <div className="flex overflow-x-auto gap-4 px-4 pb-2 snap-x snap-mandatory hide-scrollbar" style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}>
+      {/* Hotels - Responsive Layout */}
+      <div className={getLayoutClasses()} style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}>
         {hotels.map((hotel, index) => (
           <div
             key={hotel.hotel_id || index}
             onClick={() => onSelectHotel(hotel)}
-            className="w-[280px] flex-shrink-0 snap-start bg-white rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300 cursor-pointer group"
+            className={getCardClasses()}
           >
             {/* Hotel Image with Gradient Overlay */}
             <div className="relative h-48 bg-gradient-to-br from-gray-200 to-gray-300 overflow-hidden">
@@ -716,6 +758,7 @@ export const HotelCardsWidget = ({ hotels, lang, onSelectHotel }: HotelCardsWidg
                   src={hotel.image}
                   alt={lang === 'ar' ? hotel.hotel_name_ar : hotel.hotel_name_en}
                   className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                  loading={hotel.lazy ? 'lazy' : 'eager'}
                   onError={(e) => {
                     (e.target as HTMLImageElement).style.display = 'none'
                   }}

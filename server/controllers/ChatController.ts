@@ -1047,6 +1047,9 @@ export class ChatController {
             hotels: displayHotels.map((h: any) => {
               const hotelId = h.hotel_name_en || h.hotel_name_ar || 'Hotel'
               
+              // ✅ Use Unsplash mock images if hotel image not available
+              const mockImageUrl = `https://source.unsplash.com/800x600/?hotel,resort,${dest},luxury`
+              
               return {
                 hotel_id: hotelId,
                 hotel_name_ar: h.hotel_name_ar || h.hotel_name_en || 'فندق',
@@ -1054,17 +1057,18 @@ export class ChatController {
                 priceEGP: h.price_egp || 0,
                 priceUSD: h.price_usd_reference || Math.round((h.price_egp || 0) / 50),
                 rating: h.stars || h.rating || 4,
-                amenities: h.amenities || [],
-                description_ar: h.description_ar || '',
-                description_en: h.description_en || '',
-                image: h.image || `/images/hotels/${dest}/${hotelId.toLowerCase().replace(/\s+/g, '-')}.jpg`,
+                amenities: h.amenities || ['WiFi', 'Pool', 'Breakfast'],
+                description_ar: h.description_ar || 'فندق رائع مع إطلالة مميزة',
+                description_en: h.description_en || 'Amazing hotel with great views',
+                image: h.image || mockImageUrl,
                 area_ar: h.area_ar || h.area || this.getDestinationNameAr(dest),
                 area_en: h.area_en || h.area || this.getDestinationNameEn(dest),
                 cta: {
                   text_ar: 'اختر هذا الفندق',
                   text_en: 'Select Hotel',
                   variant: 'primary'
-                }
+                },
+                lazy: true
               }
             })
           })

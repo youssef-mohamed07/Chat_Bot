@@ -120,7 +120,19 @@ export const useChatWidget = () => {
             mapped.push({ text: '', isUser: false, timestamp: new Date(), meta: { source: 'system', budget: { title_ar: b.title_ar, title_en: b.title_en, ranges: b.ranges || [] } } })
           } else if (b.type === 'hotelCards') {
             console.log('🏨 Mapping hotel cards:', b.hotels?.length || 0, 'hotels')
-            mapped.push({ text: '', isUser: false, timestamp: new Date(), meta: { source: 'system', hotelCards: { hotels: b.hotels || [] } } })
+            mapped.push({ 
+              text: '', 
+              isUser: false, 
+              timestamp: new Date(), 
+              meta: { 
+                source: 'system', 
+                hotelCards: { 
+                  layout: b.layout,
+                  responsive: b.responsive,
+                  hotels: b.hotels || [] 
+                } 
+              } 
+            })
           }
         }
         

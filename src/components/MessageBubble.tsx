@@ -205,6 +205,8 @@ export const MessageBubble = ({ message, lang, onButtonClick, showButtons = true
                 <HotelCardsWidget
                   hotels={message.meta.hotelCards.hotels}
                   lang={lang}
+                  layout={message.meta.hotelCards.layout}
+                  responsive={message.meta.hotelCards.responsive}
                   onSelectHotel={(hotel) =>
                     onButtonClick && onButtonClick({
                       text: lang === 'ar' ? hotel.hotel_name_ar : hotel.hotel_name_en,
