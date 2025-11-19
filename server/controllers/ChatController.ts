@@ -822,10 +822,21 @@ export class ChatController {
   ): Promise<ChatResponse['ui'] | undefined> {
     const blocks: any[] = []
     
-    // ALWAYS add AI response as text block first
+    // Get typography config
+    const typography = this.getTypographyConfig(lang)
+    
+    // ALWAYS add AI response as text block first with typography
     blocks.push({
       type: 'text',
-      text: aiResponse
+      text: aiResponse,
+      typography: {
+        fontFamily: typography.fontFamily,
+        size: typography.sizes.base,
+        weight: typography.weights.normal,
+        lineHeight: typography.lineHeights.relaxed
+      },
+      animated: true,
+      timestamp: new Date().toISOString()
     })
     
     const step = meta.step || 'initial'
@@ -1011,13 +1022,29 @@ export class ChatController {
             return priceA - priceB
           })
         
-        const displayHotels = filtered.slice(0, 6)
+        const displayHotels = filtered.slice(0, 3)  // ✅ Show only 3 hotels
+        const hasMore = filtered.length > 3
         
         if (displayHotels.length > 0) {
+          // Add section header
+          blocks.push({
+            type: 'sectionHeader',
+            icon: '🏨',
+            title_ar: 'الفنادق المتاحة',
+            title_en: 'Available Hotels',
+            subtitle_ar: `${filtered.length} ${filtered.length === 1 ? 'فندق' : 'فنادق'}`,
+            subtitle_en: `${filtered.length} ${filtered.length === 1 ? 'hotel' : 'hotels'}`
+          })
+
           blocks.push({
             type: 'hotelCards',
+            layout: 'grid',
+            responsive: {
+              mobile: { layout: 'carousel', showCount: 1 },
+              tablet: { layout: 'grid', columns: 2 },
+              desktop: { layout: 'grid', columns: 3 }
+            },
             hotels: displayHotels.map((h: any) => {
-              // ✅ Use hotel_name_en as ID (matches JSON structure)
               const hotelId = h.hotel_name_en || h.hotel_name_ar || 'Hotel'
               
               return {
@@ -1032,12 +1059,43 @@ export class ChatController {
                 description_en: h.description_en || '',
                 image: h.image || `/images/hotels/${dest}/${hotelId.toLowerCase().replace(/\s+/g, '-')}.jpg`,
                 area_ar: h.area_ar || h.area || this.getDestinationNameAr(dest),
-                area_en: h.area_en || h.area || this.getDestinationNameEn(dest)
+                area_en: h.area_en || h.area || this.getDestinationNameEn(dest),
+                cta: {
+                  text_ar: 'اختر هذا الفندق',
+                  text_en: 'Select Hotel',
+                  variant: 'primary'
+                }
               }
             })
           })
+
+          // Add "Show More" button if there are more hotels
+          if (hasMore) {
+            blocks.push({
+              type: 'button',
+              text_ar: `عرض ${filtered.length - 3} ${filtered.length - 3 === 1 ? 'فندق آخر' : 'فنادق أخرى'}`,
+              text_en: `Show ${filtered.length - 3} more ${filtered.length - 3 === 1 ? 'hotel' : 'hotels'}`,
+              value: 'show_more_hotels',
+              variant: 'outline',
+              icon: '👇'
+            })
+          }
           
-          console.log(`✅ Showing ${displayHotels.length} hotels`)
+          console.log(`✅ Showing ${displayHotels.length} of ${filtered.length} hotels`)
+        } else {
+          // ✅ Empty state when no hotels available
+          blocks.push({
+            type: 'empty',
+            icon: '😔',
+            title_ar: 'لا توجد فنادق متاحة',
+            title_en: 'No Hotels Available',
+            description_ar: 'لم نجد فنادق تناسب ميزانيتك في هذه الوجهة. جرب تعديل الميزانية؟',
+            description_en: 'No hotels match your budget for this destination. Try adjusting your budget?',
+            actions: [
+              { text_ar: '💰 تعديل الميزانية', text_en: '💰 Adjust Budget', value: 'back_to_budget' },
+              { text_ar: '🔍 عرض كل الفنادق', text_en: '🔍 Show All Hotels', value: 'budget:0-999999' }
+            ]
+          })
         }
       }
       return { blocks }
@@ -1220,6 +1278,60 @@ export class ChatController {
 
     // Default: only text, no widgets
     return { blocks: [blocks[0]] }
+  }
+
+  private getTypographyConfig(lang: Language) {
+    return {
+      fontFamily: lang === 'ar' 
+        ? "'Cairo', 'Tajawal', 'IBM Plex Sans Arabic', -apple-system, sans-serif"
+        : "'Inter', 'Roboto', -apple-system, system-ui, sans-serif",
+      sizes: {
+        xs: '0.75rem',
+        sm: '0.875rem',
+        base: '1rem',
+        lg: '1.125rem',
+        xl: '1.25rem',
+        '2xl': '1.5rem'
+      },
+      weights: {
+        normal: 400,
+        medium: 500,
+        semibold: 600,
+        bold: 700
+      },
+      lineHeights: {
+        tight: 1.25,
+        normal: 1.5,
+        relaxed: 1.75
+      }
+    }
+  }
+
+  private getProgressForStep(step: string): { current: number; total: number; steps: any[] } {
+    const stepMap: Record<string, number> = {
+      'initial': 0,
+      'destination_selected': 1,
+      'dates_selected': 2,
+      'travelers_selected': 3,
+      'budget_selected': 4,
+      'hotel_selected': 5,
+      'meal_selected': 6,
+      'room_selected': 7
+    }
+
+    return {
+      current: stepMap[step] || 0,
+      total: 7,
+      steps: [
+        { key: 'destination', label_ar: 'الوجهة', label_en: 'Destination', icon: '🌍' },
+        { key: 'dates', label_ar: 'التواريخ', label_en: 'Dates', icon: '📅' },
+        { key: 'travelers', label_ar: 'المسافرون', label_en: 'Travelers', icon: '👥' },
+        { key: 'budget', label_ar: 'الميزانية', label_en: 'Budget', icon: '💰' },
+        { key: 'hotel', label_ar: 'الفندق', label_en: 'Hotel', icon: '🏨' },
+        { key: 'meal', label_ar: 'الوجبات', label_en: 'Meals', icon: '🍽️' },
+        { key: 'room', label_ar: 'الغرفة', label_en: 'Room', icon: '🛏️' }
+      ]
+    }
   }
 
   private getDestinationNameAr(dest: string): string {
