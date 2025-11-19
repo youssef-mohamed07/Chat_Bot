@@ -27,18 +27,18 @@ export const MessagesList = ({ messages, lang, messagesEndRef, isLoading = false
       dir={lang === 'ar' ? 'rtl' : 'ltr'}
       style={{ scrollbarWidth: 'thin', scrollbarColor: 'rgba(156, 163, 175, 0.3) transparent' }}
     >
-      <div className="px-4 pt-4">
+      <div className="px-3 md:px-4 pt-3 md:pt-4">
         <div className="relative">
           <div className="absolute inset-0 flex items-center">
             <div className="w-full border-t border-dashed border-gray-300"></div>
           </div>
           <div className="relative flex justify-center">
-            <span className="bg-white px-3 text-sm text-gray-500">Today</span>
+            <span className="bg-white px-2 md:px-3 text-xs md:text-sm text-gray-500">Today</span>
           </div>
         </div>
       </div>
 
-      <div className="px-4 py-4 space-y-4">
+      <div className="px-3 md:px-4 py-3 md:py-4 space-y-3 md:space-y-4">
         {messages.length === 0 ? null : (
           messages.map((message, index) => {
             // Only show buttons on the LAST bot message

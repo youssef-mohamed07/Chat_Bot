@@ -76,11 +76,11 @@ export default function StandaloneChatWidget({ initialOpen = false }: { initialO
   }
 
   return (
-    <div className="fixed bottom-6 right-6 z-50">
+    <div className="fixed bottom-0 right-0 md:bottom-6 md:right-6 z-50 w-full md:w-auto">
       {!isOpen && <ToggleButton onOpen={() => setIsOpen(true)} />}
       {isOpen && (
         <div className="relative">
-          <div className="w-[380px] sm:w-[400px] h-[600px] bg-white rounded-2xl shadow-2xl border border-gray-100 overflow-hidden flex flex-col">
+          <div className="w-full md:w-[400px] lg:w-[420px] h-screen md:h-[600px] lg:h-[650px] bg-white md:rounded-2xl shadow-2xl border border-gray-100 overflow-hidden flex flex-col">
             {currentStep === 'contact' && (
               <ContactInfoComponent onContactSubmit={handleContactSubmit} lang={lang || 'en'} />
             )}

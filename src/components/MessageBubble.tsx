@@ -40,24 +40,24 @@ export const MessageBubble = ({ message, lang, onButtonClick, showButtons = true
   
   return (
     <div 
-      className={`flex items-end gap-3 ${message.isUser ? 'flex-row-reverse' : 'flex-row'} message-bubble`}
+      className={`flex items-end gap-2 md:gap-3 ${message.isUser ? 'flex-row-reverse' : 'flex-row'} message-bubble`}
     >
       {!message.isUser ? (
-        <div className="w-8 h-8 rounded-full overflow-hidden shadow-sm">
+        <div className="w-7 h-7 md:w-8 md:h-8 rounded-full overflow-hidden shadow-sm flex-shrink-0">
           <img src="/logo.jpg" alt="AI" className="w-full h-full object-cover" />
         </div>
       ) : (
-        <div className="w-8 h-8 rounded-full bg-gray-800 text-white flex items-center justify-center">
-          <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+        <div className="w-7 h-7 md:w-8 md:h-8 rounded-full bg-gray-800 text-white flex items-center justify-center flex-shrink-0">
+          <svg className="w-4 h-4 md:w-5 md:h-5" fill="currentColor" viewBox="0 0 24 24">
             <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
           </svg>
         </div>
       )}
       
-      <div className={`max-w-[72%] ${message.isUser ? 'items-end' : 'items-start'} flex flex-col`}>
+      <div className={`max-w-[80%] md:max-w-[72%] ${message.isUser ? 'items-end' : 'items-start'} flex flex-col`}>
         <div
           className={`
-            relative px-4 py-3 rounded-xl shadow-sm
+            relative px-3 py-2 md:px-4 md:py-3 rounded-xl shadow-sm text-sm md:text-base
             ${message.isUser ? 'rounded-br-md' : 'rounded-bl-md'}
           `}
           style={

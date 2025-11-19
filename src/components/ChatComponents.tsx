@@ -11,20 +11,20 @@ interface ChatHeaderProps {
 
 export const ChatHeader = ({ onClose, isChatEnded = false }: ChatHeaderProps) => {
   return (
-    <div className="px-4 py-4 bg-white border-b border-gray-100">
+    <div className="px-3 md:px-4 py-3 md:py-4 bg-white border-b border-gray-100">
       <div className="flex items-center justify-between">
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-2 md:gap-3">
           {/* Logo */}
-          <div className="w-10 h-10 rounded-full overflow-hidden shadow-lg">
+          <div className="w-8 h-8 md:w-10 md:h-10 rounded-full overflow-hidden shadow-lg">
             <img 
               src="/logo.jpg" 
               alt="Quick Air" 
               className="w-full h-full object-cover" 
             />
           </div>
-          <div className="flex items-center gap-2">
-            <div className="w-2 h-2 bg-green-500 rounded-full"></div>
-            <span className="text-sm font-medium text-gray-700">Quick Air - Online</span>
+          <div className="flex items-center gap-1.5 md:gap-2">
+            <div className="w-1.5 h-1.5 md:w-2 md:h-2 bg-green-500 rounded-full"></div>
+            <span className="text-xs md:text-sm font-medium text-gray-700">Quick Air - Online</span>
           </div>
         </div>
         
@@ -104,8 +104,8 @@ export const ChatInput = ({
   }
 
   return (
-    <div className="border-t border-gray-200 bg-white p-4">
-      <div className="flex items-end gap-3">
+    <div className="border-t border-gray-200 bg-white p-3 md:p-4">
+      <div className="flex items-end gap-2 md:gap-3">
         <div className="flex-1 relative">
           <textarea
             ref={textareaRef}
@@ -118,7 +118,7 @@ export const ChatInput = ({
             rows={1}
             placeholder={lang === 'ar' ? 'اكتب رسالتك أو اختر وجهة مثل "دهب"...' : 'Type your message or destination like "Bali"...'}
             className={`
-              w-full resize-none rounded-lg border-2 px-4 py-3 text-sm transition-colors duration-200
+              w-full resize-none rounded-lg border-2 px-3 md:px-4 py-2 md:py-3 text-sm transition-colors duration-200
               ${isFocused 
                 ? 'border-blue-500' 
                 : 'border-gray-200'

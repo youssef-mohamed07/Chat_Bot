@@ -77,11 +77,11 @@ export const ChatWidget = ({ initialOpen = false, className }: ChatWidgetProps) 
   }
 
   return (
-    <div className={"fixed bottom-6 right-6 z-50 " + (className || '')}>
+    <div className={"fixed bottom-0 right-0 md:bottom-6 md:right-6 z-50 w-full md:w-auto " + (className || '')}>
       {!isOpen && <ToggleButton onOpen={() => setIsOpen(true)} />}
       {isOpen && (
         <div className="relative">
-          <div className="w-[380px] sm:w-[400px] h-[600px] bg-white rounded-2xl shadow-2xl border border-gray-100 overflow-hidden flex flex-col">
+          <div className="w-full md:w-[400px] lg:w-[420px] h-screen md:h-[600px] lg:h-[650px] bg-white md:rounded-2xl shadow-2xl border border-gray-100 overflow-hidden flex flex-col">
             {currentStep === 'contact' && (
               <ContactInfoComponent onContactSubmit={handleContactSubmit} lang={lang || 'en'} />
             )}
@@ -119,7 +119,7 @@ export const ChatWidget = ({ initialOpen = false, className }: ChatWidgetProps) 
           </div>
           <button
             onClick={() => setIsOpen(false)}
-            className="absolute -bottom-6 left-1/2 transform -translate-x-1/2 w-12 h-12 bg-red-800 rounded-full shadow-xl hover:bg-red-900 transition-all duration-200 flex items-center justify-center hover:scale-110"
+            className="hidden md:flex absolute -bottom-6 left-1/2 transform -translate-x-1/2 w-12 h-12 bg-red-800 rounded-full shadow-xl hover:bg-red-900 transition-all duration-200 items-center justify-center hover:scale-110"
           >
             <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />

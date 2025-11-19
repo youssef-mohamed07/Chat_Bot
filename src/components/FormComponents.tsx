@@ -72,20 +72,20 @@ export const ContactInfo = ({ onContactSubmit, lang }: ContactInfoProps) => {
                      validatePhone(contactData.phone) && validateEmail(contactData.email)
 
   return (
-    <div className="flex-1 p-6 bg-gradient-to-br from-red-50 to-red-100 flex items-center justify-center">
+    <div className="flex-1 p-4 md:p-6 bg-gradient-to-br from-red-50 to-red-100 flex items-center justify-center overflow-y-auto">
       <div className="w-full max-w-sm">
-        <div className="text-center mb-8">
-          <div className="w-16 h-16 rounded-full overflow-hidden mx-auto mb-4 shadow-lg">
+        <div className="text-center mb-6 md:mb-8">
+          <div className="w-14 h-14 md:w-16 md:h-16 rounded-full overflow-hidden mx-auto mb-3 md:mb-4 shadow-lg">
             <img 
               src="/logo.jpg" 
               alt="Quick Air" 
               className="w-full h-full object-cover" 
             />
           </div>
-          <div className="text-2xl font-bold text-gray-800 mb-3" dir={lang === 'ar' ? 'rtl' : 'ltr'}>
+          <div className="text-xl md:text-2xl font-bold text-gray-800 mb-2 md:mb-3" dir={lang === 'ar' ? 'rtl' : 'ltr'}>
             {LABELS[lang].contactInfo}
           </div>
-          <div className="text-sm text-gray-600" dir={lang === 'ar' ? 'rtl' : 'ltr'}>
+          <div className="text-xs md:text-sm text-gray-600 px-4" dir={lang === 'ar' ? 'rtl' : 'ltr'}>
             {LABELS[lang].contactDescription}
           </div>
         </div>
@@ -107,7 +107,7 @@ export const ContactInfo = ({ onContactSubmit, lang }: ContactInfoProps) => {
                 type="tel"
                 value={contactData.phone}
                 onChange={(e) => updateField('phone', e.target.value)}
-                className={`w-full pl-10 pr-4 py-4 border-2 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-red-800/20 transition-all duration-200 ${
+                className={`w-full pl-10 pr-4 py-3 md:py-4 border-2 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-red-800/20 transition-all duration-200 ${
                   errors.phone ? 'border-red-300 bg-red-50' : 'border-gray-200 hover:border-red-600 bg-white shadow-sm'
                 }`}
                 placeholder={PLACEHOLDERS[lang].phone}
@@ -137,7 +137,7 @@ export const ContactInfo = ({ onContactSubmit, lang }: ContactInfoProps) => {
                 type="email"
                 value={contactData.email}
                 onChange={(e) => updateField('email', e.target.value)}
-                className={`w-full pl-10 pr-4 py-4 border-2 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-red-800/20 transition-all duration-200 ${
+                className={`w-full pl-10 pr-4 py-3 md:py-4 border-2 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-red-800/20 transition-all duration-200 ${
                   errors.email ? 'border-red-300 bg-red-50' : 'border-gray-200 hover:border-red-600 bg-white shadow-sm'
                 }`}
                 placeholder={PLACEHOLDERS[lang].email}

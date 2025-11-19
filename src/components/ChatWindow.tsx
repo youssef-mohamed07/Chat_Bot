@@ -41,7 +41,7 @@ export const ChatWindow = ({
   contactInfo
 }: ChatWindowProps) => {
   return (
-    <div className="w-[380px] sm:w-[400px] h-[600px] bg-white rounded-xl shadow-lg border border-gray-200 overflow-hidden flex flex-col">
+    <div className="w-full h-full bg-white md:rounded-xl shadow-lg border border-gray-200 overflow-hidden flex flex-col">
       <ChatHeader onClose={onClose} />
       
       <MessagesList 
