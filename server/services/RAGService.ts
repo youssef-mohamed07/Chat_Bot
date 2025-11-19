@@ -15,7 +15,7 @@ export class RAGService {
   }
 
   private resolveDataDir(): string {
-    return path.resolve(process.cwd(), 'server')
+    return path.resolve(process.cwd(), 'server', 'tours')
   }
 
   private safeReadJson(filePath: string): AnyJson | null {
@@ -30,10 +30,19 @@ export class RAGService {
 
   private deriveDestination(fileBase: string, json: AnyJson): string | undefined {
     const title = (json.title_en || json.title_ar || '') as string
-    const candidates = [fileBase, title]
+    const location = (json.location || '') as string
+    const candidates = [fileBase, title, location]
     const lower = candidates.join(' ').toLowerCase()
+    
     if (lower.includes('bali')) return 'bali'
     if (lower.includes('istanbul') || lower.includes('turkey')) return 'istanbul'
+    if (lower.includes('beirut') || lower.includes('lebanon')) return 'beirut'
+    if (lower.includes('sharm') || lower.includes('sharm el sheikh') || lower.includes('sharm_el_sheikh')) return 'sharm_el_sheikh'
+    if (lower.includes('hurghada') || lower.includes('الغردقة')) return 'hurghada'
+    if (lower.includes('dahab') || lower.includes('دهب')) return 'dahab'
+    if (lower.includes('ain sokhna') || lower.includes('ain_sokhna') || lower.includes('العين السخنة')) return 'ain_sokhna'
+    if (lower.includes('sahl') || lower.includes('hasheesh') || lower.includes('sahl_hashish')) return 'sahl_hashish'
+    
     return undefined
   }
 
@@ -197,22 +206,36 @@ export class RAGService {
 
   private formatHotelsForRAG(hotels: any[], lang: Language): string {
     return hotels.map(h => {
-      const name = h.hotel_name || h.name || 'Unknown'
-      const rating = h.rating || ''
+      const name = lang === 'ar' ? (h.hotel_name_ar || h.hotel_name_en) : (h.hotel_name_en || h.hotel_name_ar)
+      const rating = h.stars ? `${h.stars} نجوم` : (h.rating || '')
       const area = h.area ? ` في ${h.area}` : ''
-      const room = h.room_type ? ` - ${h.room_type}` : ''
+      const room = lang === 'ar' ? (h.room_type_ar || h.room_type_en || '') : (h.room_type_en || h.room_type_ar || '')
+      const roomText = room ? ` - ${room}` : ''
       const meal = h.meal ? ` - ${h.meal}` : ''
       
       let price = ''
-      if (h.price_usd) {
-        price = ` السعر: $${h.price_usd} للشخص`
-      } else if (h.price_single_usd || h.price_double_triple_usd) {
-        const single = h.price_single_usd ? `$${h.price_single_usd}` : '-'
-        const double = h.price_double_triple_usd ? `$${h.price_double_triple_usd}` : '-'
-        price = ` السعر فردي: ${single} / ثنائي: ${double}`
+      // Primary: EGP pricing
+      if (h.price_egp) {
+        const usdRef = h.price_usd_reference ? ` (~$${h.price_usd_reference})` : ''
+        price = lang === 'ar' 
+          ? ` سعر العرض: ${h.price_egp} جنيه${usdRef}`
+          : ` Offer Price: ${h.price_egp} EGP${usdRef}`
+      } else if (h.prices_egp?.double) {
+        const egpDouble = h.prices_egp.double
+        const usdRef = h.price_usd_reference ? ` (~$${h.price_usd_reference})` : ''
+        price = lang === 'ar'
+          ? ` سعر العرض للفرد: ${egpDouble} جنيه${usdRef}`
+          : ` Offer Price per person: ${egpDouble} EGP${usdRef}`
+      } else if (h.prices_egp) {
+        // Istanbul format with single/double/child
+        const parts: string[] = []
+        if (h.prices_egp.single) parts.push(`فردي: ${h.prices_egp.single} جنيه`)
+        if (h.prices_egp.double) parts.push(`ثنائي: ${h.prices_egp.double} جنيه`)
+        if (h.prices_egp.child) parts.push(`طفل: ${h.prices_egp.child} جنيه`)
+        price = parts.length > 0 ? ` سعر العرض - ${parts.join(' / ')}` : ''
       }
 
-      return `${name} ${rating}${area}${room}${meal}${price}`
+      return `${name} ${rating}${area}${roomText}${meal}${price}`
     }).join('\n')
   }
 
@@ -355,8 +378,8 @@ export class RAGService {
     )
   }
 
-  // Search hotels with filters
-  searchHotels(destination: string, filters?: { minRating?: number; maxPrice?: number }): any[] {
+  // Search hotels with filters (prices now in EGP)
+  searchHotels(destination: string, filters?: { minRating?: number; maxPrice?: number; currency?: 'EGP' | 'USD' }): any[] {
     const offer = this.getOfferByDestination(destination)
     if (!offer || !Array.isArray(offer.hotels)) return []
 
@@ -364,14 +387,21 @@ export class RAGService {
 
     if (filters?.minRating) {
       hotels = hotels.filter(h => {
-        const rating = parseInt(h.rating) || 0
+        const rating = parseInt(h.stars || h.rating || '0')
         return rating >= (filters.minRating || 0)
       })
     }
 
     if (filters?.maxPrice) {
       hotels = hotels.filter(h => {
-        const price = h.price_usd || h.price_single_usd || h.price_double_triple_usd || 0
+        let price = 0
+        // Check if filtering by USD or EGP
+        if (filters.currency === 'USD') {
+          price = h.price_usd_reference || h.prices_usd_reference?.double || 0
+        } else {
+          // Default to EGP
+          price = h.price_egp || h.prices_egp?.double || 0
+        }
         return price <= (filters.maxPrice || Infinity)
       })
     }

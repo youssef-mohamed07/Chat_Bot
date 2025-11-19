@@ -116,7 +116,7 @@ export const ChatInput = ({
             onFocus={() => setIsFocused(true)}
             onBlur={() => setIsFocused(false)}
             rows={1}
-            placeholder={PLACEHOLDERS[lang].message}
+            placeholder={lang === 'ar' ? 'اكتب رسالتك أو اختر وجهة مثل "دهب"...' : 'Type your message or destination like "Bali"...'}
             className={`
               w-full resize-none rounded-lg border-2 px-4 py-3 text-sm transition-colors duration-200
               ${isFocused 

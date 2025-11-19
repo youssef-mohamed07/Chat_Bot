@@ -1,0 +1,112 @@
+{
+  "source": "istanbul_winter_offer",
+  "location": "Istanbul",
+  "type": "travel_offers",
+  "valid_months": [
+    "November",
+    "December"
+  ],
+  "valid_from": "01 Nov",
+  "valid_to": "24 Dec",
+  "hotels": [
+    {
+      "hotel_name_en": "Grand Liza Hotel",
+      "hotel_name_ar": "Grand Liza Hotel",
+      "stars": 3,
+      "area": "Fatih",
+      "room_type_en": "Standard Room + Breakfast",
+      "room_type_ar": "غرفة قياسية + إفطار",
+      "price_egp": 7950,
+      "price_usd_reference": 159
+    },
+    {
+      "hotel_name_en": "Klas Hotel Old City",
+      "hotel_name_ar": "Klas Hotel Old City",
+      "stars": 4,
+      "area": "Fatih",
+      "room_type_en": "Standard Room + Breakfast",
+      "room_type_ar": "غرفة قياسية + إفطار",
+      "price_egp": 10250,
+      "price_usd_reference": 205
+    },
+    {
+      "hotel_name_en": "Feronya Hotel Taksim",
+      "hotel_name_ar": "Feronya Hotel Taksim",
+      "stars": 4,
+      "area": "Taksim",
+      "room_type_en": "Standard Room + Breakfast",
+      "room_type_ar": "غرفة قياسية + إفطار",
+      "price_egp": 11950,
+      "price_usd_reference": 239
+    },
+    {
+      "hotel_name_en": "Central Palace Taksim",
+      "hotel_name_ar": "Central Palace Taksim",
+      "stars": 4,
+      "area": "Taksim",
+      "room_type_en": "Standard Room + Breakfast",
+      "room_type_ar": "غرفة قياسية + إفطار",
+      "price_egp": 12500,
+      "price_usd_reference": 250
+    },
+    {
+      "hotel_name_en": "Ramada by Wyndham Pera",
+      "hotel_name_ar": "Ramada by Wyndham Pera",
+      "stars": 5,
+      "area": "Taksim",
+      "room_type_en": "Standard Room + Breakfast",
+      "room_type_ar": "غرفة قياسية + إفطار",
+      "price_egp": 16250,
+      "price_usd_reference": 325
+    },
+    {
+      "hotel_name_en": "Point Hotel Taksim",
+      "hotel_name_ar": "Point Hotel Taksim",
+      "stars": 5,
+      "area": "Taksim",
+      "room_type_en": "Standard Room + Breakfast",
+      "room_type_ar": "غرفة قياسية + إفطار",
+      "price_egp": 20000,
+      "price_usd_reference": 400
+    }
+  ],
+  "includes": {
+    "ar": [
+      "الإقامة للفرد لمدة 6 أيام / 5 ليالي بالفطر في أي فندق من الفنادق المذكورة أعلاه أو ما يماثلها.",
+      "رحلة بحرية ببحيرة البوسفور.",
+      "الانتقالات من المطار إلى الفندق والعكس."
+    ],
+    "en": [
+      "Accommodation for 6 days / 5 nights with breakfast at any of the listed hotels or similar.",
+      "Bosphorus boat tour.",
+      "Round-trip airport transfers."
+    ]
+  },
+  "not_included": {
+    "ar": [
+      "أي بنود غير مدرجة في البرنامج.",
+      "تذاكر الطيران ذهاب وعودة.",
+      "تأشيرة دخول تركيا بقيمة 208 دولار للفرد (يتم استخراجها من مكتب VoyaVisa).",
+      "غرامة مخالفة التأشيرة في حالة رفضها.",
+      "أي زيادات تفرضها خطوط الطيران حسب السعر وقت الحجز.",
+      "وجبات غير المذكورة.",
+      "الرحلات الاختيارية."
+    ],
+    "en": [
+      "Any items not included in the program.",
+      "Round-trip airline tickets.",
+      "Turkey entry visa ($208 per person) processed via VoyaVisa.",
+      "Penalty in case of visa rejection.",
+      "Any increases by airlines during booking time.",
+      "Meals not mentioned.",
+      "Optional tours."
+    ]
+  },
+  "notes": {
+    "ar": "الأسعار أعلاه بالدولار ويتم السداد بما يعادلها بالجنيه المصري حسب سعر الصرف وقت السداد.",
+    "en": "Prices above are in USD and payment is made in EGP based on exchange rate at payment time."
+  },
+  "currency": "EGP",
+  "usd_exchange_rate": 50,
+  "offer_type": "travel_package"
+}

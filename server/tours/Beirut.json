@@ -1,0 +1,83 @@
+{
+  "source": "beirut_offer_image",
+  "location": "Beirut",
+  "type": "travel_offers",
+  "valid_months": [
+    "October",
+    "November",
+    "December"
+  ],
+  "hotels": [
+    {
+      "hotel_name_en": "Caramel Boutique Hotel",
+      "hotel_name_ar": "Caramel Boutique Hotel",
+      "stars": 3,
+      "area": "Beirut",
+      "room_type_en": "Deluxe Room",
+      "room_type_ar": "غرفة ديلوكس",
+      "price_egp": 22500,
+      "price_usd_reference": 450
+    },
+    {
+      "hotel_name_en": "Hotel Cavalier",
+      "hotel_name_ar": "Hotel Cavalier",
+      "stars": 4,
+      "area": "Beirut",
+      "room_type_en": "Standard Room",
+      "room_type_ar": "غرفة ستاندرد",
+      "price_egp": 24250,
+      "price_usd_reference": 485
+    },
+    {
+      "hotel_name_en": "Crowne Plaza Beirut",
+      "hotel_name_ar": "Crowne Plaza Beirut",
+      "stars": 5,
+      "area": "Beirut",
+      "room_type_en": "Deluxe Room",
+      "room_type_ar": "غرفة ديلوكس",
+      "price_egp": 29500,
+      "price_usd_reference": 590
+    },
+    {
+      "hotel_name_en": "Movenpick Hotel Beirut",
+      "hotel_name_ar": "Movenpick Hotel Beirut",
+      "stars": 5,
+      "area": "Beirut",
+      "room_type_en": "Classic Room",
+      "room_type_ar": "غرفة كلاسيك",
+      "price_egp": 60000,
+      "price_usd_reference": 1200
+    }
+  ],
+  "includes": {
+    "ar": [
+      "الإقامة في الغرفة لمدة 5 أيام / 4 ليالي في أي من الفنادق المذكورة أعلاه.",
+      "الوجبات شاملة الإفطار.",
+      "الانتقالات من المطار إلى الفندق والعكس."
+    ],
+    "en": [
+      "Accommodation for 5 days / 4 nights at any of the listed hotels.",
+      "Breakfast included.",
+      "Round-trip airport transfers (Beirut Airport ↔ Hotel)."
+    ]
+  },
+  "not_included": {
+    "ar": [
+      "أي بنود غير مدرجة في البرنامج.",
+      "تذاكر الطيران.",
+      "تأشيرة دخول لبنان (25 دولار عند الوصول) بشرط وجود 2000 دولار مع المسافر."
+    ],
+    "en": [
+      "Any items not mentioned in the program.",
+      "Airline tickets.",
+      "Lebanon entry visa (25 USD on arrival) — traveler must hold 2000 USD cash."
+    ]
+  },
+  "notes": {
+    "ar": "الأسعار متغيرة حسب الإمكانية في الفندق والتاريخ الفعلي للحجز وطبقاً لتغيرات أسعار العملات.",
+    "en": "Prices vary based on hotel availability, actual booking date, and currency fluctuations."
+  },
+  "currency": "EGP",
+  "usd_exchange_rate": 50,
+  "offer_type": "travel_package"
+}

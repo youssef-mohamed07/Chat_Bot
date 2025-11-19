@@ -107,6 +107,20 @@ export const useChatWidget = () => {
             mapped.push({ text: '', isUser: false, timestamp: new Date(), meta: { source: 'system', dateRange: { heading: b.heading, minDate: b.minDate, maxDate: b.maxDate } } })
           } else if (b.type === 'travellers') {
             mapped.push({ text: '', isUser: false, timestamp: new Date(), meta: { source: 'system', travellers: { heading: b.heading, min: b.min, max: b.max, default: b.default } } })
+          } else if (b.type === 'quickReplies') {
+            mapped.push({ text: '', isUser: false, timestamp: new Date(), meta: { source: 'system', quickReplies: { title_ar: b.title_ar, title_en: b.title_en, options: b.options || [] } } })
+          } else if (b.type === 'mealPlans') {
+            mapped.push({ text: '', isUser: false, timestamp: new Date(), meta: { source: 'system', mealPlans: { title_ar: b.title_ar, title_en: b.title_en, options: b.options || [] } } })
+          } else if (b.type === 'roomTypes') {
+            mapped.push({ text: '', isUser: false, timestamp: new Date(), meta: { source: 'system', roomTypes: { title_ar: b.title_ar, title_en: b.title_en, options: b.options || [] } } })
+          } else if (b.type === 'hotelFilters') {
+            mapped.push({ text: '', isUser: false, timestamp: new Date(), meta: { source: 'system', hotelFilters: { title_ar: b.title_ar, title_en: b.title_en, filters: b.filters || {} } } })
+          } else if (b.type === 'budget') {
+            console.log('📊 Mapping budget widget:', b)
+            mapped.push({ text: '', isUser: false, timestamp: new Date(), meta: { source: 'system', budget: { title_ar: b.title_ar, title_en: b.title_en, ranges: b.ranges || [] } } })
+          } else if (b.type === 'hotelCards') {
+            console.log('🏨 Mapping hotel cards:', b.hotels?.length || 0, 'hotels')
+            mapped.push({ text: '', isUser: false, timestamp: new Date(), meta: { source: 'system', hotelCards: { hotels: b.hotels || [] } } })
           }
         }
         

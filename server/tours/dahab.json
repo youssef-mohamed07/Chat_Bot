@@ -1,0 +1,173 @@
+{
+  "source": "dahab_november_offer_image",
+  "type": "travel_offers",
+  "valid_months": [
+    "November",
+    "December"
+  ],
+  "hotels": [
+    {
+      "hotel_name_en": "Daniela Diving Resort",
+      "hotel_name_ar": "منتجع دانبيلا دايفنج",
+      "stars": 3,
+      "area": "dahab",
+      "room_type_en": "Standard Room - All Inclusive",
+      "room_type_ar": "غرفة قياسية - شامل جميع الوجبات",
+      "valid_from": "01-11",
+      "valid_to": "30-11",
+      "prices_egp": {
+        "single": 6450,
+        "double": 5250,
+        "triple": 4400
+      },
+      "price_egp": 5250,
+      "price_usd_reference": 175
+    },
+    {
+      "hotel_name_en": "Happy Life Village",
+      "hotel_name_ar": "هابي لايف فيليدج",
+      "stars": 3,
+      "area": "dahab",
+      "room_type_en": "Standard Room - All Inclusive",
+      "room_type_ar": "غرفة قياسية - شامل جميع الوجبات",
+      "valid_from": "01-11",
+      "valid_to": "29-12",
+      "prices_egp": {
+        "single": 7500,
+        "double": 5000,
+        "triple": 4925
+      },
+      "price_egp": 5000,
+      "price_usd_reference": 167
+    },
+    {
+      "hotel_name_en": "Tropitel Dahab Oasis",
+      "hotel_name_ar": "تروبيتل دهب أوايسيس",
+      "stars": 3,
+      "area": "dahab",
+      "room_type_en": "Standard Room - All Inclusive",
+      "room_type_ar": "غرفة قياسية - شامل جميع الوجبات",
+      "valid_from": "01-11",
+      "valid_to": "29-12",
+      "prices_egp": {
+        "single": 8700,
+        "double": 5450,
+        "triple": 5380
+      },
+      "price_egp": 5450,
+      "price_usd_reference": 182
+    },
+    {
+      "hotel_name_en": "Dahab Lagoon Club",
+      "hotel_name_ar": "دهب لاجون كلوب",
+      "stars": 4,
+      "area": "dahab",
+      "room_type_en": "Standard Room - All Inclusive",
+      "room_type_ar": "غرفة قياسية - شامل جميع الوجبات",
+      "valid_from": "01-11",
+      "valid_to": "30-11",
+      "prices_egp": {
+        "single": 14110,
+        "double": 8850,
+        "triple": 8850
+      },
+      "price_egp": 8850,
+      "price_usd_reference": 295
+    },
+    {
+      "hotel_name_en": "Ecotel Dahab Sea View",
+      "hotel_name_ar": "إيكوتيل دهب سي فيو",
+      "stars": 4,
+      "area": "dahab",
+      "room_type_en": "Standard Room - All Inclusive",
+      "room_type_ar": "غرفة قياسية - شامل جميع الوجبات",
+      "valid_from": "01-11",
+      "valid_to": "29-12",
+      "prices_egp": {
+        "single": 11760,
+        "double": 7350,
+        "triple": 6370
+      },
+      "price_egp": 7350,
+      "price_usd_reference": 245
+    },
+    {
+      "hotel_name_en": "Swiss Inn Resort Dahab",
+      "hotel_name_ar": "سويس إن ريزورت دهب",
+      "stars": 4,
+      "area": "dahab",
+      "room_type_en": "Standard Room - All Inclusive",
+      "room_type_ar": "غرفة قياسية - شامل جميع الوجبات",
+      "valid_from": "01-11",
+      "valid_to": "30-11",
+      "prices_egp": {
+        "single": 14110,
+        "double": 8820,
+        "triple": 8675
+      },
+      "price_egp": 8820,
+      "price_usd_reference": 294
+    },
+    {
+      "hotel_name_en": "Retac Dahab Resort",
+      "hotel_name_ar": "ريتاج دهب ريزورت",
+      "stars": 5,
+      "area": "dahab",
+      "room_type_en": "Standard Room - All Inclusive",
+      "room_type_ar": "غرفة قياسية - شامل جميع الوجبات",
+      "valid_from": "01-11",
+      "valid_to": "24-12",
+      "prices_egp": {
+        "single": 10400,
+        "double": 6950,
+        "triple": 6800
+      },
+      "price_egp": 6950,
+      "price_usd_reference": 232
+    },
+    {
+      "hotel_name_en": "SAFIR DAHAB RESORT",
+      "hotel_name_ar": "سفير دهب ريزورت",
+      "stars": 5,
+      "area": "dahab",
+      "room_type_en": "Standard Room - All Inclusive",
+      "room_type_ar": "غرفة قياسية - شامل جميع الوجبات",
+      "valid_from": "01-11",
+      "valid_to": "28-12",
+      "prices_egp": {
+        "single": 13100,
+        "double": 8730,
+        "triple": 8450
+      },
+      "price_egp": 8730,
+      "price_usd_reference": 291
+    }
+  ],
+  "includes": {
+    "ar": [
+      "الإقامة بالفندق لمدة 4 أيام / 3 ليالي",
+      "الوجبات (إفطار + عشاء)"
+    ],
+    "en": [
+      "Hotel stay for 4 days / 3 nights",
+      "Meals (Breakfast + Dinner)"
+    ]
+  },
+  "not_included": {
+    "ar": [
+      "أي بنود غير مدرجة في البرنامج",
+      "الانتقالات"
+    ],
+    "en": [
+      "Any items not listed in the program",
+      "Transportation"
+    ]
+  },
+  "notes": {
+    "ar": "الأسعار قابلة للزيادة طبقاً لأسعار الفندق والإمكانية وقت الحجز.",
+    "en": "Prices may increase depending on hotel pricing and availability at booking time."
+  },
+  "currency": "EGP",
+  "usd_exchange_rate": 50,
+  "offer_type": "travel_package"
+}

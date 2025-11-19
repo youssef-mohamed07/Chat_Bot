@@ -1,0 +1,176 @@
+{
+  "source": "sahl_hashish_offer_image",
+  "location": "Sahl Hasheesh",
+  "type": "travel_offers",
+  "valid_months": [
+    "November",
+    "December"
+  ],
+  "hotels": [
+    {
+      "hotel_name_en": "Zen Resort Sahl Hasheesh",
+      "hotel_name_ar": "Zen Resort Sahl Hasheesh",
+      "stars": 4,
+      "area": "Sahl Hasheesh",
+      "room_type_en": "Standard Room - All Inclusive",
+      "room_type_ar": "غرفة قياسية - شامل جميع الوجبات",
+      "valid_from": null,
+      "valid_to": "26-12",
+      "prices_egp": {
+        "single": 9200,
+        "double": 8750,
+        "triple": null
+      },
+      "price_egp": 8750,
+      "price_usd_reference": 292
+    },
+    {
+      "hotel_name_en": "Jasmine Palace Resort And Spa",
+      "hotel_name_ar": "Jasmine Palace Resort And Spa",
+      "stars": 4,
+      "area": "Sahl Hasheesh",
+      "room_type_en": "Standard Room - All Inclusive",
+      "room_type_ar": "غرفة قياسية - شامل جميع الوجبات",
+      "valid_from": null,
+      "valid_to": "23-12",
+      "prices_egp": {
+        "single": 8910,
+        "double": 8700,
+        "triple": null
+      },
+      "price_egp": 8700,
+      "price_usd_reference": 290
+    },
+    {
+      "hotel_name_en": "Gravity Hotels & Aqua Park",
+      "hotel_name_ar": "Gravity Hotels & Aqua Park",
+      "stars": 4,
+      "area": "Sahl Hasheesh",
+      "room_type_en": "Standard Room - All Inclusive",
+      "room_type_ar": "غرفة قياسية - شامل جميع الوجبات",
+      "valid_from": null,
+      "valid_to": "26-12",
+      "prices_egp": {
+        "single": 14350,
+        "double": 14050,
+        "triple": null
+      },
+      "price_egp": 14050,
+      "price_usd_reference": 468
+    },
+    {
+      "hotel_name_en": "Tropitel Sahl Hasheesh",
+      "hotel_name_ar": "Tropitel Sahl Hasheesh",
+      "stars": 4,
+      "area": "Sahl Hasheesh",
+      "room_type_en": "Standard Room - All Inclusive",
+      "room_type_ar": "غرفة قياسية - شامل جميع الوجبات",
+      "valid_from": null,
+      "valid_to": "20-11",
+      "prices_egp": {
+        "single": 13230,
+        "double": 13180,
+        "triple": null
+      },
+      "price_egp": 13180,
+      "price_usd_reference": 439
+    },
+    {
+      "hotel_name_en": "KaiSol Romance Hotel (Adults only)",
+      "hotel_name_ar": "KaiSol Romance Hotel (للبالغين فقط)",
+      "stars": 5,
+      "area": "Sahl Hasheesh",
+      "room_type_en": "Standard Room - All Inclusive",
+      "room_type_ar": "غرفة قياسية - شامل جميع الوجبات",
+      "valid_from": "21-11",
+      "valid_to": "29-12",
+      "prices_egp": {
+        "single": 11760,
+        "double": 11700,
+        "triple": null
+      },
+      "price_egp": 11700,
+      "price_usd_reference": 390
+    },
+    {
+      "hotel_name_en": "Old Palace Resort",
+      "hotel_name_ar": "Old Palace Resort",
+      "stars": 5,
+      "area": "Sahl Hasheesh",
+      "room_type_en": "Standard Room - All Inclusive",
+      "room_type_ar": "غرفة قياسية - شامل جميع الوجبات",
+      "valid_from": "19-11",
+      "valid_to": null,
+      "prices_egp": {
+        "single": 20580,
+        "double": 20300,
+        "triple": null
+      },
+      "price_egp": 20300,
+      "price_usd_reference": 677
+    },
+    {
+      "hotel_name_en": "Premier Le Reve Hotel (Adults only)",
+      "hotel_name_ar": "Premier Le Reve Hotel (للبالغين فقط)",
+      "stars": 5,
+      "area": "Sahl Hasheesh",
+      "room_type_en": "Standard Room - All Inclusive",
+      "room_type_ar": "غرفة قياسية - شامل جميع الوجبات",
+      "valid_from": "30-11",
+      "valid_to": null,
+      "prices_egp": {
+        "single": 14580,
+        "double": 13560,
+        "triple": null
+      },
+      "price_egp": 13560,
+      "price_usd_reference": 452
+    },
+    {
+      "hotel_name_en": "Premier Le Reve Hotel (Adults only)",
+      "hotel_name_ar": "Premier Le Reve Hotel (للبالغين فقط)",
+      "stars": 5,
+      "area": "Sahl Hasheesh",
+      "room_type_en": "Standard Room - All Inclusive",
+      "room_type_ar": "غرفة قياسية - شامل جميع الوجبات",
+      "valid_from": "30-11",
+      "valid_to": null,
+      "prices_egp": {
+        "single": 22050,
+        "double": 21600,
+        "triple": null
+      },
+      "price_egp": 21600,
+      "price_usd_reference": 720
+    }
+  ],
+  "includes": {
+    "ar": [
+      "سعر الغرفة لمدة 4 أيام / 3 ليالي",
+      "الوجبات تشمل (فطار + غداء + عشاء + مشروبات وسناكس)",
+      "الوجبات تشمل (فطار + عشاء) في فندق Tropitel Sahl Hashish"
+    ],
+    "en": [
+      "Room rate for 4 days / 3 nights",
+      "Meals include (breakfast + lunch + dinner + drinks & snacks)",
+      "Meals include (breakfast + dinner) at Tropitel Sahl Hasheesh"
+    ]
+  },
+  "not_included": {
+    "ar": [
+      "أي بنود غير مدرجة في البرنامج",
+      "الانتقالات"
+    ],
+    "en": [
+      "Any items not listed in the program",
+      "Transportation"
+    ]
+  },
+  "notes": {
+    "ar": "الأسعار قابلة للزيادة طبقاً لخطط أسعار الفندق و الإمكانية وقت الحجز.",
+    "en": "Prices may increase depending on hotel pricing policies and availability at booking."
+  },
+  "currency": "EGP",
+  "usd_exchange_rate": 50,
+  "offer_type": "travel_package"
+}

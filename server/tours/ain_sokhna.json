@@ -1,0 +1,257 @@
+{
+  "source": "ain_sokhna_offers_images",
+  "location": "Ain Sokhna",
+  "type": "travel_offers",
+  "valid_months": [
+    "November",
+    "December"
+  ],
+  "hotels": [
+    {
+      "hotel_name_en": "Palmera El Sokhna",
+      "hotel_name_ar": "Palmera El Sokhna",
+      "stars": 4,
+      "area": "Ain Sokhna",
+      "room_type_en": "Standard Room - All Inclusive",
+      "room_type_ar": "غرفة قياسية - شامل جميع الوجبات",
+      "valid_from": "01 Nov",
+      "valid_to": "30 Dec",
+      "prices_egp": {
+        "single": 6350,
+        "double": 3970,
+        "triple": 3750
+      },
+      "price_egp": 3970,
+      "price_usd_reference": 132
+    },
+    {
+      "hotel_name_en": "Retal View El-Sokhna Hotel",
+      "hotel_name_ar": "Retal View El-Sokhna Hotel",
+      "stars": 4,
+      "area": "Ain Sokhna",
+      "room_type_en": "Standard Room - All Inclusive",
+      "room_type_ar": "غرفة قياسية - شامل جميع الوجبات",
+      "valid_from": "01 Nov",
+      "valid_to": "30 Nov",
+      "prices_egp": {
+        "single": 6395,
+        "double": 4270,
+        "triple": 4165
+      },
+      "price_egp": 4270,
+      "price_usd_reference": 142
+    },
+    {
+      "hotel_name_en": "Marina Wadi Degla",
+      "hotel_name_ar": "Marina Wadi Degla",
+      "stars": 4,
+      "area": "Ain Sokhna",
+      "room_type_en": "Standard Room - All Inclusive",
+      "room_type_ar": "غرفة قياسية - شامل جميع الوجبات",
+      "valid_from": "01 Nov",
+      "valid_to": "30 Dec",
+      "prices_egp": {
+        "single": 7100,
+        "double": 4410,
+        "triple": 4270
+      },
+      "price_egp": 4410,
+      "price_usd_reference": 147
+    },
+    {
+      "hotel_name_en": "Swiss Inn Teda Hotel",
+      "hotel_name_ar": "Swiss Inn Teda Hotel",
+      "stars": 4,
+      "area": "Ain Sokhna",
+      "room_type_en": "Standard Room - All Inclusive",
+      "room_type_ar": "غرفة قياسية - شامل جميع الوجبات",
+      "valid_from": "01 Nov",
+      "valid_to": "30 Dec",
+      "prices_egp": {
+        "single": 9110,
+        "double": 5750,
+        "triple": 5160
+      },
+      "price_egp": 5750,
+      "price_usd_reference": 192
+    },
+    {
+      "hotel_name_en": "Al Masa Hotel El Sokhna",
+      "hotel_name_ar": "Al Masa Hotel El Sokhna",
+      "stars": 4,
+      "area": "Ain Sokhna",
+      "room_type_en": "Standard Room - All Inclusive",
+      "room_type_ar": "غرفة قياسية - شامل جميع الوجبات",
+      "valid_from": "01 Nov",
+      "valid_to": "17 Dec",
+      "prices_egp": {
+        "single": 16470,
+        "double": 8850,
+        "triple": 8400
+      },
+      "price_egp": 8850,
+      "price_usd_reference": 295
+    },
+    {
+      "hotel_name_en": "Cancun Resort",
+      "hotel_name_ar": "Cancun Resort",
+      "stars": 4,
+      "area": "Ain Sokhna",
+      "room_type_en": "Standard Room - All Inclusive",
+      "room_type_ar": "غرفة قياسية - شامل جميع الوجبات",
+      "valid_from": "01 Nov",
+      "valid_to": "17 Dec",
+      "prices_egp": {
+        "single": 7650,
+        "double": 5595,
+        "triple": 4900
+      },
+      "price_egp": 5595,
+      "price_usd_reference": 187
+    },
+    {
+      "hotel_name_en": "Tolip El Galala Heights",
+      "hotel_name_ar": "Tolip El Galala Heights",
+      "stars": 5,
+      "area": "Ain Sokhna",
+      "room_type_en": "Standard Room - All Inclusive",
+      "room_type_ar": "غرفة قياسية - شامل جميع الوجبات",
+      "valid_from": "01 Nov",
+      "valid_to": "30 Dec",
+      "prices_egp": {
+        "single": 12660,
+        "double": 7200,
+        "triple": 6490
+      },
+      "price_egp": 7200,
+      "price_usd_reference": 240
+    },
+    {
+      "hotel_name_en": "Stella Grand",
+      "hotel_name_ar": "Stella Grand",
+      "stars": 5,
+      "area": "Ain Sokhna",
+      "room_type_en": "Standard Room - All Inclusive",
+      "room_type_ar": "غرفة قياسية - شامل جميع الوجبات",
+      "valid_from": "01 Nov",
+      "valid_to": "30 Dec",
+      "prices_egp": {
+        "single": 13525,
+        "double": 7350,
+        "triple": 5880
+      },
+      "price_egp": 7350,
+      "price_usd_reference": 245
+    },
+    {
+      "hotel_name_en": "Tolip Majestic El Galala",
+      "hotel_name_ar": "Tolip Majestic El Galala",
+      "stars": 5,
+      "area": "Ain Sokhna",
+      "room_type_en": "Standard Room - All Inclusive",
+      "room_type_ar": "غرفة قياسية - شامل جميع الوجبات",
+      "valid_from": "01 Nov",
+      "valid_to": "30 Dec",
+      "prices_egp": {
+        "single": 10860,
+        "double": 5960,
+        "triple": 5100
+      },
+      "price_egp": 5960,
+      "price_usd_reference": 199
+    },
+    {
+      "hotel_name_en": "Tolip Resort El Galala Hills",
+      "hotel_name_ar": "Tolip Resort El Galala Hills",
+      "stars": 5,
+      "area": "Ain Sokhna",
+      "room_type_en": "Standard Room - All Inclusive",
+      "room_type_ar": "غرفة قياسية - شامل جميع الوجبات",
+      "valid_from": "01 Nov",
+      "valid_to": "30 Dec",
+      "prices_egp": {
+        "single": 10590,
+        "double": 6615,
+        "triple": 6030
+      },
+      "price_egp": 6615,
+      "price_usd_reference": 221
+    },
+    {
+      "hotel_name_en": "Coral Sea Beach Resort & Aqua Park",
+      "hotel_name_ar": "Coral Sea Beach Resort & Aqua Park",
+      "stars": 5,
+      "area": "Ain Sokhna",
+      "room_type_en": "Standard Room - All Inclusive",
+      "room_type_ar": "غرفة قياسية - شامل جميع الوجبات",
+      "valid_from": "01 Nov",
+      "valid_to": "27 Dec",
+      "prices_egp": {
+        "single": 14675,
+        "double": 8150,
+        "triple": 8490
+      },
+      "price_egp": 8150,
+      "price_usd_reference": 272
+    },
+    {
+      "hotel_name_en": "TANOAK Resort",
+      "hotel_name_ar": "TANOAK Resort",
+      "stars": 5,
+      "area": "Ain Sokhna",
+      "room_type_en": "Standard Room - All Inclusive",
+      "room_type_ar": "غرفة قياسية - شامل جميع الوجبات",
+      "valid_from": "01 Nov",
+      "valid_to": "27 Dec",
+      "prices_egp": {
+        "single": 20200,
+        "double": 13820,
+        "triple": 13530
+      },
+      "price_egp": 13820,
+      "price_usd_reference": 461
+    },
+    {
+      "hotel_name_en": "Grand Ocean Hotel",
+      "hotel_name_ar": "Grand Ocean Hotel",
+      "stars": 5,
+      "area": "Ain Sokhna",
+      "room_type_en": "Standard Room - All Inclusive",
+      "room_type_ar": "غرفة قياسية - شامل جميع الوجبات",
+      "valid_from": null,
+      "valid_to": null,
+      "prices_egp": {
+        "single": null,
+        "double": null,
+        "triple": null
+      }
+    }
+  ],
+  "includes": {
+    "ar": [
+      "الإقامة بالفندق لمدة 4 أيام / 3 ليالي خلال أيام الأسبوع.",
+      "الوجبات (فطار + عشاء)."
+    ],
+    "en": [
+      "Hotel stay for 4 days / 3 nights during weekdays.",
+      "Meals include (Breakfast + Dinner)."
+    ]
+  },
+  "not_included": {
+    "ar": [
+      "أي بنود غير مدرجة في البرنامج.",
+      "الانتقالات."
+    ],
+    "en": [
+      "Any items not included in the program.",
+      "Transportation."
+    ]
+  },
+  "notes": {
+    "ar": "الأسعار قابلة للزيادة طبقاً لخطط أسعار الفنادق و الإمكانية وقت الحجز.",
+    "en": "Prices may increase depending on hotel pricing and availability at booking."
+  },
+  "currency": "EGP",
+  "usd_exchange_rate": 50,
+  "offer_type": "travel_package"
+}

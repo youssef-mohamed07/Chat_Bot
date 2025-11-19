@@ -1,6 +1,15 @@
 import type { ChatMessage, Language, ButtonOption } from '../types'
 import { TripCard } from './TripCard'
-import { DateRangeWidget, TravellersWidget } from './ChatWidgets'
+import { 
+  DateRangeWidget, 
+  TravellersWidget, 
+  QuickRepliesWidget, 
+  MealPlanWidget, 
+  RoomTypesWidget, 
+  HotelFiltersWidget,
+  BudgetWidget,
+  HotelCardsWidget
+} from './ChatWidgets'
 import { formatTime } from '../utils'
 
 interface MessageBubbleProps {
@@ -19,6 +28,12 @@ export const MessageBubble = ({ message, lang, onButtonClick, showButtons = true
       !message.meta?.attachments?.length &&
       !message.meta?.dateRange &&
       !message.meta?.travellers &&
+      !message.meta?.quickReplies &&
+      !message.meta?.mealPlans &&
+      !message.meta?.roomTypes &&
+      !message.meta?.hotelFilters &&
+      !message.meta?.budget &&
+      !message.meta?.hotelCards &&
       (!message.meta?.buttons?.length || !showButtons)) {
     return null
   }
@@ -106,6 +121,94 @@ export const MessageBubble = ({ message, lang, onButtonClick, showButtons = true
                     onButtonClick && onButtonClick({
                       text: `${pax} ${lang==='ar'?'مسافر':'traveler'}${pax>1?(lang==='ar'?'ين':'s'):''}`,
                       value: `set_pax:${pax}`
+                    })
+                  }
+                />
+              ) : null}
+              {/* Quick Replies widget */}
+              {message.meta?.quickReplies ? (
+                <QuickRepliesWidget
+                  title_ar={message.meta.quickReplies.title_ar}
+                  title_en={message.meta.quickReplies.title_en}
+                  options={message.meta.quickReplies.options}
+                  lang={lang}
+                  onSelect={(value: string, label: string) =>
+                    onButtonClick && onButtonClick({
+                      text: label,
+                      value: value
+                    })
+                  }
+                />
+              ) : null}
+              {/* Meal Plans widget */}
+              {message.meta?.mealPlans ? (
+                <MealPlanWidget
+                  title_ar={message.meta.mealPlans.title_ar}
+                  title_en={message.meta.mealPlans.title_en}
+                  options={message.meta.mealPlans.options}
+                  lang={lang}
+                  onSelect={(value: string, label: string) =>
+                    onButtonClick && onButtonClick({
+                      text: label,
+                      value: `meal:${value}`
+                    })
+                  }
+                />
+              ) : null}
+              {/* Room Types widget */}
+              {message.meta?.roomTypes ? (
+                <RoomTypesWidget
+                  title_ar={message.meta.roomTypes.title_ar}
+                  title_en={message.meta.roomTypes.title_en}
+                  options={message.meta.roomTypes.options}
+                  lang={lang}
+                  onSelect={(value: string, label: string) =>
+                    onButtonClick && onButtonClick({
+                      text: label,
+                      value: `room:${value}`
+                    })
+                  }
+                />
+              ) : null}
+              {/* Hotel Filters widget */}
+              {message.meta?.hotelFilters ? (
+                <HotelFiltersWidget
+                  title_ar={message.meta.hotelFilters.title_ar}
+                  title_en={message.meta.hotelFilters.title_en}
+                  filters={message.meta.hotelFilters.filters}
+                  lang={lang}
+                  onFilterChange={(filterType: string, value: string) =>
+                    onButtonClick && onButtonClick({
+                      text: `${filterType}: ${value}`,
+                      value: `filter:${filterType}=${value}`
+                    })
+                  }
+                />
+              ) : null}
+              {/* Budget widget */}
+              {message.meta?.budget ? (
+                <BudgetWidget
+                  title_ar={message.meta.budget.title_ar}
+                  title_en={message.meta.budget.title_en}
+                  ranges={message.meta.budget.ranges}
+                  lang={lang}
+                  onSelect={(range) =>
+                    onButtonClick && onButtonClick({
+                      text: `${range.label} (${range.min}-${range.max} EGP)`,
+                      value: `budget:${range.min}-${range.max}`
+                    })
+                  }
+                />
+              ) : null}
+              {/* Hotel Cards widget */}
+              {message.meta?.hotelCards ? (
+                <HotelCardsWidget
+                  hotels={message.meta.hotelCards.hotels}
+                  lang={lang}
+                  onSelectHotel={(hotel) =>
+                    onButtonClick && onButtonClick({
+                      text: lang === 'ar' ? hotel.hotel_name_ar : hotel.hotel_name_en,
+                      value: `hotel:${hotel.hotel_id || hotel.hotel_name_en}`
                     })
                   }
                 />

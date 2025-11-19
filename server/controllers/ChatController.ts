@@ -38,6 +38,10 @@ export class ChatController {
       // Extract button actions data if present
       let userMessage = message
       let contextData: any = {}
+      let isDetectedAction = false  // Track if this is a detected action (like destination from text)
+
+      // Track previous step before updating
+      const previousStep = meta.step || 'initial'
 
       // Handle button clicks (extract data but still use AI)
       if (message.startsWith('dest:')) {
@@ -45,12 +49,32 @@ export class ChatController {
         contextData.selectedDestination = dest
         this.sessionManager.updateMeta(userId, { 
           lastDest: dest,
-          step: 'destination_selected'
+          step: 'destination_selected',
+          previousStep
         })
         userMessage = lang === 'ar' 
           ? `اخترت ${dest === 'bali' ? 'بالي' : dest === 'istanbul' ? 'إسطنبول' : dest}`
           : `I chose ${dest}`
-      } else if (message.startsWith('ask_')) {
+      } 
+      // ✨ NEW: Detect destination from natural language text
+      else if (!meta.lastDest || meta.step === 'initial') {
+        const detectedDest = this.detectDestinationFromText(message, lang as Language)
+        if (detectedDest) {
+          contextData.selectedDestination = detectedDest
+          isDetectedAction = true  // Mark as detected action
+          this.sessionManager.updateMeta(userId, { 
+            lastDest: detectedDest,
+            step: 'destination_selected',
+            previousStep
+          })
+          userMessage = lang === 'ar' 
+            ? `اخترت ${this.getDestinationNameAr(detectedDest)}`
+            : `I chose ${this.getDestinationNameEn(detectedDest)}`
+          
+          console.log(`✅ Detected destination from text: ${detectedDest}`)
+        }
+      }
+      else if (message.startsWith('ask_')) {
         const topic = message.replace('ask_', '')
         const dest = meta.lastDest || 'bali'
         contextData.requestedTopic = topic
@@ -64,7 +88,8 @@ export class ChatController {
         this.sessionManager.updateMeta(userId, { 
           startDate: start, 
           endDate: end,
-          step: 'dates_selected'
+          step: 'dates_selected',
+          previousStep
         })
         userMessage = lang === 'ar'
           ? `اخترت السفر من ${start} إلى ${end}`
@@ -73,28 +98,101 @@ export class ChatController {
         const pax = parseInt(message.replace('set_pax:', ''), 10)
         this.sessionManager.updateMeta(userId, { 
           pax,
-          step: 'travelers_selected'
+          step: 'travelers_selected',
+          previousStep
         })
         userMessage = lang === 'ar'
           ? `عدد المسافرين ${pax} ${pax > 1 ? 'أشخاص' : 'شخص'}`
           : `Number of travelers is ${pax} ${pax > 1 ? 'people' : 'person'}`
       } else if (message.startsWith('budget:')) {
-        const budget = parseInt(message.replace('budget:', ''), 10)
+        const budgetValue = message.replace('budget:', '')
+        // Handle both numeric and string budget values
+        const budget = isNaN(parseInt(budgetValue)) ? budgetValue : parseInt(budgetValue)
         this.sessionManager.updateMeta(userId, { 
           budget,
-          step: 'budget_selected'
+          step: 'budget_selected',
+          previousStep
+        })
+        if (typeof budget === 'number') {
+          userMessage = lang === 'ar'
+            ? `ميزانيتي حوالي ${budget} دولار للشخص`
+            : `My budget is around $${budget} per person`
+        } else {
+          const budgetNames: Record<string, { ar: string; en: string }> = {
+            budget: { ar: 'اقتصادي (حتى $300)', en: 'Budget (up to $300)' },
+            standard: { ar: 'متوسط ($300-$600)', en: 'Standard ($300-$600)' },
+            luxury: { ar: 'فاخر (أكثر من $600)', en: 'Luxury (above $600)' },
+            all: { ar: 'جميع الفنادق', en: 'All hotels' }
+          }
+          const name = budgetNames[budget] || { ar: budget, en: budget }
+          userMessage = lang === 'ar'
+            ? `اخترت فئة ${name.ar}`
+            : `I chose ${name.en} category`
+        }
+      } else if (message.startsWith('hotel:')) {
+        // ✅ FIX: Extract hotel name and find it in RAG
+        const hotelIdentifier = message.replace('hotel:', '').trim()
+        
+        console.log(`🏨 User selected hotel: ${hotelIdentifier}`)
+        
+        const dest = meta.lastDest
+        const destChunks = ragService.getDestinationInfo(dest, 'hotels', lang)
+        
+        let hotelDisplayName = hotelIdentifier
+        if (destChunks.length > 0 && destChunks[0].metadata?.hotels) {
+          const hotel = destChunks[0].metadata.hotels.find((h: any) => 
+            h.hotel_name_en === hotelIdentifier ||
+            h.hotel_name_ar === hotelIdentifier
+          )
+          
+          if (hotel) {
+            hotelDisplayName = lang === 'ar' ? (hotel.hotel_name_ar || hotel.hotel_name_en) : (hotel.hotel_name_en || hotel.hotel_name_ar)
+            console.log(`✅ Found hotel: ${hotelDisplayName}`)
+          } else {
+            console.warn(`⚠️ Hotel not found: ${hotelIdentifier}`)
+          }
+        }
+        
+        contextData.selectedHotel = hotelIdentifier
+        this.sessionManager.updateMeta(userId, { 
+          selectedHotel: hotelIdentifier,
+          step: 'hotel_selected',
+          previousStep
+        })
+        
+        userMessage = lang === 'ar'
+          ? `اخترت فندق ${hotelDisplayName}`
+          : `I chose ${hotelDisplayName} hotel`
+      } else if (message.startsWith('meal:')) {
+        const mealPlan = message.replace('meal:', '')
+        this.sessionManager.updateMeta(userId, { 
+          mealPlan,
+          step: 'meal_selected',
+          previousStep
         })
         userMessage = lang === 'ar'
-          ? `ميزانيتي حوالي ${budget} دولار للشخص`
-          : `My budget is around $${budget} per person`
-      } else if (message.startsWith('hotel:')) {
-        // User selected a hotel - show detailed info
-        const hotelName = message.replace('hotel:', '')
-        contextData.selectedHotel = hotelName
-        this.sessionManager.updateMeta(userId, { selectedHotel: hotelName })
+          ? `اخترت نظام ${mealPlan}`
+          : `I chose ${mealPlan} meal plan`
+      } else if (message.startsWith('room:')) {
+        const roomType = message.replace('room:', '')
+        this.sessionManager.updateMeta(userId, { 
+          roomType,
+          step: 'room_selected',
+          previousStep
+        })
         userMessage = lang === 'ar'
-          ? `أريد معرفة المزيد عن فندق ${hotelName}`
-          : `I want to know more about ${hotelName} hotel`
+          ? `اخترت غرفة ${roomType}`
+          : `I chose ${roomType} room`
+      } else if (message.startsWith('filter:')) {
+        const filterValue = message.replace('filter:', '')
+        const [filterType, value] = filterValue.split('=')
+        this.sessionManager.updateMeta(userId, { 
+          [`filter_${filterType}`]: value,
+          previousStep
+        })
+        userMessage = lang === 'ar'
+          ? `تصفية ${filterType}: ${value}`
+          : `Filter ${filterType}: ${value}`
       } else if (message.startsWith('set_from:')) {
         const city = message.replace('set_from:', '')
         this.sessionManager.updateMeta(userId, { depCity: city })
@@ -106,9 +204,11 @@ export class ChatController {
           ? 'أريد التواصل مع الدعم الفني'
           : 'I want to contact support'
       }
+      // For regular messages, don't update previousStep to avoid blocking widgets
 
       // Get AI response with full context
-      await this.handleAIChat(userMessage, userId, lang as Language, history, meta, contextData, res)
+      await this.handleAIChat(userMessage, userId, lang as Language, history, 
+                              this.sessionManager.getMeta(userId), contextData, res, isDetectedAction, message)
 
     } catch (error) {
       console.error('❌ Chat Error:', error)
@@ -187,11 +287,13 @@ export class ChatController {
     history: any[],
     meta: any,
     contextData: any,
-    res: Response
+    res: Response,
+    isDetectedAction: boolean = false,
+    originalMessage: string = message
   ): Promise<void> {
     try {
       console.log('🤖 Processing with AI...')
-
+      
       // Build rich context for AI
       const enrichedContext = await this.buildEnrichedContext(message, lang, meta, contextData)
       
@@ -201,7 +303,7 @@ export class ChatController {
       console.log('🚀 Calling Gemini API...')
       const result = await this.geminiService.sendChatRequest(messages, lang, true)
       
-      console.log(' Got AI response:', result.text?.substring(0, 100))
+      console.log('✅ Got AI response:', result.text?.substring(0, 100))
 
       // Handle function call
       if (result.functionCall) {
@@ -216,7 +318,7 @@ export class ChatController {
       }
 
       // Generate smart UI based on AI response and context
-      const ui = await this.generateSmartUI(result.text, message, lang, meta, contextData, userId)
+      const ui = await this.generateSmartUI(result.text, originalMessage, lang, meta, contextData, userId, isDetectedAction)
       
       this.sessionManager.addMessage(userId, { role: 'user', content: message })
       this.sessionManager.addMessage(userId, { role: 'assistant', content: result.text })
@@ -242,7 +344,7 @@ export class ChatController {
               text: lang === 'ar' ? 'كيف يمكنني مساعدتك؟' : 'How can I help you?',
               buttons: [
                 { text: lang === 'ar' ? '📞 تواصل عبر واتساب' : '📞 Contact via WhatsApp', value: 'whatsapp' },
-                { text: lang === 'ar' ? '� الفنادق' : '� Hotels', value: 'ask_hotels' },
+                { text: lang === 'ar' ? '🏨 الفنادق' : '🏨 Hotels', value: 'ask_hotels' },
                 { text: lang === 'ar' ? '🎯 الجولات' : '🎯 Tours', value: 'ask_tours' }
               ]
             }
@@ -260,77 +362,166 @@ export class ChatController {
     contextData: any
   ): Promise<string> {
     const contextParts: string[] = []
-
-    // Add conversation flow instructions based on current step
     const step = meta.step || 'initial'
-    const hasDestination = !!(meta.lastDest || meta.destination)
-    const hasDates = !!(meta.startDate && meta.endDate)
-    const hasTravelers = !!meta.pax
-    const hasBudget = !!meta.budget
 
-    // Guide AI based on what information we have
-    if (!hasDestination) {
-      contextParts.push(lang === 'ar'
-        ? '🎯 الخطوة التالية: اسأل العميل عن الوجهة التي يريد السفر إليها (بالي أو إسطنبول)'
-        : '🎯 Next step: Ask the client about their desired destination (Bali or Istanbul)')
-    } else if (!hasDates) {
-      contextParts.push(lang === 'ar'
-        ? '🎯 الخطوة التالية: اسأل العميل عن تواريخ سفره (متى يريد السفر)'
-        : '🎯 Next step: Ask the client about travel dates (when they want to travel)')
-    } else if (!hasTravelers) {
-      contextParts.push(lang === 'ar'
-        ? '🎯 الخطوة التالية: اسأل العميل عن عدد المسافرين (كام واحد هيسافر)'
-        : '🎯 Next step: Ask the client about number of travelers (how many people)')
-    } else if (!hasBudget) {
-      contextParts.push(lang === 'ar'
-        ? '🎯 الخطوة التالية: اسأل العميل عن الميزانية التقريبية لكل شخص'
-        : '🎯 Next step: Ask the client about approximate budget per person')
-    } else {
-      contextParts.push(lang === 'ar'
-        ? ' لديك كل المعلومات! الآن اقترح 2-3 عروض مناسبة بناءً على اختياراته'
-        : ' You have all info! Now suggest 2-3 suitable offers based on their choices')
-    }
-
-    // Add collected user preferences
-    if (meta.lastDest || contextData.destination) {
-      const dest = contextData.destination || meta.lastDest
-      contextParts.push(lang === 'ar' 
-        ? `📍 الوجهة: ${dest === 'bali' ? 'بالي' : 'إسطنبول'}`
-        : `📍 Destination: ${dest}`)
-    }
-
-    if (meta.startDate && meta.endDate) {
-      contextParts.push(lang === 'ar'
-        ? `📅 التواريخ: من ${meta.startDate} إلى ${meta.endDate}`
-        : `📅 Dates: from ${meta.startDate} to ${meta.endDate}`)
-    }
-
-    if (meta.pax) {
-      contextParts.push(lang === 'ar'
-        ? `👥 عدد المسافرين: ${meta.pax}`
-        : `👥 Travelers: ${meta.pax}`)
-    }
-
-    if (meta.budget) {
-      contextParts.push(lang === 'ar'
-        ? `💰 الميزانية: ${meta.budget} دولار/شخص`
-        : `💰 Budget: $${meta.budget}/person`)
-    }
-
-    // Retrieve relevant RAG chunks
-    const { chunks } = ragService.retrieve(message, { lang, limit: 5 })
+    // ===== Simple step-based instructions - ONE step at a time =====
     
-    if (chunks.length > 0) {
-      const ragContext = PromptService.formatRAGContext(chunks, lang)
-      contextParts.push('\n📚 معلومات متاحة:\n' + ragContext)
-      
-      // Add explicit instruction to use real data
-      contextParts.push(lang === 'ar'
-        ? '\n⚠️ استخدم المعلومات الحقيقية أعلاه (أسماء الفنادق، الأسعار، التفاصيل) في ردك!'
-        : '\n⚠️ Use the real information above (hotel names, prices, details) in your response!')
+    switch(step) {
+      case 'initial':
+        contextParts.push(lang === 'ar'
+          ? 'اسأل فقط: "فين تحب تسافر؟"'
+          : 'Ask only: "Where to travel?"')
+        break
+        
+      case 'destination_selected':
+        contextParts.push(
+          `📍 ${meta.lastDest}`,
+          lang === 'ar' ? 'اسأل فقط: "امتى السفر؟"' : 'Ask only: "When to travel?"'
+        )
+        break
+        
+      case 'dates_selected':
+        contextParts.push(
+          `📍 ${meta.lastDest} | 📅 ${meta.startDate}-${meta.endDate}`,
+          lang === 'ar' ? 'اسأل فقط: "كام شخص؟"' : 'Ask only: "How many people?"'
+        )
+        break
+        
+      case 'travelers_selected':
+        contextParts.push(
+          `📍 ${meta.lastDest} | 📅 ${meta.startDate}-${meta.endDate} | 👥 ${meta.pax}`,
+          lang === 'ar' ? 'اسأل فقط: "الميزانية؟"' : 'Ask only: "Budget?"'
+        )
+        break
+        
+      case 'budget_selected':
+      case 'ready_for_offers':
+        const dest = meta.lastDest
+        const destChunks = ragService.getDestinationInfo(dest, 'hotels', lang)
+        
+        console.log(`🔍 Getting hotels for ${dest}:`, destChunks.length, 'chunks')
+        
+        if (destChunks.length > 0 && destChunks[0].metadata?.hotels) {
+          const allHotels = destChunks[0].metadata.hotels
+          console.log(`📊 Found ${allHotels.length} hotels in ${dest}`)
+          
+          // Filter by budget using EGP prices
+          let suitable = allHotels
+          const budgetValue = meta.budget
+          
+          if (budgetValue && typeof budgetValue === 'number') {
+            suitable = allHotels.filter((h: any) => {
+              const priceEGP = h.prices_egp?.double || h.price_egp || 0
+              const priceUSD = Math.round(priceEGP / 50)
+              return priceUSD > 0 && priceUSD <= (budgetValue * 1.2)
+            })
+          } else if (budgetValue === 'budget') {
+            suitable = allHotels.filter((h: any) => {
+              const priceEGP = h.prices_egp?.double || h.price_egp || 0
+              const priceUSD = Math.round(priceEGP / 50)
+              return priceUSD <= 300
+            })
+          } else if (budgetValue === 'standard') {
+            suitable = allHotels.filter((h: any) => {
+              const priceEGP = h.prices_egp?.double || h.price_egp || 0
+              const priceUSD = Math.round(priceEGP / 50)
+              return priceUSD > 300 && priceUSD <= 600
+            })
+          } else if (budgetValue === 'luxury') {
+            suitable = allHotels.filter((h: any) => {
+              const priceEGP = h.prices_egp?.double || h.price_egp || 0
+              const priceUSD = Math.round(priceEGP / 50)
+              return priceUSD > 600
+            })
+          }
+          
+          console.log(`✅ After filtering: ${suitable.length} hotels match budget`)
+          
+          if (suitable.length > 0) {
+            // Format hotels with REAL names and prices from JSON
+            const hotelsText = suitable.slice(0, 6).map((h: any) => {
+              const nameAr = h.hotel_name_ar || h.hotel_name_en || h.hotel_name || 'فندق'
+              const nameEn = h.hotel_name_en || h.hotel_name_ar || h.hotel_name || 'Hotel'
+              const name = lang === 'ar' ? nameAr : nameEn
+              const stars = h.stars || h.rating || 0
+              const priceEGP = h.prices_egp?.double || h.price_egp || 0
+              const priceUSD = Math.round(priceEGP / 50)
+              const area = h.area || dest
+              const roomType = lang === 'ar' ? (h.room_type_ar || h.room_type_en || '') : (h.room_type_en || h.room_type_ar || '')
+              
+              return `🏨 **${name}** (${stars}⭐)\n   📍 ${area}\n   💰 ${priceEGP.toLocaleString()} جنيه (~$${priceUSD} دولار)\n   🛏️ ${roomType}`
+            }).join('\n\n')
+            
+            contextParts.push(
+              `\n📍 **وجهة السفر: ${dest.toUpperCase()}**`,
+              `👥 عدد المسافرين: ${meta.pax || 2}`,
+              `\n🏨 **الفنادق المتاحة (${suitable.length} فندق):**\n`,
+              hotelsText,
+              `\n\n${lang === 'ar' ? '✨ اعرض هذه الفنادق بأسمائها الحقيقية وأسعارها الفعلية. لا تخترع أسماء!' : '✨ Show these hotels with their REAL names and prices. Do not invent names!'}`
+            )
+          } else {
+            contextParts.push(
+              lang === 'ar'
+                ? `\n⚠️ لا توجد فنادق تناسب الميزانية في ${dest}. اقترح فنادق قريبة من السعر المطلوب.`
+                : `\n⚠️ No hotels match the budget in ${dest}. Suggest nearby price range.`
+            )
+          }
+        } else {
+          console.log(`⚠️ No hotel data found for destination: ${dest}`)
+          contextParts.push(
+            lang === 'ar'
+              ? `\n❌ لا توجد بيانات فنادق متاحة حالياً لوجهة ${dest}`
+              : `\n❌ No hotel data currently available for ${dest}`
+          )
+        }
+        break
+        
+      case 'hotel_selected':
+        const hotelIdentifier = meta.selectedHotel
+        const hotelDest = meta.lastDest
+        const hotelChunks = ragService.getDestinationInfo(hotelDest, 'hotels', lang)
+        
+        console.log(`🔍 Looking for hotel: "${hotelIdentifier}" in ${hotelDest}`)
+        
+        if (hotelChunks.length > 0 && hotelChunks[0].metadata?.hotels) {
+          const hotel = hotelChunks[0].metadata.hotels.find((h: any) => 
+            h.hotel_name_en === hotelIdentifier ||
+            h.hotel_name_ar === hotelIdentifier ||
+            h.hotel_name_en?.toLowerCase() === hotelIdentifier.toLowerCase() ||
+            h.hotel_name_ar?.toLowerCase() === hotelIdentifier.toLowerCase()
+          )
+          
+          if (hotel) {
+            const name = lang === 'ar' ? (hotel.hotel_name_ar || hotel.hotel_name_en) : (hotel.hotel_name_en || hotel.hotel_name_ar)
+            const stars = hotel.stars || 0
+            const priceEGP = hotel.price_egp || 0
+            const priceUSD = hotel.price_usd_reference || Math.round(priceEGP / 50)
+            const area = hotel.area || hotelDest
+            const roomType = lang === 'ar' ? (hotel.room_type_ar || hotel.room_type_en) : (hotel.room_type_en || hotel.room_type_ar)
+            
+            contextParts.push(
+              `\n🏨 **${name}** (${stars}⭐)`,
+              `📍 ${area}`,
+              `💰 ${priceEGP.toLocaleString()} جنيه (~$${priceUSD} دولار)`,
+              `🛏️ ${roomType}`,
+              `\n${lang === 'ar' ? '✅ اعرض التفاصيل واسأل عن نظام الوجبات' : '✅ Show details and ask about meal plan'}`
+            )
+            
+            console.log(`✅ Found hotel: ${name}`)
+          } else {
+            console.error(`❌ Hotel NOT FOUND: "${hotelIdentifier}"`)
+            console.log('Available:', hotelChunks[0].metadata.hotels.map((h: any) => h.hotel_name_en))
+            contextParts.push(
+              lang === 'ar'
+                ? `\n⚠️ عذراً، لا توجد معلومات عن "${hotelIdentifier}"`
+                : `\n⚠️ Sorry, no info for "${hotelIdentifier}"`
+            )
+          }
+        }
+        break
     }
 
-    // Add specific topic data if requested
+    // Add specific topic data if requested (hotels/tours inquiry)
     if (contextData.requestedTopic && contextData.destination) {
       const topicChunks = ragService.getDestinationInfo(
         contextData.destination,
@@ -341,68 +532,18 @@ export class ChatController {
       if (topicChunks.length > 0) {
         let topicContext = ''
         
-        // Format based on topic type with interactive instructions
         if (contextData.requestedTopic === 'hotels' && topicChunks[0].metadata?.hotels) {
-          const hotels = topicChunks[0].metadata.hotels
-          topicContext = PromptService.formatHotels(hotels, lang, hotels.length) // Show ALL hotels
-          topicContext += lang === 'ar'
-            ? '\n\n📌 تعليمات: استخدم الأسماء والأسعار الحقيقية للفنادق أعلاه. اقترح 2-3 فنادق مناسبة للميزانية والتفضيلات.'
-            : '\n\n📌 Instructions: Use the real hotel names and prices above. Suggest 2-3 hotels suitable for budget and preferences.'
+          const hotels = topicChunks[0].metadata.hotels.slice(0, 5)
+          topicContext = PromptService.formatHotels(hotels, lang, hotels.length)
         } else if (contextData.requestedTopic === 'tours' && topicChunks[0].metadata?.tours) {
-          const tours = topicChunks[0].metadata.tours
-          topicContext = PromptService.formatTours(tours, lang, tours.length) // Show ALL tours
-          topicContext += lang === 'ar'
-            ? '\n\n📌 تعليمات: استخدم الأسماء والأسعار الحقيقية للجولات أعلاه. اقترح 2-3 جولات مناسبة.'
-            : '\n\n📌 Instructions: Use the real tour names and prices above. Suggest 2-3 suitable tours.'
+          const tours = topicChunks[0].metadata.tours.slice(0, 5)
+          topicContext = PromptService.formatTours(tours, lang, tours.length)
         } else {
           topicContext = topicChunks.map(c => c.text).join('\n\n')
         }
         
-        contextParts.push(`\n${lang === 'ar' ? '🎯 معلومات محددة:' : '🎯 Specific information:'}\n${topicContext}`)
-      }
-    }
-    
-    // If user selected a specific hotel, provide detailed information
-    if (contextData.selectedHotel || meta.selectedHotel) {
-      const hotelName = contextData.selectedHotel || meta.selectedHotel
-      const dest = meta.lastDest || contextData.destination || 'bali'
-      const destChunks = ragService.getDestinationInfo(dest, 'hotels', lang)
-      
-      if (destChunks.length > 0 && destChunks[0].metadata?.hotels) {
-        const hotel = destChunks[0].metadata.hotels.find((h: any) => 
-          h.hotel_name?.toLowerCase().includes(hotelName.toLowerCase())
-        )
-        
-        if (hotel) {
-          const hotelDetails = lang === 'ar'
-            ? `🏨 **تفاصيل ${hotel.hotel_name}**\n\n⭐ التصنيف: ${hotel.rating || 'غير محدد'}\n📍 المنطقة: ${hotel.area || 'غير محدد'}\n💵 السعر: $${hotel.price_usd || hotel.price_double_triple_usd || 'غير محدد'} للشخص\n\n📋 **المميزات:**\n${hotel.features || 'غير متوفر'}\n\n📝 **الوصف:**\n${hotel.description_ar || hotel.description || 'غير متوفر'}`
-            : `🏨 **${hotel.hotel_name} Details**\n\n⭐ Rating: ${hotel.rating || 'N/A'}\n📍 Area: ${hotel.area || 'N/A'}\n💵 Price: $${hotel.price_usd || hotel.price_double_triple_usd || 'N/A'} per person\n\n📋 **Features:**\n${hotel.features || 'Not available'}\n\n📝 **Description:**\n${hotel.description_en || hotel.description || 'Not available'}`
-          
-          contextParts.push('\n' + hotelDetails)
-          contextParts.push(lang === 'ar'
-            ? '\n📌 تعليمات: اعرض تفاصيل الفندق بشكل جذاب واسأل العميل إذا كان يريد الحجز أو رؤية فنادق أخرى.'
-            : '\n📌 Instructions: Present the hotel details attractively and ask the client if they want to book or see other hotels.')
-        }
-      }
-    }
-    
-    // If we have all info, add instruction to make recommendations
-    if (hasDestination && hasDates && hasTravelers && hasBudget) {
-      const dest = meta.lastDest || contextData.destination
-      const destChunks = ragService.getDestinationInfo(dest, 'all', lang)
-      
-      if (destChunks.length > 0 && destChunks[0].metadata?.hotels) {
-        const allHotels = destChunks[0].metadata.hotels
-        const filtered = allHotels.filter((h: any) => {
-          const price = h.price_usd || h.price_double_triple_usd || 0
-          return price <= (meta.budget || 999999)
-        })
-        
-        if (filtered.length > 0) {
-          contextParts.push('\n' + PromptService.formatHotels(filtered, lang, filtered.length))
-          contextParts.push(lang === 'ar'
-            ? '\n الآن اقترح أفضل 2-3 فنادق من القائمة أعلاه بناءً على ميزانية العميل وتفضيلاته. اذكر الأسماء والأسعار الحقيقية!'
-            : '\n Now suggest the best 2-3 hotels from the list above based on client budget and preferences. Mention real names and prices!')
+        if (topicContext) {
+          contextParts.push(`\n📚 ${topicContext}`)
         }
       }
     }
@@ -410,14 +551,274 @@ export class ChatController {
     return contextParts.join('\n')
   }
 
-  // Generate smart UI based on AI response
+  // Detect if a widget is required based on missing session data
+  private detectRequiredWidget(meta: any, lang: Language): { type: string; widget: any; message: string } | null {
+    // Check what data is missing and return appropriate widget
+    
+    // No destination selected
+    if (!meta.lastDest && meta.step !== 'destination_selected') {
+      const destinations = ragService.destinations().filter(d => d && d !== 'unknown')
+      const international = destinations.filter(d => ['bali', 'istanbul', 'beirut'].includes(d))
+      const local = destinations.filter(d => !['bali', 'istanbul', 'beirut'].includes(d))
+      
+      return {
+        type: 'destinations',
+        message: lang === 'ar' ? 'ممتاز! 🌟 اختر وجهتك المفضلة:' : 'Great! 🌟 Choose your destination:',
+        widget: {
+          type: 'destinations',
+          title: lang === 'ar' ? 'اختر وجهتك' : 'Choose your destination',
+          categories: [
+            {
+              title: lang === 'ar' ? '🌍 وجهات دولية' : '🌍 International',
+              destinations: international.map(d => ({
+                id: d,
+                name: this.getDestinationNameAr(d),
+                name_en: this.getDestinationNameEn(d),
+                emoji: this.getDestinationEmoji(d)
+              }))
+            },
+            {
+              title: lang === 'ar' ? '🏖️ وجهات محلية' : '🏖️ Local',
+              destinations: local.map(d => ({
+                id: d,
+                name: this.getDestinationNameAr(d),
+                name_en: this.getDestinationNameEn(d),
+                emoji: this.getDestinationEmoji(d)
+              }))
+            }
+          ]
+        }
+      }
+    }
+    
+    // Destination selected but no dates
+    if (meta.lastDest && !meta.startDate && meta.step !== 'dates_selected') {
+      const today = new Date()
+      const maxDate = new Date()
+      maxDate.setMonth(maxDate.getMonth() + 6)
+      
+      return {
+        type: 'dateRange',
+        message: lang === 'ar' ? 'اختيار رائع! 🎉 اختر تواريخ السفر:' : 'Great choice! 🎉 Select travel dates:',
+        widget: {
+          type: 'dateRange',
+          heading: lang === 'ar' ? 'تواريخ السفر' : 'Travel dates',
+          minDate: today.toISOString().split('T')[0],
+          maxDate: maxDate.toISOString().split('T')[0]
+        }
+      }
+    }
+    
+    // Dates selected but no travelers count
+    if (meta.startDate && !meta.pax && meta.step !== 'travelers_selected') {
+      return {
+        type: 'travellers',
+        message: lang === 'ar' ? 'ممتاز! 👥 كم عدد المسافرين؟' : 'Excellent! 👥 How many travelers?',
+        widget: {
+          type: 'travellers',
+          heading: lang === 'ar' ? 'عدد المسافرين' : 'Number of travelers',
+          min: 1,
+          max: 10,
+          default: 2
+        }
+      }
+    }
+    
+    // Travelers count selected but no budget
+    if (meta.pax && !meta.budget && meta.step !== 'budget_selected') {
+      return {
+        type: 'budget',
+        message: lang === 'ar' ? 'تمام! 💰 اختر ميزانيتك:' : 'Perfect! 💰 Choose your budget:',
+        widget: {
+          type: 'budget',
+          title_ar: 'اختر ميزانيتك',
+          title_en: 'Choose Your Budget',
+          ranges: [
+            {
+              label_ar: 'اقتصادي',
+              label_en: 'Budget',
+              min: 0,
+              max: 15000,
+              icon: '💰',
+              description_ar: 'خيارات ممتازة بأسعار مناسبة',
+              description_en: 'Great options at affordable prices'
+            },
+            {
+              label_ar: 'متوسط',
+              label_en: 'Standard',
+              min: 15000,
+              max: 30000,
+              icon: '💎',
+              description_ar: 'توازن مثالي بين السعر والجودة',
+              description_en: 'Perfect balance of price and quality',
+              popular: true
+            },
+            {
+              label_ar: 'فاخر',
+              label_en: 'Premium',
+              min: 30000,
+              max: 50000,
+              icon: '👑',
+              description_ar: 'تجربة فاخرة ومميزة',
+              description_en: 'Luxury premium experience'
+            },
+            {
+              label_ar: 'الكل',
+              label_en: 'All',
+              min: 0,
+              max: 999999,
+              icon: '✨',
+              description_ar: 'عرض جميع الخيارات المتاحة',
+              description_en: 'Show all available options'
+            }
+          ]
+        }
+      }
+    }
+    
+    // Budget selected but no hotel selected - show hotels widget
+    if (meta.budget && !meta.selectedHotel && meta.step !== 'hotel_selected') {
+      const dest = meta.lastDest
+      const chunks = ragService.getDestinationInfo(dest, 'hotels', lang)
+      
+      if (chunks.length > 0 && chunks[0].metadata?.hotels) {
+        const hotels = chunks[0].metadata.hotels
+        const budgetMin = typeof meta.budget === 'object' ? meta.budget.min : 0
+        const budgetMax = typeof meta.budget === 'object' ? meta.budget.max : 999999
+        
+        const suitable = hotels.filter((h: any) => {
+          const price = h.prices_egp?.double || h.price_egp || 0
+          return price >= budgetMin && price <= budgetMax
+        }).slice(0, 10)
+        
+        if (suitable.length > 0) {
+          return {
+            type: 'hotelCards',
+            message: lang === 'ar' ? 'وجدت لك فنادق رائعة! 🏨 اختر ما يناسبك:' : 'Found great hotels! 🏨 Choose what suits you:',
+            widget: {
+              type: 'hotelCards',
+              hotels: suitable.map((h: any) => ({
+                hotel_id: h.hotel_id,
+                hotel_name_ar: h.hotel_name_ar || h.hotel_name,
+                hotel_name_en: h.hotel_name_en || h.hotel_name,
+                priceEGP: h.prices_egp?.double || h.price_egp || 0,
+                priceUSD: Math.round((h.prices_egp?.double || h.price_egp || 0) / 50),
+                rating: h.stars || h.rating || 4,
+                amenities: h.amenities || [],
+                area_ar: h.area_ar || h.area,
+                area_en: h.area_en || h.area,
+                description_ar: h.description_ar,
+                description_en: h.description_en,
+                image: h.image
+              }))
+            }
+          }
+        }
+      }
+    }
+    
+    // Hotel selected but no meal plan
+    if (meta.selectedHotel && !meta.mealPlan && meta.step !== 'meal_selected') {
+      return {
+        type: 'mealPlan',
+        message: lang === 'ar' ? 'اختيار موفق! 🌟 اختر نظام الوجبات:' : 'Great choice! 🌟 Select meal plan:',
+        widget: {
+          type: 'mealPlan',
+          title_ar: 'نظام الوجبات',
+          title_en: 'Meal Plan',
+          options: [
+            {
+              value: 'BB',
+              label_ar: 'إفطار فقط',
+              label_en: 'Breakfast Only',
+              icon: '🍳',
+              description_ar: 'وجبة الإفطار يومياً',
+              description_en: 'Daily breakfast included'
+            },
+            {
+              value: 'HB',
+              label_ar: 'نصف إقامة',
+              label_en: 'Half Board',
+              icon: '🍽️',
+              description_ar: 'إفطار وعشاء',
+              description_en: 'Breakfast and dinner'
+            },
+            {
+              value: 'FB',
+              label_ar: 'إقامة كاملة',
+              label_en: 'Full Board',
+              icon: '🍴',
+              description_ar: 'جميع الوجبات',
+              description_en: 'All meals included'
+            },
+            {
+              value: 'AI',
+              label_ar: 'شامل كلياً',
+              label_en: 'All Inclusive',
+              icon: '🎉',
+              description_ar: 'وجبات ومشروبات وأنشطة',
+              description_en: 'Meals, drinks and activities'
+            }
+          ]
+        }
+      }
+    }
+    
+    // Meal plan selected but no room type
+    if (meta.mealPlan && !meta.roomType && meta.step !== 'room_selected') {
+      return {
+        type: 'roomTypes',
+        message: lang === 'ar' ? 'ممتاز! 🛏️ اختر نوع الغرفة:' : 'Excellent! 🛏️ Select room type:',
+        widget: {
+          type: 'roomTypes',
+          title_ar: 'نوع الغرفة',
+          title_en: 'Room Type',
+          options: [
+            {
+              value: 'single',
+              label_ar: 'غرفة فردية',
+              label_en: 'Single Room',
+              icon: '🛏️',
+              capacity: 1
+            },
+            {
+              value: 'double',
+              label_ar: 'غرفة مزدوجة',
+              label_en: 'Double Room',
+              icon: '🛏️🛏️',
+              capacity: 2
+            },
+            {
+              value: 'triple',
+              label_ar: 'غرفة ثلاثية',
+              label_en: 'Triple Room',
+              icon: '👨‍👩‍👦',
+              capacity: 3
+            },
+            {
+              value: 'family',
+              label_ar: 'غرفة عائلية',
+              label_en: 'Family Room',
+              icon: '👨‍👩‍👧‍👦',
+              capacity: 4
+            }
+          ]
+        }
+      }
+    }
+    
+    return null
+  }
+
+  // Generate smart UI based on AI response AND conversation state
   private async generateSmartUI(
     aiResponse: string,
     userMessage: string,
     lang: Language,
     meta: any,
     contextData: any,
-    userId: string
+    userId: string,
+    isDetectedAction: boolean = false
   ): Promise<ChatResponse['ui'] | undefined> {
     const blocks: any[] = []
     
@@ -427,133 +828,440 @@ export class ChatController {
       text: aiResponse
     })
     
-    const responseLower = aiResponse.toLowerCase()
-    const messageLower = userMessage.toLowerCase()
+    const step = meta.step || 'initial'
+    const previousStep = meta.previousStep
+    
+    // ✅ Detect if message is a button action (not free text)
+    const isButtonAction = userMessage.startsWith('dest:') || 
+                           userMessage.startsWith('hotel:') || 
+                           userMessage.startsWith('meal:') || 
+                           userMessage.startsWith('room:') || 
+                           userMessage.startsWith('budget:') || 
+                           userMessage.startsWith('set_dates:') || 
+                           userMessage.startsWith('set_pax:') ||
+                           userMessage.startsWith('ask_') ||
+                           userMessage.startsWith('filter:') ||
+                           userMessage === 'contact_support'
+    
+    const isNewStep = previousStep !== step
+    
+    // ✅ Don't show widgets for free text messages (except initial or detected actions)
+    if (!isButtonAction && !isDetectedAction && step !== 'initial') {
+      console.log(`💬 Free text message - AI response only`)
+      return { blocks: [blocks[0]] }
+    }
+    
+    console.log(`🎯 Showing widget for step: ${step} (button: ${isButtonAction}, detected: ${isDetectedAction}, newStep: ${isNewStep})`)
 
-    // Only show destination buttons if AI mentions multiple destinations and user hasn't chosen yet
-    if (!meta.lastDest && !contextData.selectedDestination &&
-        (responseLower.includes('bali') && responseLower.includes('istanbul')) &&
-        (responseLower.includes('which') || responseLower.includes('choose') || 
-         responseLower.includes('prefer') ||
-         responseLower.includes('أي') || responseLower.includes('اختر') ||
-         responseLower.includes('تفضل'))) {
+    // ===== Show widget for current step =====
+
+    // 1️⃣ Destinations Grid - Enhanced with categories
+    if (step === 'initial') {
       const destinations = ragService.destinations().filter(d => d && d !== 'unknown')
       if (destinations.length > 0) {
+        const international = destinations.filter(d => ['bali', 'istanbul', 'beirut'].includes(d))
+        const local = destinations.filter(d => !['bali', 'istanbul', 'beirut'].includes(d))
+        
         blocks.push({
-          type: 'buttons',
-          text: '',
-          buttons: destinations.map(d => ({
-            text: lang === 'ar' ? (d === 'istanbul' ? '🕌 إسطنبول' : '🌴 بالي') : (d === 'istanbul' ? '🕌 Istanbul' : '🌴 Bali'),
-            value: `dest:${d}`
-          }))
+          type: 'destinations',
+          title: lang === 'ar' ? 'اختر وجهتك' : 'Choose your destination',
+          categories: [
+            {
+              title: lang === 'ar' ? '🌍 وجهات دولية' : '🌍 International',
+              destinations: international.map(d => ({
+                id: d,
+                name: this.getDestinationNameAr(d),
+                name_en: this.getDestinationNameEn(d),
+                emoji: this.getDestinationEmoji(d),
+                image: `/images/destinations/${d}.jpg`
+              }))
+            },
+            {
+              title: lang === 'ar' ? '🏖️ وجهات محلية' : '🏖️ Local',
+              destinations: local.map(d => ({
+                id: d,
+                name: this.getDestinationNameAr(d),
+                name_en: this.getDestinationNameEn(d),
+                emoji: this.getDestinationEmoji(d),
+                image: `/images/destinations/${d}.jpg`
+              }))
+            }
+          ]
         })
       }
-      return blocks.length > 0 ? { blocks } : undefined
+      return { blocks }
     }
 
-    // Show date picker ONLY if AI specifically asks about dates
-    if ((responseLower.includes('when') || responseLower.includes('date') || 
-         responseLower.includes('متى') || responseLower.includes('تاريخ') ||
-         responseLower.includes('امتى') || responseLower.includes('ناوي تسافر')) &&
-        !meta.startDate && meta.lastDest) {
+    // 2️⃣ Date Range Picker - Enhanced
+    if (step === 'destination_selected') {
+      const today = new Date()
+      const maxDate = new Date()
+      maxDate.setMonth(maxDate.getMonth() + 6)
+      
       blocks.push({
         type: 'dateRange',
-        heading: lang === 'ar' ? 'اختر التواريخ:' : 'Select dates:'
+        heading: lang === 'ar' ? 'اختر التواريخ:' : 'Select dates:',
+        label_ar: 'تواريخ السفر',
+        label_en: 'Travel dates',
+        minDate: today.toISOString().split('T')[0],
+        maxDate: maxDate.toISOString().split('T')[0],
+        nights: 5
       })
-      return blocks.length > 0 ? { blocks } : undefined
+      return { blocks }
     }
 
-    // Show travellers widget ONLY if AI asks about number of people
-    if ((responseLower.includes('how many') || responseLower.includes('traveler') || 
-         responseLower.includes('people') ||
-         responseLower.includes('كم شخص') || responseLower.includes('مسافر') ||
-         responseLower.includes('كام') || responseLower.includes('عدد') ||
-         responseLower.includes('هيسافروا')) &&
-        !meta.pax && meta.lastDest) {
+    // 3️⃣ Travelers Selector - Enhanced with options
+    if (step === 'dates_selected') {
       blocks.push({
         type: 'travellers',
         heading: lang === 'ar' ? 'عدد المسافرين:' : 'Number of travelers:',
+        label_ar: 'عدد المسافرين',
+        label_en: 'Number of travelers',
         min: 1,
-        max: 9,
-        default: 2
+        max: 10,
+        default: 2,
+        options: [
+          { value: 1, label_ar: 'شخص واحد', label_en: '1 Person', icon: '👤' },
+          { value: 2, label_ar: 'شخصين', label_en: '2 People', icon: '👥' },
+          { value: 3, label_ar: '3 أشخاص', label_en: '3 People', icon: '👨‍👩‍👦' },
+          { value: 4, label_ar: '4 أشخاص', label_en: '4 People', icon: '👨‍👩‍👧‍👦' },
+          { value: 5, label_ar: '5+ أشخاص', label_en: '5+ People', icon: '👨‍👩‍👧‍👦+' }
+        ]
       })
-      return blocks.length > 0 ? { blocks } : undefined
+      return { blocks }
     }
 
-    // Show budget buttons if AI asks about budget - ENHANCED
-    if ((responseLower.includes('budget') || responseLower.includes('price') || 
-         responseLower.includes('ميزانية') || responseLower.includes('سعر') ||
-         responseLower.includes('تكلفة') || responseLower.includes('كام') ||
-         responseLower.includes('how much')) &&
-        !meta.budget) {
+    // 4️⃣ Budget Selector - Enhanced with descriptions
+    if (step === 'travelers_selected') {
+      console.log('🎯 Showing Budget Widget for travelers_selected step')
       blocks.push({
-        type: 'buttons',
-        text: lang === 'ar' 
-          ? '💰 اختر الميزانية المناسبة لك (السعر للشخص الواحد):' 
-          : '💰 Choose your preferred budget (price per person):',
-        buttons: [
+        type: 'budget',
+        title_ar: '💰 اختر ميزانيتك للشخص الواحد',
+        title_en: '💰 Choose Your Budget',
+        ranges: [
           { 
-            text: lang === 'ar' ? '� اقتصادي\n$500 - $800' : '� Economy\n$500 - $800', 
-            value: 'budget:650' 
+            label_ar: '🌟 اقتصادي', 
+            label_en: '🌟 Budget Friendly',
+            min: 0, 
+            max: 15000, 
+            icon: '💰',
+            description_ar: 'فنادق 3 نجوم - حتى 15,000 ج.م',
+            description_en: '3-star hotels - Up to 15,000 EGP'
           },
           { 
-            text: lang === 'ar' ? '💎 متوسط\n$800 - $1200' : '💎 Medium\n$800 - $1200', 
-            value: 'budget:1000' 
+            label_ar: '💎 متوسط', 
+            label_en: '💎 Standard',
+            min: 15000, 
+            max: 30000, 
+            icon: '💎',
+            description_ar: 'فنادق 4 نجوم - 15,000-30,000 ج.م',
+            description_en: '4-star hotels - 15,000-30,000 EGP',
+            popular: true
           },
           { 
-            text: lang === 'ar' ? '👑 فاخر\n$1200+' : '👑 Luxury\n$1200+', 
-            value: 'budget:1500' 
+            label_ar: '👑 فاخر', 
+            label_en: '👑 Luxury',
+            min: 30000, 
+            max: 999999, 
+            icon: '👑',
+            description_ar: 'فنادق 5 نجوم - أكثر من 30,000 ج.م',
+            description_en: '5-star hotels - Above 30,000 EGP'
           },
-          { 
-            text: lang === 'ar' ? '🌟 ممتاز جداً\n$1500+' : '🌟 Premium\n$1500+', 
-            value: 'budget:2000' 
+          {
+            label_ar: '🔍 كل الفنادق',
+            label_en: '🔍 All Hotels',
+            min: 0,
+            max: 999999,
+            icon: '🔍',
+            description_ar: 'عرض جميع الخيارات المتاحة',
+            description_en: 'Show all available options'
           }
         ]
       })
+      console.log('✅ Budget Widget added to blocks')
+      return { blocks }
     }
 
-    // If AI suggested hotels AND user has all info, show hotel selection buttons
-    if (meta.lastDest && meta.budget && !meta.selectedHotel && !contextData.selectedHotel) {
-      // Check if AI response mentions hotel recommendations
-      if (responseLower.includes('hotel') || responseLower.includes('فندق')) {
-        const dest = meta.lastDest
-        const destChunks = ragService.getDestinationInfo(dest, 'hotels', lang)
+    // 5️⃣ Hotel Cards - Enhanced with full details and images
+    if (step === 'budget_selected' || step === 'ready_for_offers') {
+      const dest = meta.lastDest
+      const destChunks = ragService.getDestinationInfo(dest, 'hotels', lang)
+      
+      if (destChunks.length > 0 && destChunks[0].metadata?.hotels) {
+        const budgetValue = meta.budget
+        let minPriceEGP = 0
+        let maxPriceEGP = 999999
         
-        if (destChunks.length > 0 && destChunks[0].metadata?.hotels) {
-          const allHotels = destChunks[0].metadata.hotels
-          const filtered = allHotels.filter((h: any) => {
-            const price = h.price_usd || h.price_double_triple_usd || 0
-            return price <= (meta.budget || 999999)
-          }).slice(0, 3) // Top 3 hotels only
-          
-          if (filtered.length > 0) {
-            blocks.push({
-              type: 'buttons',
-              text: lang === 'ar' ? '🏨 اختر فندق لمعرفة المزيد:' : '🏨 Select a hotel to learn more:',
-              buttons: filtered.map((h: any) => ({
-                text: `${h.hotel_name}\n${h.rating || ''} - $${h.price_usd || h.price_double_triple_usd}`,
-                value: `hotel:${h.hotel_name}`
-              }))
-            })
-          }
+        // Parse budget from "min-max" format
+        if (typeof budgetValue === 'string' && budgetValue.includes('-')) {
+          const [min, max] = budgetValue.split('-').map(Number)
+          minPriceEGP = min
+          maxPriceEGP = max
         }
+        
+        const allHotels = destChunks[0].metadata.hotels
+        const filtered = allHotels
+          .filter((h: any) => {
+            const priceEGP = h.prices_egp?.double || h.price_egp || 0
+            return priceEGP >= minPriceEGP && priceEGP <= maxPriceEGP
+          })
+          .sort((a: any, b: any) => {
+            const priceA = a.prices_egp?.double || a.price_egp || 0
+            const priceB = b.prices_egp?.double || b.price_egp || 0
+            return priceA - priceB
+          })
+        
+        const displayHotels = filtered.slice(0, 6)
+        
+        if (displayHotels.length > 0) {
+          blocks.push({
+            type: 'hotelCards',
+            hotels: displayHotels.map((h: any) => {
+              // ✅ Use hotel_name_en as ID (matches JSON structure)
+              const hotelId = h.hotel_name_en || h.hotel_name_ar || 'Hotel'
+              
+              return {
+                hotel_id: hotelId,
+                hotel_name_ar: h.hotel_name_ar || h.hotel_name_en || 'فندق',
+                hotel_name_en: h.hotel_name_en || h.hotel_name_ar || 'Hotel',
+                priceEGP: h.price_egp || 0,
+                priceUSD: h.price_usd_reference || Math.round((h.price_egp || 0) / 50),
+                rating: h.stars || h.rating || 4,
+                amenities: h.amenities || [],
+                description_ar: h.description_ar || '',
+                description_en: h.description_en || '',
+                image: h.image || `/images/hotels/${dest}/${hotelId.toLowerCase().replace(/\s+/g, '-')}.jpg`,
+                area_ar: h.area_ar || h.area || this.getDestinationNameAr(dest),
+                area_en: h.area_en || h.area || this.getDestinationNameEn(dest)
+              }
+            })
+          })
+          
+          console.log(`✅ Showing ${displayHotels.length} hotels`)
+        }
+      }
+      return { blocks }
+    }
+
+    // 6️⃣ Hotel Selected - Show meal plans
+    if (step === 'hotel_selected') {
+      console.log('✅ Showing meal plan options for hotel_selected step')
+      blocks.push({
+        type: 'mealPlans',
+        title_ar: 'اختر نظام الوجبات:',
+        title_en: 'Choose meal plan:',
+        options: [
+          { 
+            value: 'room_only', 
+            label_ar: 'غرفة فقط', 
+            label_en: 'Room Only',
+            icon: '🛏️',
+            description_ar: 'بدون وجبات',
+            description_en: 'No meals included'
+          },
+          { 
+            value: 'breakfast', 
+            label_ar: 'مع الإفطار', 
+            label_en: 'Breakfast',
+            icon: '☕',
+            description_ar: 'إفطار يومي',
+            description_en: 'Daily breakfast'
+          },
+          { 
+            value: 'half_board', 
+            label_ar: 'نصف إقامة', 
+            label_en: 'Half Board',
+            icon: '🍽️',
+            description_ar: 'إفطار + عشاء',
+            description_en: 'Breakfast + Dinner'
+          },
+          { 
+            value: 'full_board', 
+            label_ar: 'إقامة كاملة', 
+            label_en: 'Full Board',
+            icon: '🍱',
+            description_ar: 'جميع الوجبات',
+            description_en: 'All meals'
+          },
+          { 
+            value: 'all_inclusive', 
+            label_ar: 'شامل كليًا', 
+            label_en: 'All Inclusive',
+            icon: '🌟',
+            description_ar: 'كل شيء مشمول',
+            description_en: 'Everything included'
+          }
+        ]
+      })
+      return { blocks }
+    }
+
+    // 7️⃣ After meal plan - Show room types
+    if (step === 'meal_selected') {
+      blocks.push({
+        type: 'roomTypes',
+        title_ar: 'اختر نوع الغرفة:',
+        title_en: 'Choose room type:',
+        options: [
+          { 
+            value: 'single', 
+            label_ar: 'غرفة مفردة', 
+            label_en: 'Single Room',
+            icon: '👤',
+            capacity: 1,
+            description_ar: 'سرير مفرد',
+            description_en: 'One bed'
+          },
+          { 
+            value: 'double', 
+            label_ar: 'غرفة مزدوجة', 
+            label_en: 'Double Room',
+            icon: '👥',
+            capacity: 2,
+            description_ar: 'سرير مزدوج',
+            description_en: 'Double bed'
+          },
+          { 
+            value: 'twin', 
+            label_ar: 'غرفة توأم', 
+            label_en: 'Twin Room',
+            icon: '🛏️🛏️',
+            capacity: 2,
+            description_ar: 'سريرين منفصلين',
+            description_en: 'Two separate beds'
+          },
+          { 
+            value: 'triple', 
+            label_ar: 'غرفة ثلاثية', 
+            label_en: 'Triple Room',
+            icon: '👨‍👩‍👦',
+            capacity: 3,
+            description_ar: '3 أسرة',
+            description_en: '3 beds'
+          },
+          { 
+            value: 'family', 
+            label_ar: 'غرفة عائلية', 
+            label_en: 'Family Room',
+            icon: '👨‍👩‍👧‍👦',
+            capacity: 4,
+            description_ar: 'مناسبة للعائلات',
+            description_en: 'Perfect for families'
+          }
+        ]
+      })
+      return { blocks }
+    }
+
+    // 8️⃣ After room type - Show final booking options
+    if (step === 'room_selected') {
+      blocks.push({
+        type: 'buttons',
+        text: lang === 'ar' ? 'الخطوة التالية؟' : 'Next step?',
+        buttons: [
+          { text: lang === 'ar' ? '✅ تأكيد الحجز' : '✅ Confirm Booking', value: 'confirm_booking' },
+          { text: lang === 'ar' ? '📞 واتساب' : '📞 WhatsApp', value: 'whatsapp' },
+          { text: lang === 'ar' ? '🔙 تعديل الاختيارات' : '🔙 Modify Selections', value: 'modify_booking' }
+        ]
+      })
+      return { blocks }
+    }
+
+    // 9️⃣ Quick Replies - للأسئلة العامة
+    if (step === 'general_inquiry' || userMessage.toLowerCase().includes('محتاج مساعدة') || userMessage.toLowerCase().includes('need help')) {
+      blocks.push({
+        type: 'quickReplies',
+        title_ar: 'كيف يمكنني مساعدتك؟',
+        title_en: 'How can I help you?',
+        options: [
+          { label_ar: 'معلومات عن الفنادق', label_en: 'Hotel Information', value: 'ask_hotels', emoji: '🏨' },
+          { label_ar: 'الجولات السياحية', label_en: 'Tours & Activities', value: 'ask_tours', emoji: '🎯' },
+          { label_ar: 'التأشيرات', label_en: 'Visa Information', value: 'ask_visa', emoji: '📋' },
+          { label_ar: 'الأسعار والعروض', label_en: 'Prices & Offers', value: 'ask_prices', emoji: '💰' },
+          { label_ar: 'تكلم مع موظف', label_en: 'Talk to Agent', value: 'contact_support', emoji: '👤' }
+        ]
+      })
+      return { blocks }
+    }
+
+    // 🔟 Hotel Filters - عند عرض الفنادق
+    if ((step === 'budget_selected' || step === 'ready_for_offers') && meta.lastDest) {
+      const destChunks = ragService.getDestinationInfo(meta.lastDest, 'hotels', lang)
+      
+      if (destChunks.length > 0 && destChunks[0].metadata?.hotels) {
+        // Extract unique areas from hotels
+        const hotels = destChunks[0].metadata.hotels
+        const uniqueAreas = [...new Set(hotels.map((h: any) => h.area).filter(Boolean))]
+        
+        blocks.push({
+          type: 'hotelFilters',
+          title_ar: 'تصفية النتائج:',
+          title_en: 'Filter Results:',
+          filters: {
+            stars: [
+              { value: 3, label: '⭐⭐⭐' },
+              { value: 4, label: '⭐⭐⭐⭐' },
+              { value: 5, label: '⭐⭐⭐⭐⭐' }
+            ],
+            mealPlans: [
+              { value: 'breakfast', label_ar: 'إفطار فقط', label_en: 'Breakfast Only' },
+              { value: 'half_board', label_ar: 'نصف إقامة', label_en: 'Half Board' },
+              { value: 'all_inclusive', label_ar: 'شامل كليًا', label_en: 'All Inclusive' }
+            ],
+            areas: uniqueAreas.slice(0, 5).map((area: string) => ({
+              value: area.toLowerCase(),
+              label_ar: area,
+              label_en: area
+            }))
+          }
+        })
       }
     }
 
-    // If user selected a hotel, show booking options
-    if (meta.selectedHotel || contextData.selectedHotel) {
-      blocks.push({
-        type: 'buttons',
-        text: lang === 'ar' ? 'ماذا تريد أن تفعل؟' : 'What would you like to do?',
-        buttons: [
-          { text: lang === 'ar' ? '� تواصل عبر واتساب' : '� Contact via WhatsApp', value: 'whatsapp' },
-          { text: lang === 'ar' ? '🏨 فنادق أخرى' : '🏨 Other Hotels', value: 'ask_hotels' },
-          { text: lang === 'ar' ? '🎯 الجولات السياحية' : '🎯 Tours', value: 'ask_tours' }
-        ]
-      })
-    }
+    // Default: only text, no widgets
+    return { blocks: [blocks[0]] }
+  }
 
-    return blocks.length > 0 ? { blocks } : undefined
+  private getDestinationNameAr(dest: string): string {
+    const names: Record<string, string> = {
+      bali: 'بالي',
+      istanbul: 'إسطنبول',
+      beirut: 'بيروت',
+      sharm_el_sheikh: 'شرم الشيخ',
+      hurghada: 'الغردقة',
+      dahab: 'دهب',
+      ain_sokhna: 'العين السخنة',
+      sahl_hashish: 'صحل حشيش'
+    }
+    return names[dest] || dest
+  }
+
+  private getDestinationNameEn(dest: string): string {
+    const names: Record<string, string> = {
+      bali: 'Bali',
+      istanbul: 'Istanbul',
+      beirut: 'Beirut',
+      sharm_el_sheikh: 'Sharm El Sheikh',
+      hurghada: 'Hurghada',
+      dahab: 'Dahab',
+      ain_sokhna: 'Ain Sokhna',
+      sahl_hashish: 'Sahl Hasheesh'
+    }
+    return names[dest] || dest
+  }
+
+  private getDestinationEmoji(dest: string): string {
+    const emojis: Record<string, string> = {
+      bali: '🌴',
+      istanbul: '🕌',
+      beirut: '🇱🇧',
+      sharm_el_sheikh: '🌊',
+      hurghada: '🏝️',
+      dahab: '🏔️',
+      ain_sokhna: '🌅',
+      sahl_hashish: '🏖️'
+    }
+    return emojis[dest] || '🌍'
   }
 
   // Execute function calls from AI
@@ -719,5 +1427,37 @@ export class ChatController {
       excludes: 'ما لا يشمله العرض'
     }
     return map[topic] || topic
+  }
+
+  // ✨ NEW: Detect destination from natural language text
+  private detectDestinationFromText(message: string, lang: Language): string | null {
+    const lower = message.toLowerCase()
+    
+    // Check each destination with multiple variations (English + Arabic + common typos + phrases)
+    // Bali
+    if (/bali|بالي|باالي|balli/.test(lower)) return 'bali'
+    
+    // Istanbul
+    if (/istanbul|إسطنبول|اسطنبول|instanbul|turkey|تركيا|تركي/.test(lower)) return 'istanbul'
+    
+    // Beirut
+    if (/beirut|بيروت|beyrut|lebanon|لبنان/.test(lower)) return 'beirut'
+    
+    // Sharm El Sheikh
+    if (/sharm|شرم/.test(lower)) return 'sharm_el_sheikh'
+    
+    // Hurghada
+    if (/hurghada|الغردقة|غردقة|hurgada/.test(lower)) return 'hurghada'
+    
+    // Dahab
+    if (/dahab|دهب|dhab/.test(lower)) return 'dahab'
+    
+    // Ain Sokhna
+    if (/ain sokhna|العين السخنة|sokhna|سخنة|ain sukhna/.test(lower)) return 'ain_sokhna'
+    
+    // Sahl Hasheesh
+    if (/sahl|hasheesh|hashish|صحل|حشيش/.test(lower)) return 'sahl_hashish'
+    
+    return null
   }
 }

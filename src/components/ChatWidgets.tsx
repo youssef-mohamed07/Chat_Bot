@@ -225,8 +225,576 @@ export const TravellersWidget = ({
           onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#991B1B'}
           onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#7A0C2E'}
         >
-          {lang === 'ar' ? ' تأكيد عدد المسافرين' : ' Confirm Travelers'}
+          {lang === 'ar' ? '✓ تأكيد عدد المسافرين' : '✓ Confirm Travelers'}
         </button>
+      </div>
+    </div>
+  )
+}
+
+// Quick Replies Widget - أزرار اختيار سريعة
+export const QuickRepliesWidget = ({
+  title_ar,
+  title_en,
+  options,
+  lang,
+  onSelect
+}: {
+  title_ar?: string
+  title_en?: string
+  options: Array<{ label_ar: string; label_en: string; value: string; emoji?: string }>
+  lang: Language
+  onSelect: (value: string, label: string) => void
+}) => {
+  return (
+    <div className="mt-3 p-4 border-2 rounded-xl shadow-sm" style={{
+      borderColor: '#7A0C2E20',
+      background: 'linear-gradient(135deg, #FFF5F7 0%, #ffffff 100%)'
+    }}>
+      {(title_ar || title_en) && (
+        <div className="mb-3" dir={lang === 'ar' ? 'rtl' : 'ltr'}>
+          <span className="text-sm font-semibold" style={{ color: '#7A0C2E' }}>
+            {lang === 'ar' ? title_ar : title_en}
+          </span>
+        </div>
+      )}
+      
+      <div className="grid grid-cols-1 gap-2">
+        {options.map((option, index) => (
+          <button
+            key={index}
+            onClick={() => onSelect(option.value, lang === 'ar' ? option.label_ar : option.label_en)}
+            className="flex items-center gap-3 px-4 py-3 rounded-lg border-2 bg-white transition-all hover:shadow-md"
+            style={{ borderColor: '#7A0C2E30' }}
+            dir={lang === 'ar' ? 'rtl' : 'ltr'}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.borderColor = '#7A0C2E'
+              e.currentTarget.style.backgroundColor = '#FFF5F7'
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.borderColor = '#7A0C2E30'
+              e.currentTarget.style.backgroundColor = 'white'
+            }}
+          >
+            {option.emoji && <span className="text-xl">{option.emoji}</span>}
+            <span className="text-sm font-medium" style={{ color: '#374151' }}>
+              {lang === 'ar' ? option.label_ar : option.label_en}
+            </span>
+          </button>
+        ))}
+      </div>
+    </div>
+  )
+}
+
+// Meal Plans Widget - اختيار نظام الوجبات
+export const MealPlanWidget = ({
+  title_ar,
+  title_en,
+  options,
+  lang,
+  onSelect
+}: {
+  title_ar?: string
+  title_en?: string
+  options: Array<{ 
+    value: string
+    label_ar: string
+    label_en: string
+    icon: string
+    description_ar?: string
+    description_en?: string
+  }>
+  lang: Language
+  onSelect: (value: string, label: string) => void
+}) => {
+  return (
+    <div className="mt-3 p-4 border-2 rounded-xl shadow-sm" style={{
+      borderColor: '#7A0C2E20',
+      background: 'linear-gradient(135deg, #FFF5F7 0%, #ffffff 100%)'
+    }}>
+      {(title_ar || title_en) && (
+        <div className="mb-4" dir={lang === 'ar' ? 'rtl' : 'ltr'}>
+          <span className="text-sm font-semibold" style={{ color: '#7A0C2E' }}>
+            {lang === 'ar' ? title_ar : title_en}
+          </span>
+        </div>
+      )}
+      
+      <div className="space-y-2">
+        {options.map((option, index) => (
+          <button
+            key={index}
+            onClick={() => onSelect(option.value, lang === 'ar' ? option.label_ar : option.label_en)}
+            className="w-full flex items-center gap-3 px-4 py-3 rounded-lg border-2 bg-white transition-all hover:shadow-md"
+            style={{ borderColor: '#7A0C2E30' }}
+            dir={lang === 'ar' ? 'rtl' : 'ltr'}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.borderColor = '#7A0C2E'
+              e.currentTarget.style.backgroundColor = '#FFF5F7'
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.borderColor = '#7A0C2E30'
+              e.currentTarget.style.backgroundColor = 'white'
+            }}
+          >
+            <span className="text-2xl">{option.icon}</span>
+            <div className="flex-1 text-left" dir={lang === 'ar' ? 'rtl' : 'ltr'}>
+              <div className="text-sm font-semibold" style={{ color: '#374151' }}>
+                {lang === 'ar' ? option.label_ar : option.label_en}
+              </div>
+              {(option.description_ar || option.description_en) && (
+                <div className="text-xs text-gray-500 mt-0.5">
+                  {lang === 'ar' ? option.description_ar : option.description_en}
+                </div>
+              )}
+            </div>
+          </button>
+        ))}
+      </div>
+    </div>
+  )
+}
+
+// Room Types Widget - اختيار نوع الغرفة
+export const RoomTypesWidget = ({
+  title_ar,
+  title_en,
+  options,
+  lang,
+  onSelect
+}: {
+  title_ar?: string
+  title_en?: string
+  options: Array<{ 
+    value: string
+    label_ar: string
+    label_en: string
+    icon: string
+    capacity?: number
+    description_ar?: string
+    description_en?: string
+  }>
+  lang: Language
+  onSelect: (value: string, label: string) => void
+}) => {
+  return (
+    <div className="mt-3 p-4 border-2 rounded-xl shadow-sm" style={{
+      borderColor: '#7A0C2E20',
+      background: 'linear-gradient(135deg, #FFF5F7 0%, #ffffff 100%)'
+    }}>
+      {(title_ar || title_en) && (
+        <div className="mb-4" dir={lang === 'ar' ? 'rtl' : 'ltr'}>
+          <span className="text-sm font-semibold" style={{ color: '#7A0C2E' }}>
+            {lang === 'ar' ? title_ar : title_en}
+          </span>
+        </div>
+      )}
+      
+      <div className="grid grid-cols-2 gap-2">
+        {options.map((option, index) => (
+          <button
+            key={index}
+            onClick={() => onSelect(option.value, lang === 'ar' ? option.label_ar : option.label_en)}
+            className="flex flex-col items-center gap-2 px-3 py-4 rounded-lg border-2 bg-white transition-all hover:shadow-md"
+            style={{ borderColor: '#7A0C2E30' }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.borderColor = '#7A0C2E'
+              e.currentTarget.style.backgroundColor = '#FFF5F7'
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.borderColor = '#7A0C2E30'
+              e.currentTarget.style.backgroundColor = 'white'
+            }}
+          >
+            <span className="text-2xl">{option.icon}</span>
+            <div className="text-center">
+              <div className="text-xs font-semibold" style={{ color: '#374151' }}>
+                {lang === 'ar' ? option.label_ar : option.label_en}
+              </div>
+              {option.capacity && (
+                <div className="text-xs text-gray-500 mt-0.5">
+                  {option.capacity} {lang === 'ar' ? 'شخص' : 'person'}
+                  {option.capacity > 1 && lang === 'en' ? 's' : ''}
+                </div>
+              )}
+            </div>
+          </button>
+        ))}
+      </div>
+    </div>
+  )
+}
+
+// Hotel Filters Widget - فلاتر الفنادق
+export const HotelFiltersWidget = ({
+  title_ar,
+  title_en,
+  filters,
+  lang,
+  onFilterChange
+}: {
+  title_ar?: string
+  title_en?: string
+  filters: {
+    stars?: Array<{ value: number; label: string }>
+    mealPlans?: Array<{ value: string; label_ar: string; label_en: string }>
+    areas?: Array<{ value: string; label_ar: string; label_en: string }>
+  }
+  lang: Language
+  onFilterChange: (filterType: string, value: string) => void
+}) => {
+  return (
+    <div className="mt-3 p-4 border-2 rounded-xl shadow-sm" style={{
+      borderColor: '#7A0C2E20',
+      background: 'linear-gradient(135deg, #FFF5F7 0%, #ffffff 100%)'
+    }}>
+      {(title_ar || title_en) && (
+        <div className="mb-3" dir={lang === 'ar' ? 'rtl' : 'ltr'}>
+          <span className="text-sm font-semibold" style={{ color: '#7A0C2E' }}>
+            {lang === 'ar' ? title_ar : title_en}
+          </span>
+        </div>
+      )}
+      
+      <div className="space-y-3">
+        {/* Star Rating Filter */}
+        {filters.stars && filters.stars.length > 0 && (
+          <div>
+            <div className="text-xs font-medium mb-2 text-gray-600" dir={lang === 'ar' ? 'rtl' : 'ltr'}>
+              {lang === 'ar' ? 'التقييم:' : 'Rating:'}
+            </div>
+            <div className="flex gap-2 flex-wrap">
+              {filters.stars.map((star) => (
+                <button
+                  key={star.value}
+                  onClick={() => onFilterChange('stars', star.value.toString())}
+                  className="px-3 py-1.5 rounded-md border-2 bg-white text-xs font-medium transition-all"
+                  style={{ borderColor: '#7A0C2E30' }}
+                  onMouseEnter={(e) => {
+                    e.currentTarget.style.borderColor = '#7A0C2E'
+                    e.currentTarget.style.backgroundColor = '#FFF5F7'
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.borderColor = '#7A0C2E30'
+                    e.currentTarget.style.backgroundColor = 'white'
+                  }}
+                >
+                  {star.label}
+                </button>
+              ))}
+            </div>
+          </div>
+        )}
+        
+        {/* Meal Plans Filter */}
+        {filters.mealPlans && filters.mealPlans.length > 0 && (
+          <div>
+            <div className="text-xs font-medium mb-2 text-gray-600" dir={lang === 'ar' ? 'rtl' : 'ltr'}>
+              {lang === 'ar' ? 'نظام الوجبات:' : 'Meal Plan:'}
+            </div>
+            <div className="flex gap-2 flex-wrap">
+              {filters.mealPlans.map((meal) => (
+                <button
+                  key={meal.value}
+                  onClick={() => onFilterChange('mealPlans', meal.value)}
+                  className="px-3 py-1.5 rounded-md border-2 bg-white text-xs font-medium transition-all"
+                  style={{ borderColor: '#7A0C2E30' }}
+                  dir={lang === 'ar' ? 'rtl' : 'ltr'}
+                  onMouseEnter={(e) => {
+                    e.currentTarget.style.borderColor = '#7A0C2E'
+                    e.currentTarget.style.backgroundColor = '#FFF5F7'
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.borderColor = '#7A0C2E30'
+                    e.currentTarget.style.backgroundColor = 'white'
+                  }}
+                >
+                  {lang === 'ar' ? meal.label_ar : meal.label_en}
+                </button>
+              ))}
+            </div>
+          </div>
+        )}
+        
+        {/* Areas Filter */}
+        {filters.areas && filters.areas.length > 0 && (
+          <div>
+            <div className="text-xs font-medium mb-2 text-gray-600" dir={lang === 'ar' ? 'rtl' : 'ltr'}>
+              {lang === 'ar' ? 'المنطقة:' : 'Area:'}
+            </div>
+            <div className="flex gap-2 flex-wrap">
+              {filters.areas.map((area) => (
+                <button
+                  key={area.value}
+                  onClick={() => onFilterChange('areas', area.value)}
+                  className="px-3 py-1.5 rounded-md border-2 bg-white text-xs font-medium transition-all"
+                  style={{ borderColor: '#7A0C2E30' }}
+                  dir={lang === 'ar' ? 'rtl' : 'ltr'}
+                  onMouseEnter={(e) => {
+                    e.currentTarget.style.borderColor = '#7A0C2E'
+                    e.currentTarget.style.backgroundColor = '#FFF5F7'
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.borderColor = '#7A0C2E30'
+                    e.currentTarget.style.backgroundColor = 'white'
+                  }}
+                >
+                  {lang === 'ar' ? area.label_ar : area.label_en}
+                </button>
+              ))}
+            </div>
+          </div>
+        )}
+      </div>
+    </div>
+  )
+}
+
+// Budget Widget
+interface BudgetWidgetProps {
+  title_ar?: string
+  title_en?: string
+  ranges: Array<{
+    label_ar: string
+    label_en: string
+    min: number
+    max: number
+    icon: string
+    description_ar?: string
+    description_en?: string
+    popular?: boolean
+  }>
+  lang: 'ar' | 'en'
+  onSelect: (range: { min: number; max: number; label: string }) => void
+}
+
+export const BudgetWidget = ({
+  title_ar = 'اختر ميزانيتك',
+  title_en = 'Choose Your Budget',
+  ranges,
+  lang,
+  onSelect
+}: BudgetWidgetProps) => {
+  return (
+    <div className="my-3 w-full max-w-2xl mx-auto" dir={lang === 'ar' ? 'rtl' : 'ltr'}>
+      {/* Header */}
+      <div className="mb-4 text-center px-2">
+        <div className="inline-flex items-center gap-2 bg-gradient-to-r from-[#7A0C2E] to-[#991B1B] text-white px-4 py-2 rounded-full shadow-lg mb-2">
+          <span className="text-lg">💰</span>
+          <h3 className="text-sm md:text-base font-bold">
+            {lang === 'ar' ? title_ar : title_en}
+          </h3>
+        </div>
+        <p className="text-xs md:text-sm text-gray-600 mt-2">
+          {lang === 'ar' ? 'السعر شامل الإقامة والإفطار (بالجنيه المصري)' : 'Price includes accommodation and breakfast (in EGP)'}
+        </p>
+      </div>
+
+      {/* Budget Cards Grid - 2x2 Modern Grid */}
+      <div className="grid grid-cols-2 gap-3 px-2">
+        {ranges.map((range, index) => (
+          <button
+            key={index}
+            onClick={() =>
+              onSelect({
+                min: range.min,
+                max: range.max,
+                label: lang === 'ar' ? range.label_ar : range.label_en
+              })
+            }
+            className={`
+              relative p-4 rounded-2xl transition-all duration-300 overflow-hidden
+              ${range.popular 
+                ? 'bg-gradient-to-br from-[#7A0C2E] to-[#991B1B] text-white shadow-xl scale-105' 
+                : 'bg-white border-2 border-gray-200 hover:border-[#7A0C2E] hover:shadow-lg'
+              }
+              hover:scale-[1.02] active:scale-95
+              flex flex-col items-center gap-2
+            `}
+          >
+            {/* Popular Ribbon */}
+            {range.popular && (
+              <div className="absolute -right-8 top-3 w-24 bg-yellow-400 text-[#7A0C2E] text-[10px] font-bold py-1 text-center rotate-45 shadow-lg">
+                BEST
+              </div>
+            )}
+
+            {/* Icon Circle */}
+            <div className={`w-14 h-14 rounded-full flex items-center justify-center text-2xl ${
+              range.popular ? 'bg-white/20' : 'bg-gradient-to-br from-[#7A0C2E]/10 to-[#991B1B]/10'
+            }`}>
+              {range.icon}
+            </div>
+
+            {/* Title */}
+            <h4 className={`font-bold text-sm text-center leading-tight ${
+              range.popular ? 'text-white' : 'text-gray-800'
+            }`}>
+              {lang === 'ar' ? range.label_ar : range.label_en}
+            </h4>
+
+            {/* Price Range - K Format */}
+            <div className={`text-lg font-bold text-center ${
+              range.popular ? 'text-white' : 'text-[#7A0C2E]'
+            }`}>
+              {range.max === 999999
+                ? `${(range.min / 1000).toFixed(0)}K+`
+                : range.min === 0
+                ? `${(range.max / 1000).toFixed(0)}K`
+                : `${(range.min / 1000).toFixed(0)}-${(range.max / 1000).toFixed(0)}K`
+              }
+            </div>
+            
+            {/* Currency Label */}
+            <div className={`text-[10px] ${
+              range.popular ? 'text-white/80' : 'text-gray-500'
+            }`}>
+              {lang === 'ar' ? 'ج.م' : 'EGP'}
+            </div>
+          </button>
+        ))}
+      </div>
+    </div>
+  )
+}
+
+// Hotel Cards Widget
+interface HotelCardsWidgetProps {
+  hotels: Array<{
+    hotel_id?: string
+    hotel_name_ar: string
+    hotel_name_en: string
+    priceEGP: number
+    priceUSD?: number
+    rating?: number
+    amenities?: string[]
+    description_ar?: string
+    description_en?: string
+    image?: string
+    area_ar?: string
+    area_en?: string
+  }>
+  lang: 'ar' | 'en'
+  onSelectHotel: (hotel: any) => void
+}
+
+export const HotelCardsWidget = ({ hotels, lang, onSelectHotel }: HotelCardsWidgetProps) => {
+  const renderStars = (rating: number = 4) => {
+    return Array.from({ length: 5 }, (_, i) => (
+      <svg key={i} className="w-4 h-4 inline" fill={i < rating ? '#fbbf24' : '#d1d5db'} viewBox="0 0 20 20">
+        <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+      </svg>
+    ))
+  }
+
+  return (
+    <div className="my-3 w-full" dir={lang === 'ar' ? 'rtl' : 'ltr'}>
+      {/* Header */}
+      <div className="mb-4 text-center px-2">
+        <div className="inline-flex items-center gap-2 bg-gradient-to-r from-[#7A0C2E] to-[#991B1B] text-white px-4 py-2 rounded-full shadow-lg">
+          <span className="text-lg">🏨</span>
+          <h3 className="text-sm md:text-base font-bold">
+            {lang === 'ar' ? 'الفنادق المتاحة' : 'Available Hotels'}
+          </h3>
+          <span className="bg-white/20 text-xs px-2 py-0.5 rounded-full">({hotels.length})</span>
+        </div>
+      </div>
+
+      {/* Hotels Horizontal Carousel */}
+      <div className="flex overflow-x-auto gap-4 px-4 pb-2 snap-x snap-mandatory hide-scrollbar" style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}>
+        {hotels.map((hotel, index) => (
+          <div
+            key={hotel.hotel_id || index}
+            onClick={() => onSelectHotel(hotel)}
+            className="w-[280px] flex-shrink-0 snap-start bg-white rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300 cursor-pointer group"
+          >
+            {/* Hotel Image with Gradient Overlay */}
+            <div className="relative h-48 bg-gradient-to-br from-gray-200 to-gray-300 overflow-hidden">
+              {hotel.image ? (
+                <img
+                  src={hotel.image}
+                  alt={lang === 'ar' ? hotel.hotel_name_ar : hotel.hotel_name_en}
+                  className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                  onError={(e) => {
+                    (e.target as HTMLImageElement).style.display = 'none'
+                  }}
+                />
+              ) : (
+                <div className="w-full h-full flex items-center justify-center text-5xl">
+                  🏨
+                </div>
+              )}
+              
+              {/* Gradient Overlay */}
+              <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
+              
+              {/* Price Badge - Floating */}
+              <div className="absolute bottom-3 right-3 bg-gradient-to-r from-[#7A0C2E] to-[#991B1B] text-white px-3 py-2 rounded-xl shadow-lg">
+                <div className="text-xs opacity-90">{lang === 'ar' ? 'من' : 'From'}</div>
+                <div className="text-xl font-bold">{(hotel.priceEGP / 1000).toFixed(0)}K</div>
+                <div className="text-[10px] opacity-80">{lang === 'ar' ? 'ج.م' : 'EGP'}</div>
+              </div>
+              
+              {/* Stars Badge - Top Left */}
+              <div className="absolute top-3 left-3 bg-white/90 backdrop-blur-sm px-2 py-1 rounded-lg flex items-center gap-0.5">
+                {renderStars(hotel.rating)}
+              </div>
+            </div>
+
+            {/* Hotel Info */}
+            <div className="p-4">
+              {/* Name */}
+              <h4 className="font-bold text-base text-gray-800 mb-2 line-clamp-1">
+                {lang === 'ar' ? hotel.hotel_name_ar : hotel.hotel_name_en}
+              </h4>
+
+              {/* Location with SVG Icon */}
+              {(hotel.area_ar || hotel.area_en) && (
+                <div className="flex items-center gap-1 mb-3 text-gray-600">
+                  <svg className="w-4 h-4 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                    <path fillRule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clipRule="evenodd" />
+                  </svg>
+                  <span className="text-xs line-clamp-1">{lang === 'ar' ? hotel.area_ar : hotel.area_en}</span>
+                </div>
+              )}
+
+              {/* Amenities Pills */}
+              {hotel.amenities && hotel.amenities.length > 0 && (
+                <div className="flex flex-wrap gap-1 mb-3">
+                  {hotel.amenities.slice(0, 2).map((amenity, idx) => (
+                    <span
+                      key={idx}
+                      className="text-[10px] bg-gradient-to-r from-[#7A0C2E]/10 to-[#991B1B]/10 text-[#7A0C2E] border border-[#7A0C2E]/20 px-2 py-1 rounded-full font-medium"
+                    >
+                      {amenity}
+                    </span>
+                  ))}
+                  {hotel.amenities.length > 2 && (
+                    <span className="text-[10px] text-gray-500 px-2 py-1">
+                      +{hotel.amenities.length - 2}
+                    </span>
+                  )}
+                </div>
+              )}
+
+              {/* CTA Button with Arrow Icon */}
+              <button className="w-full bg-gradient-to-r from-[#7A0C2E] to-[#991B1B] text-white py-3 rounded-xl text-sm font-semibold hover:shadow-lg transition-all duration-200 group-hover:scale-[1.02] flex items-center justify-center gap-2">
+                <span>{lang === 'ar' ? 'اختر الفندق' : 'Select Hotel'}</span>
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                </svg>
+              </button>
+            </div>
+          </div>
+        ))}
+      </div>
+      
+      {/* Scroll Indicators */}
+      <div className="flex justify-center gap-1.5 mt-3">
+        {hotels.slice(0, Math.min(5, hotels.length)).map((_, idx) => (
+          <div key={idx} className="w-1.5 h-1.5 rounded-full bg-gray-300" />
+        ))}
       </div>
     </div>
   )

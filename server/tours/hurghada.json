@@ -1,0 +1,276 @@
+{
+  "source": "hurghada_offers_image",
+  "location": "Hurghada",
+  "type": "travel_offers",
+  "valid_months": [
+    "November",
+    "December"
+  ],
+  "hotels": [
+    {
+      "hotel_name_en": "Dexon Roma Hotel",
+      "hotel_name_ar": "Dexon Roma Hotel",
+      "stars": 3,
+      "area": "Hurghada",
+      "room_type_en": "Standard Room - All Inclusive",
+      "room_type_ar": "غرفة قياسية - شامل جميع الوجبات",
+      "valid_from": "01 Nov",
+      "valid_to": "23 Dec",
+      "prices_egp": {
+        "single": 7000,
+        "double": 4375,
+        "triple": 4280
+      },
+      "price_egp": 4375,
+      "price_usd_reference": 146
+    },
+    {
+      "hotel_name_en": "Minamark Beach",
+      "hotel_name_ar": "Minamark Beach",
+      "stars": 3,
+      "area": "Hurghada",
+      "room_type_en": "Standard Room - All Inclusive",
+      "room_type_ar": "غرفة قياسية - شامل جميع الوجبات",
+      "valid_from": "01 Nov",
+      "valid_to": "23 Dec",
+      "prices_egp": {
+        "single": 9925,
+        "double": 6615,
+        "triple": 6575
+      },
+      "price_egp": 6615,
+      "price_usd_reference": 221
+    },
+    {
+      "hotel_name_en": "Sphinx Aqua Park",
+      "hotel_name_ar": "Sphinx Aqua Park",
+      "stars": 3,
+      "area": "Hurghada",
+      "room_type_en": "Standard Room - All Inclusive",
+      "room_type_ar": "غرفة قياسية - شامل جميع الوجبات",
+      "valid_from": "01 Nov",
+      "valid_to": "23 Dec",
+      "prices_egp": {
+        "single": 16170,
+        "double": 8820,
+        "triple": 8820
+      },
+      "price_egp": 8820,
+      "price_usd_reference": 294
+    },
+    {
+      "hotel_name_en": "Sunny Days El Palacio",
+      "hotel_name_ar": "Sunny Days El Palacio",
+      "stars": 4,
+      "area": "Hurghada",
+      "room_type_en": "Standard Room - All Inclusive",
+      "room_type_ar": "غرفة قياسية - شامل جميع الوجبات",
+      "valid_from": "01 Nov",
+      "valid_to": "25 Dec",
+      "prices_egp": {
+        "single": 14115,
+        "double": 8820,
+        "triple": 8820
+      },
+      "price_egp": 8820,
+      "price_usd_reference": 294
+    },
+    {
+      "hotel_name_en": "Seagull Resort",
+      "hotel_name_ar": "Seagull Resort",
+      "stars": 4,
+      "area": "Hurghada",
+      "room_type_en": "Standard Room - All Inclusive",
+      "room_type_ar": "غرفة قياسية - شامل جميع الوجبات",
+      "valid_from": "01 Nov",
+      "valid_to": "30 Nov",
+      "prices_egp": {
+        "single": 23330,
+        "double": 14260,
+        "triple": 14260
+      },
+      "price_egp": 14260,
+      "price_usd_reference": 475
+    },
+    {
+      "hotel_name_en": "Sentido Mamlouk",
+      "hotel_name_ar": "Sentido Mamlouk",
+      "stars": 5,
+      "area": "Hurghada",
+      "room_type_en": "Standard Room - All Inclusive",
+      "room_type_ar": "غرفة قياسية - شامل جميع الوجبات",
+      "valid_from": "01 Nov",
+      "valid_to": "19 Nov",
+      "prices_egp": {
+        "single": 22050,
+        "double": 14680,
+        "triple": 14370
+      },
+      "price_egp": 14680,
+      "price_usd_reference": 489
+    },
+    {
+      "hotel_name_en": "Swiss Inn Resort",
+      "hotel_name_ar": "Swiss Inn Resort",
+      "stars": 5,
+      "area": "Hurghada",
+      "room_type_en": "Standard Room - All Inclusive",
+      "room_type_ar": "غرفة قياسية - شامل جميع الوجبات",
+      "valid_from": "20 Nov",
+      "valid_to": "30 Nov",
+      "prices_egp": {
+        "single": 23520,
+        "double": 14700,
+        "triple": 14645
+      },
+      "price_egp": 14700,
+      "price_usd_reference": 490
+    },
+    {
+      "hotel_name_en": "Titanic Palace",
+      "hotel_name_ar": "Titanic Palace",
+      "stars": 5,
+      "area": "Hurghada",
+      "room_type_en": "Standard Room - All Inclusive",
+      "room_type_ar": "غرفة قياسية - شامل جميع الوجبات",
+      "valid_from": "01 Nov",
+      "valid_to": "30 Nov",
+      "prices_egp": {
+        "single": 21170,
+        "double": 13230,
+        "triple": 13175
+      },
+      "price_egp": 13230,
+      "price_usd_reference": 441
+    },
+    {
+      "hotel_name_en": "Sunrise Royal Makadi",
+      "hotel_name_ar": "Sunrise Royal Makadi",
+      "stars": 5,
+      "area": "Hurghada",
+      "room_type_en": "Standard Room - All Inclusive",
+      "room_type_ar": "غرفة قياسية - شامل جميع الوجبات",
+      "valid_from": "01 Nov",
+      "valid_to": "30 Nov",
+      "prices_egp": {
+        "single": 24255,
+        "double": 16170,
+        "triple": null
+      },
+      "price_egp": 16170,
+      "price_usd_reference": 539
+    },
+    {
+      "hotel_name_en": "Meraki Resort (Adults Only)",
+      "hotel_name_ar": "Meraki Resort (Adults Only)",
+      "stars": 5,
+      "area": "Hurghada",
+      "room_type_en": "Standard Room - All Inclusive",
+      "room_type_ar": "غرفة قياسية - شامل جميع الوجبات",
+      "valid_from": "01 Nov",
+      "valid_to": "30 Nov",
+      "prices_egp": {
+        "single": 23175,
+        "double": 15450,
+        "triple": 15145
+      },
+      "price_egp": 15450,
+      "price_usd_reference": 515
+    },
+    {
+      "hotel_name_en": "Continental Hotel",
+      "hotel_name_ar": "Continental Hotel",
+      "stars": 5,
+      "area": "Hurghada",
+      "room_type_en": "Standard Room - All Inclusive",
+      "room_type_ar": "غرفة قياسية - شامل جميع الوجبات",
+      "valid_from": "01 Nov",
+      "valid_to": "23 Dec",
+      "prices_egp": {
+        "single": 30825,
+        "double": 20550,
+        "triple": null
+      },
+      "price_egp": 20550,
+      "price_usd_reference": 685
+    },
+    {
+      "hotel_name_en": "Pickalbatros White Beach Resort",
+      "hotel_name_ar": "Pickalbatros White Beach Resort",
+      "stars": 5,
+      "area": "Hurghada",
+      "room_type_en": "Standard Room - All Inclusive",
+      "room_type_ar": "غرفة قياسية - شامل جميع الوجبات",
+      "valid_from": "01 Nov",
+      "valid_to": "30 Nov",
+      "prices_egp": {
+        "single": 33600,
+        "double": 21000,
+        "triple": 16000
+      },
+      "price_egp": 21000,
+      "price_usd_reference": 700
+    },
+    {
+      "hotel_name_en": "Rixos Premium Magawish Suites & Villas",
+      "hotel_name_ar": "Rixos Premium Magawish Suites & Villas",
+      "stars": 5,
+      "area": "Hurghada",
+      "room_type_en": "Standard Room - All Inclusive",
+      "room_type_ar": "غرفة قياسية - شامل جميع الوجبات",
+      "valid_from": "01 Nov",
+      "valid_to": "30 Nov",
+      "prices_egp": {
+        "single": 32925,
+        "double": 20580,
+        "triple": 19210
+      },
+      "price_egp": 20580,
+      "price_usd_reference": 686
+    },
+    {
+      "hotel_name_en": "Rixos Premium Magawish Suites & Villas",
+      "hotel_name_ar": "Rixos Premium Magawish Suites & Villas",
+      "stars": 5,
+      "area": "Hurghada",
+      "room_type_en": "Standard Room - All Inclusive",
+      "room_type_ar": "غرفة قياسية - شامل جميع الوجبات",
+      "valid_from": "01 Nov",
+      "valid_to": "30 Nov",
+      "prices_egp": {
+        "single": 50715,
+        "double": 33810,
+        "triple": 29300
+      },
+      "price_egp": 33810,
+      "price_usd_reference": 1127
+    }
+  ],
+  "includes": {
+    "ar": [
+      "الإقامة بالفندق لمدة 4 أيام / 3 ليالي.",
+      "الوجبات (فطار + غداء + عشاء + مشروبات وسناكس)."
+    ],
+    "en": [
+      "Hotel stay for 4 days / 3 nights.",
+      "Meals include (Breakfast + Lunch + Dinner + Drinks & Snacks)."
+    ]
+  },
+  "not_included": {
+    "ar": [
+      "أي بنود غير مدرجة في البرنامج.",
+      "الانتقالات."
+    ],
+    "en": [
+      "Any items not included in the program.",
+      "Transportation."
+    ]
+  },
+  "notes": {
+    "ar": "الأسعار قابلة للزيادة طبقاً لخطط أسعار الفنادق والإمكانية وقت الحجز.",
+    "en": "Prices may increase depending on hotel pricing policies and room availability at booking time."
+  },
+  "currency": "EGP",
+  "usd_exchange_rate": 50,
+  "offer_type": "travel_package"
+}

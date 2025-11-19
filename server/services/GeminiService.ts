@@ -36,59 +36,92 @@ export class GeminiService {
     lang: Language,
     enableFunctions: boolean = true
   ): Promise<{ text: string; functionCall?: FunctionCall }> {
-    const url = `${this.baseUrl}/${this.model}:generateContent?key=${this.apiKey}`
+    const maxRetries = 3
+    const baseDelay = 2000 // 2 seconds
+    
+    for (let attempt = 1; attempt <= maxRetries; attempt++) {
+      try {
+        console.log(`🚀 Calling Gemini API... (attempt ${attempt}/${maxRetries})`)
+        const url = `${this.baseUrl}/${this.model}:generateContent?key=${this.apiKey}`
 
-    const { systemMessages, regularMessages } = this.splitMessages(messages)
-    const requestBody: any = {
-      contents: regularMessages,
-      generationConfig: {
-        temperature: 0.7,
-        maxOutputTokens: 2048,
-      },
-    }
+        const { systemMessages, regularMessages } = this.splitMessages(messages)
+        const requestBody: any = {
+          contents: regularMessages,
+          generationConfig: {
+            temperature: 0.7,
+            maxOutputTokens: 2048,
+          },
+        }
 
-    // Add system instruction
-    if (systemMessages.length > 0) {
-      requestBody.systemInstruction = {
-        parts: [{ text: systemMessages.join('\n\n') }]
+        // Add system instruction
+        if (systemMessages.length > 0) {
+          requestBody.systemInstruction = {
+            parts: [{ text: systemMessages.join('\n\n') }]
+          }
+        }
+
+        // Add function declarations if enabled
+        if (enableFunctions) {
+          requestBody.tools = [{
+            functionDeclarations: PromptService.getFunctionDefinitions()
+          }]
+        }
+
+        const response = await fetch(url, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(requestBody),
+        })
+
+        if (!response.ok) {
+          const errorData = await response.json() as any
+          
+          // Handle rate limit error (429)
+          if (errorData?.error?.code === 429 && attempt < maxRetries) {
+            const delay = baseDelay * Math.pow(2, attempt - 1) // Exponential backoff
+            console.log(`⏳ Rate limit hit. Retrying in ${delay}ms...`)
+            await new Promise(resolve => setTimeout(resolve, delay))
+            continue
+          }
+          
+          console.error('❌ Gemini API Error:', errorData)
+          throw new Error(`Gemini API Error: ${response.status}`)
+        }
+
+        const data = await response.json() as GeminiResponse
+        const candidate = data.candidates?.[0]
+        const parts = candidate?.content?.parts || []
+
+        // Check for function call
+        const functionCallPart = parts.find((p: any) => p.functionCall)
+        if (functionCallPart && (functionCallPart as any).functionCall) {
+          console.log('🔧 Function call detected:', (functionCallPart as any).functionCall.name)
+          return {
+            text: '',
+            functionCall: (functionCallPart as any).functionCall
+          }
+        }
+
+        // Regular text response
+        const text = parts.map((p: any) => p.text || '').join('')
+        console.log('✅ Got AI response:', text.slice(0, 50) + (text.length > 50 ? '...' : ''))
+        return { text: text || (lang === 'ar' ? '❌ لم أتمكن من الحصول على رد.' : '❌ Could not get a response.') }
+        
+      } catch (error: any) {
+        // If last attempt, throw error
+        if (attempt === maxRetries) {
+          console.error('❌ Gemini API Error after all retries:', error)
+          throw error
+        }
+        
+        // Otherwise retry with backoff
+        const delay = baseDelay * Math.pow(2, attempt - 1)
+        console.log(`⚠️ Error occurred. Retrying in ${delay}ms...`)
+        await new Promise(resolve => setTimeout(resolve, delay))
       }
     }
-
-    // Add function declarations if enabled
-    if (enableFunctions) {
-      requestBody.tools = [{
-        functionDeclarations: PromptService.getFunctionDefinitions()
-      }]
-    }
-
-    const response = await fetch(url, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(requestBody),
-    })
-
-    if (!response.ok) {
-      const errorData = await response.json()
-      console.error('❌ Gemini API Error:', errorData)
-      throw new Error(`Gemini API Error: ${response.status}`)
-    }
-
-    const data = await response.json() as GeminiResponse
-    const candidate = data.candidates?.[0]
-    const parts = candidate?.content?.parts || []
-
-    // Check for function call
-    const functionCallPart = parts.find((p: any) => p.functionCall)
-    if (functionCallPart && (functionCallPart as any).functionCall) {
-      return {
-        text: '',
-        functionCall: (functionCallPart as any).functionCall
-      }
-    }
-
-    // Regular text response
-    const text = parts.map((p: any) => p.text || '').join('')
-    return { text: text || (lang === 'ar' ? '❌ لم أتمكن من الحصول على رد.' : '❌ Could not get a response.') }
+    
+    throw new Error('Gemini API: Max retries exceeded')
   }
 
   // Streaming chat with function calling support

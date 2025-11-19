@@ -27,6 +27,60 @@ export type ChatMessage = {
       max?: number
       default?: number
     }
+    quickReplies?: {
+      title_ar?: string
+      title_en?: string
+      options: Array<{ label_ar: string; label_en: string; value: string; emoji?: string }>
+    }
+    hotelFilters?: {
+      title_ar?: string
+      title_en?: string
+      filters: {
+        stars?: Array<{ value: number; label: string }>
+        mealPlans?: Array<{ value: string; label_ar: string; label_en: string }>
+        areas?: Array<{ value: string; label_ar: string; label_en: string }>
+      }
+    }
+    mealPlans?: {
+      title_ar?: string
+      title_en?: string
+      options: Array<{ value: string; label_ar: string; label_en: string; icon: string; description_ar?: string; description_en?: string }>
+    }
+    roomTypes?: {
+      title_ar?: string
+      title_en?: string
+      options: Array<{ value: string; label_ar: string; label_en: string; icon: string; capacity?: number; description_ar?: string; description_en?: string }>
+    }
+    budget?: {
+      title_ar?: string
+      title_en?: string
+      ranges: Array<{
+        label_ar: string
+        label_en: string
+        min: number
+        max: number
+        icon: string
+        description_ar?: string
+        description_en?: string
+        popular?: boolean
+      }>
+    }
+    hotelCards?: {
+      hotels: Array<{
+        hotel_id?: string
+        hotel_name_ar: string
+        hotel_name_en: string
+        priceEGP: number
+        priceUSD?: number
+        rating?: number
+        amenities?: string[]
+        description_ar?: string
+        description_en?: string
+        image?: string
+        area_ar?: string
+        area_en?: string
+      }>
+    }
   }
 }
 

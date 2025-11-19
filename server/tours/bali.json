@@ -1,0 +1,139 @@
+{
+  "source": "bali_honeymoon_offer",
+  "location": "Bali",
+  "type": "travel_offers",
+  "valid_months": [
+    "October",
+    "November"
+  ],
+  "hotels": [
+    {
+      "hotel_name_en": "Harris Hotel Seminyak",
+      "hotel_name_ar": "Harris Hotel Seminyak",
+      "stars": 4,
+      "area": "Seminyak",
+      "room_type_en": "Harris Room + Breakfast",
+      "room_type_ar": "غرفة هاريس + إفطار",
+      "price_egp": 17500,
+      "price_usd_reference": 350
+    },
+    {
+      "hotel_name_en": "KajaNe Yangloni",
+      "hotel_name_ar": "KajaNe Yangloni",
+      "stars": 4,
+      "area": "Ubud",
+      "room_type_en": "Deluxe Room + Breakfast",
+      "room_type_ar": "غرفة ديلوكس + إفطار",
+      "price_egp": 31000,
+      "price_usd_reference": 620
+    },
+    {
+      "hotel_name_en": "Mercure Kuta Bali",
+      "hotel_name_ar": "Mercure Kuta Bali",
+      "stars": 4,
+      "area": "Kuta",
+      "room_type_en": "Superior Double Room + Breakfast",
+      "room_type_ar": "غرفة مزدوجة سوبيريور + إفطار",
+      "price_egp": 26500,
+      "price_usd_reference": 530
+    },
+    {
+      "hotel_name_en": "Montigo Resorts Seminyak",
+      "hotel_name_ar": "Montigo Resorts Seminyak",
+      "stars": 5,
+      "area": "Seminyak",
+      "room_type_en": "Deluxe Room + Breakfast",
+      "room_type_ar": "غرفة ديلوكس + إفطار",
+      "price_egp": 30000,
+      "price_usd_reference": 600
+    },
+    {
+      "hotel_name_en": "Ramayana Suites and Resort",
+      "hotel_name_ar": "Ramayana Suites and Resort",
+      "stars": 5,
+      "area": "Kuta",
+      "room_type_en": "Deluxe Room + Breakfast",
+      "room_type_ar": "غرفة ديلوكس + إفطار",
+      "price_egp": 32750,
+      "price_usd_reference": 655
+    }
+  ],
+  "includes": {
+    "ar": [
+      "الإقامة للزوجين لمدة 6 أيام / 5 ليالي في أي فندق من الفنادق المذكورة أعلاه أو ما يماثلها.",
+      "الوجبات تشمل الإفطار فقط.",
+      "الانتقالات من المطار إلى الفندق والعكس."
+    ],
+    "en": [
+      "Accommodation for 6 days / 5 nights for the couple at any of the listed hotels or similar.",
+      "Meals include breakfast only.",
+      "Airport round-trip transfers."
+    ]
+  },
+  "not_included": {
+    "ar": [
+      "أي بنود غير مدرجة في البرنامج.",
+      "تأشيرة دخول إندونيسيا عند الوصول.",
+      "تذاكر الطيران."
+    ],
+    "en": [
+      "Any items not included in the program.",
+      "Indonesia entry visa on arrival.",
+      "International flights."
+    ]
+  },
+  "optional_tours": [
+    {
+      "tour_name_ar": "معابد التراث العالمي لليونسكو",
+      "tour_name_en": "UNESCO Heritage Temples Tour",
+      "price_usd": 55,
+      "details_ar": "زيارة Taman Ayun، بحيرة Bratan، معبد Pura Ulun Danu Bratan، وختام الجولة في Tanah Lot.",
+      "details_en": "Visit Taman Ayun Temple, Bratan Lake, Ulun Danu Bratan Temple, and end the tour at Tanah Lot."
+    },
+    {
+      "tour_name_ar": "جولة غطس مع أسماك مانتا Rays في Nusa Penida (3 مواقع)",
+      "tour_name_en": "3-Spot Manta Ray Snorkeling Tour - Nusa Penida",
+      "price_usd": 65,
+      "details_ar": "رحلة غوص في 3 مواقع: Manta Bay وCrystal Bay وGamat Bay مع غداء في Nusa Lembongan.",
+      "details_en": "Snorkeling in 3 spots: Manta Bay, Crystal Bay, Gamat Bay with lunch at Nusa Lembongan."
+    },
+    {
+      "tour_name_ar": "جولة لأجمل شلالات أوبود",
+      "tour_name_en": "Best Ubud Waterfalls Tour",
+      "price_usd": 65,
+      "details_ar": "زيارة شلالات Tibumana، Tukad Cepung، وTegenungan مع وقت للسباحة والتصوير.",
+      "details_en": "Visit Tibumana, Tukad Cepung, and Tegenungan waterfalls with swimming and photo stops."
+    },
+    {
+      "tour_name_ar": "رحلة شروق الشمس إلى جبل باتور",
+      "tour_name_en": "Mount Batur Sunrise Trek",
+      "price_usd": 60,
+      "details_ar": "تسلق جبل Batur لمشاهدة شروق الشمس، زيارة المزارع والبراكين القديمة.",
+      "details_en": "Climb Mount Batur for sunrise; visit plantations and volcanic areas."
+    },
+    {
+      "tour_name_ar": "جولة مميزة لأشهر معالم بالي",
+      "tour_name_en": "Premium Bali Highlights Tour",
+      "price_usd": 90,
+      "details_ar": "زيارة معبد Lempuyang، قصر Tirta Gangga، شلالات Tukad Cepung، وحدائق الأرز.",
+      "details_en": "Visit Lempuyang Temple, Tirta Gangga Water Palace, Tukad Cepung Waterfall, and rice terraces."
+    }
+  ],
+  "notes": {
+    "ar": [
+      "تسجيل الوصول المبكر أو المغادرة المتأخرة يخضعان للتوافر.",
+      "الغرف تخضع للتوافر في الفنادق المذكورة أعلاه أو فئة مماثلة عند وقت الحجز الفعلي.",
+      "الأسعار بالدولار ويتم السداد بما يعادلها بالجنيه المصري حسب سعر الصرف وقت السداد.",
+      "الأسعار متغيرة حسب الإمكانية والتاريخ الفعلي للحجز وطبقاً لمتغيرات أسعار العملات."
+    ],
+    "en": [
+      "Early check-in or late check-out is subject to availability.",
+      "Rooms are subject to availability at the listed hotels or similar category at booking time.",
+      "Prices are in USD and payment is made in EGP based on exchange rate at payment time.",
+      "Prices may vary depending on availability and actual booking date as well as currency fluctuations."
+    ]
+  },
+  "currency": "EGP",
+  "usd_exchange_rate": 50,
+  "offer_type": "travel_package"
+}
