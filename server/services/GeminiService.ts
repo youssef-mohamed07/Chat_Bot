@@ -266,4 +266,169 @@ export class GeminiService {
 
  return { systemMessages, regularMessages }
  }
+
+ /**
+ * توليد رد ذكي مع دعم السياق والتاريخ
+ */
+ async generateSmartResponse(
+ userId: string,
+ message: string,
+ sessionManager: any,
+ ragService: any,
+ intent: any,
+ language: Language = 'ar'
+ ): Promise<{
+ text: string
+ functionCall?: FunctionCall
+ suggestions: string[]
+ confidence: number
+ }> {
+ try {
+ // جلب تاريخ المحادثة
+ const conversationHistory = sessionManager.getConversationHistory(userId, 5)
+ const contextMemory = sessionManager.getContextMemory(userId)
+ const metadata = sessionManager.getMeta(userId)
+
+ // بناء رسائل السياق
+ const contextMessages: ChatMessage[] = []
+
+ // إضافة نظام التعليمات مع السياق
+ const systemPrompt = this.buildEnhancedSystemPrompt(
+ language,
+ metadata,
+ conversationHistory,
+ intent
+ )
+ contextMessages.push({
+ role: 'system',
+ content: systemPrompt
+ })
+
+ // إضافة تاريخ المحادثة
+ for (const turn of conversationHistory) {
+ contextMessages.push({
+ role: 'user',
+ content: turn.userMessage
+ })
+ contextMessages.push({
+ role: 'assistant',
+ content: turn.botResponse
+ })
+ }
+
+ // إضافة الرسالة الحالية
+ contextMessages.push({
+ role: 'user',
+ content: message
+ })
+
+ // استدعاء Gemini
+ const response = await this.sendChatRequest(contextMessages, language, true)
+
+ // استخراج الاقتراحات
+ const suggestions = intent.suggestions || []
+
+ return {
+ text: response.text,
+ functionCall: response.functionCall,
+ suggestions,
+ confidence: intent.confidence
+ }
+
+ } catch (error) {
+ console.error('Error in generateSmartResponse:', error)
+ throw error
+ }
+ }
+
+ /**
+ * بناء تعليمات نظام محسّنة مع السياق
+ */
+ private buildEnhancedSystemPrompt(
+ language: Language,
+ metadata: any,
+ conversationHistory: any[],
+ intent: any
+ ): string {
+ const basePrompt = PromptService.getSystemPrompt(language)
+ 
+ // إضافة معلومات السياق
+ let contextInfo = '\n\n### CONVERSATION CONTEXT ###\n'
+ 
+ if (metadata.lastDest) {
+ contextInfo += `- Last mentioned destination: ${metadata.lastDest}\n`
+ }
+ if (metadata.selectedHotel) {
+ contextInfo += `- Currently selected hotel: ${metadata.selectedHotel}\n`
+ }
+ if (metadata.startDate && metadata.endDate) {
+ contextInfo += `- Travel dates: ${metadata.startDate} to ${metadata.endDate}\n`
+ }
+ if (metadata.pax) {
+ contextInfo += `- Number of travelers: ${metadata.pax}\n`
+ }
+ if (metadata.budget) {
+ contextInfo += `- Budget: ${metadata.budget} EGP\n`
+ }
+ if (metadata.step) {
+ contextInfo += `- Current step: ${metadata.step}\n`
+ }
+
+ // إضافة معلومات النية
+ if (intent) {
+ contextInfo += `\n### DETECTED INTENT ###\n`
+ contextInfo += `- Intent type: ${intent.type}\n`
+ contextInfo += `- Confidence: ${(intent.confidence * 100).toFixed(0)}%\n`
+ 
+ if (intent.entities && Object.keys(intent.entities).length > 0) {
+ contextInfo += `- Extracted entities:\n`
+ for (const [key, value] of Object.entries(intent.entities)) {
+ if (value) {
+ contextInfo += `  * ${key}: ${JSON.stringify(value)}\n`
+ }
+ }
+ }
+ }
+
+ // إضافة تعليمات خاصة بالنية
+ const intentInstructions = this.getIntentSpecificInstructions(intent, language)
+ if (intentInstructions) {
+ contextInfo += `\n${intentInstructions}\n`
+ }
+
+ return basePrompt + contextInfo
+ }
+
+ /**
+ * تعليمات خاصة بكل نوع نية
+ */
+ private getIntentSpecificInstructions(intent: any, language: Language): string {
+ if (!intent) return ''
+
+ const instructions: Record<string, { ar: string; en: string }> = {
+ hotel_comparison: {
+ ar: '### تعليمات خاصة ###\nالمستخدم يريد مقارنة فنادق. قدم مقارنة واضحة بين الفنادق مع التركيز على: السعر، عدد النجوم، الموقع، المرافق، والمميزات. استخدم جدول أو نقاط واضحة.',
+ en: '### Special Instructions ###\nUser wants to compare hotels. Provide clear comparison focusing on: price, stars, location, facilities, and features. Use table or clear bullet points.'
+ },
+ price_inquiry: {
+ ar: '### تعليمات خاصة ###\nالمستخدم يسأل عن السعر. اذكر السعر بوضوح مع تفاصيل ما يشمله (الوجبات، المدة، عدد الأشخاص). اذكر السعر بالجنيه المصري أولاً ثم بالدولار كمرجع.',
+ en: '### Special Instructions ###\nUser asking about price. State price clearly with details of what\'s included (meals, duration, people). Mention EGP first, then USD as reference.'
+ },
+ recommendation_request: {
+ ar: '### تعليمات خاصة ###\nالمستخدم يريد توصيات. قدم 3-5 اقتراحات مع شرح سبب التوصية لكل فندق. ركز على ما يناسب احتياجاته المذكورة.',
+ en: '### Special Instructions ###\nUser wants recommendations. Provide 3-5 suggestions with reasoning for each. Focus on matching their stated needs.'
+ },
+ general_question: {
+ ar: '### تعليمات خاصة ###\nالمستخدم يسأل سؤالاً عاماً. أجب بشكل مختصر ومفيد. إذا كان السؤال خارج نطاق الحجز، وجهه بلطف للموضوع الأساسي.',
+ en: '### Special Instructions ###\nUser asking general question. Answer briefly and helpfully. If question is outside booking scope, gently redirect to main topic.'
+ },
+ unknown: {
+ ar: '### تعليمات خاصة ###\nالنية غير واضحة. اطلب توضيحاً بطريقة ودودة مع تقديم اقتراحات لما قد يبحث عنه المستخدم.',
+ en: '### Special Instructions ###\nIntent unclear. Ask for clarification in friendly way while suggesting what user might be looking for.'
+ }
+ }
+
+ const instruction = instructions[intent.type]
+ return instruction ? instruction[language] : ''
+ }
 }

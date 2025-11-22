@@ -5,16 +5,208 @@ import { SessionManager } from '../services/SessionManager.js'
 import { ragService } from '../services/RAGService.js'
 import { PromptService } from '../services/PromptService.js'
 import { WhatsAppService } from '../services/WhatsAppService.js'
+import IntentService from '../services/IntentService.js'
+import ValidationService from '../services/ValidationService.js'
 
 export class ChatController {
   private geminiService: GeminiService
   private sessionManager: SessionManager
   private whatsappService: WhatsAppService
+  private intentService = IntentService
+  private validationService = ValidationService
 
   constructor() {
     this.geminiService = new GeminiService()
     this.sessionManager = new SessionManager()
     this.whatsappService = new WhatsAppService()
+  }
+
+  /**
+   * معالجة ذكية للرسائل مع Intent Detection
+   */
+  private async handleSmartMessage(
+    userId: string,
+    message: string,
+    lang: Language
+  ): Promise<{
+    shouldUseSmart: boolean
+    intent?: any
+    response?: string
+    hotels?: any[]
+    suggestions?: string[]
+  }> {
+    try {
+      // تحليل النية
+      const meta = this.sessionManager.getMeta(userId)
+      const intent = this.intentService.analyzeMessage(message, meta)
+
+      console.log(`🧠 Intent detected: ${intent.type} (${(intent.confidence * 100).toFixed(0)}%)`)
+
+      // التحقق من الكيانات إذا لزم الأمر
+      const validation = this.intentService.validateIntent(intent)
+      if (!validation.valid) {
+        console.warn('⚠️ Intent validation failed:', validation.errors)
+      }
+
+      // معالجة حسب النية
+      switch (intent.type) {
+        case 'hotel_comparison':
+          if (intent.entities.hotelNames && intent.entities.hotelNames.length >= 2) {
+            const hotels = ragService.compareHotels(intent.entities.hotelNames, meta.lastDest)
+            const comparison = this.formatHotelComparison(hotels, lang)
+            
+            return {
+              shouldUseSmart: true,
+              intent,
+              response: comparison,
+              hotels,
+              suggestions: intent.suggestions
+            }
+          }
+          break
+
+        case 'price_inquiry':
+          // حل الإشارة الضمنية
+          const implicitRef = this.sessionManager.resolveImplicitReference(userId, message)
+          if (implicitRef) {
+            const hotel = this.findHotelByName(implicitRef, meta.lastDest)
+            if (hotel) {
+              const priceInfo = this.formatPriceInfo(hotel, lang)
+              return {
+                shouldUseSmart: true,
+                intent,
+                response: priceInfo,
+                suggestions: intent.suggestions
+              }
+            }
+          }
+          break
+
+        case 'recommendation_request':
+          const recommendations = ragService.getRecommendations({
+            destination: intent.entities.destination || meta.lastDest,
+            stars: intent.entities.stars,
+            budget: this.categorizeBudget(intent.entities.budget),
+          }, lang)
+
+          if (recommendations.length > 0) {
+            this.sessionManager.updateContextMemory(userId, {
+              lastShownHotels: recommendations.map((h: any) => h.hotel_name_en)
+            })
+
+            return {
+              shouldUseSmart: true,
+              intent,
+              hotels: recommendations,
+              suggestions: intent.suggestions
+            }
+          }
+          break
+
+        case 'general_question':
+          const answer = ragService.answerGeneralQuestion(message, lang)
+          if (answer) {
+            return {
+              shouldUseSmart: true,
+              intent,
+              response: answer,
+              suggestions: intent.suggestions
+            }
+          }
+          break
+
+        case 'unknown':
+          // إذا كانت الثقة منخفضة جداً، نقدم اقتراحات
+          if (intent.confidence < 0.4) {
+            const fallback = lang === 'ar'
+              ? `عذراً، لم أفهم طلبك بوضوح. هل تريد:\n${intent.suggestions.map((s: string) => `• ${s}`).join('\n')}`
+              : `Sorry, I didn't understand. Would you like to:\n${intent.suggestions.map((s: string) => `• ${s}`).join('\n')}`
+            
+            return {
+              shouldUseSmart: true,
+              intent,
+              response: fallback,
+              suggestions: intent.suggestions
+            }
+          }
+          break
+      }
+
+      // إذا لم نتمكن من المعالجة الذكية، نرجع للنظام العادي
+      return {
+        shouldUseSmart: false,
+        intent
+      }
+
+    } catch (error) {
+      console.error('Error in handleSmartMessage:', error)
+      return { shouldUseSmart: false }
+    }
+  }
+
+  /**
+   * تنسيق مقارنة الفنادق
+   */
+  private formatHotelComparison(hotels: any[], lang: Language): string {
+    if (hotels.length === 0) {
+      return lang === 'ar' ? 'عذراً، لم أجد الفنادق المطلوبة' : 'Sorry, hotels not found'
+    }
+
+    let comparison = lang === 'ar' ? '📊 مقارنة الفنادق:\n\n' : '📊 Hotel Comparison:\n\n'
+
+    for (const hotel of hotels) {
+      const name = lang === 'ar' ? hotel.hotel_name_ar : hotel.hotel_name_en
+      const stars = '⭐'.repeat(hotel.stars || 0)
+      const price = hotel.price_egp || hotel.prices_egp?.double || 0
+      const priceUsd = hotel.price_usd_reference || Math.round(price / 50)
+
+      comparison += `🏨 ${name}\n`
+      comparison += `${stars} (${hotel.stars} ${lang === 'ar' ? 'نجوم' : 'stars'})\n`
+      comparison += `💰 ${price.toLocaleString()} ${lang === 'ar' ? 'جنيه' : 'EGP'} (~$${priceUsd})\n`
+      comparison += `📍 ${hotel.area || hotel.destination}\n`
+      comparison += `🍽️ ${lang === 'ar' ? hotel.room_type_ar : hotel.room_type_en}\n\n`
+    }
+
+    return comparison
+  }
+
+  /**
+   * تنسيق معلومات السعر
+   */
+  private formatPriceInfo(hotel: any, lang: Language): string {
+    const name = lang === 'ar' ? hotel.hotel_name_ar : hotel.hotel_name_en
+    const price = hotel.price_egp || hotel.prices_egp?.double || 0
+    const priceUsd = hotel.price_usd_reference || Math.round(price / 50)
+
+    if (lang === 'ar') {
+      return `💰 سعر فندق ${name}:\n\n` +
+        `• للفرد: ${price.toLocaleString()} جنيه (~$${priceUsd})\n` +
+        `• يشمل: ${hotel.room_type_ar || 'شامل جميع الوجبات'}\n` +
+        `• المدة: 4 أيام / 3 ليالي`
+    } else {
+      return `💰 Price for ${name}:\n\n` +
+        `• Per person: ${price.toLocaleString()} EGP (~$${priceUsd})\n` +
+        `• Includes: ${hotel.room_type_en || 'All Inclusive'}\n` +
+        `• Duration: 4 days / 3 nights`
+    }
+  }
+
+  /**
+   * البحث عن فندق بالاسم
+   */
+  private findHotelByName(name: string, destination?: string): any {
+    const hotels = ragService.compareHotels([name], destination)
+    return hotels.length > 0 ? hotels[0] : null
+  }
+
+  /**
+   * تصنيف الميزانية
+   */
+  private categorizeBudget(budget?: number): 'low' | 'medium' | 'high' | undefined {
+    if (!budget) return undefined
+    if (budget < 8000) return 'low'
+    if (budget <= 15000) return 'medium'
+    return 'high'
   }
 
   // Main chat handler - 100% AI-driven
@@ -106,6 +298,56 @@ export class ChatController {
           : `I want to know about ${topic} in ${dest}`
       } else if (message.startsWith('set_dates:')) {
         const [, dates] = message.split(':')
+      } else {
+        // ✨ المعالجة الذكية للرسائل الحرة
+        const smartResult = await this.handleSmartMessage(userId, message, lang as Language)
+        
+        if (smartResult.shouldUseSmart) {
+          console.log('🎯 Using smart response handler')
+          
+          // حفظ في تاريخ المحادثة
+          this.sessionManager.addConversationTurn(
+            userId,
+            message,
+            smartResult.response || '',
+            smartResult.intent?.type,
+            smartResult.intent?.entities
+          )
+
+          // تحديث ذاكرة السياق
+          if (smartResult.hotels && smartResult.hotels.length > 0) {
+            this.sessionManager.updateContextMemory(userId, {
+              lastShownHotels: smartResult.hotels.map((h: any) => h.hotel_name_en)
+            })
+          }
+
+          const chatResponse: ChatResponse = {
+            reply: smartResult.response || '',
+            ui: smartResult.hotels ? {
+              blocks: [{
+                type: 'hotelCards',
+                hotels: smartResult.hotels.map((h: any) => ({
+                  hotel_name_ar: h.hotel_name_ar,
+                  hotel_name_en: h.hotel_name_en,
+                  priceEGP: h.price_egp || h.prices_egp?.double || 0,
+                  priceUSD: h.price_usd_reference || Math.round((h.price_egp || 0) / 50),
+                  stars: h.stars,
+                  area: h.area || h.destination,
+                  image_url: h.image_url,
+                  room_type_ar: h.room_type_ar,
+                  room_type_en: h.room_type_en,
+                }))
+              }]
+            } : undefined
+          }
+
+          res.json(chatResponse)
+          return
+        }
+      }
+
+      if (message.startsWith('set_dates:')) {
+        const [, dates] = message.split(':')
         const [start, end] = dates.split('..')
         this.sessionManager.updateMeta(userId, { 
           startDate: start, 
@@ -157,7 +399,7 @@ export class ChatController {
         
         console.log(`🏨 User selected hotel: ${hotelIdentifier}`)
         
-        const dest = meta.lastDest
+        const dest = meta.lastDest || 'sharm_el_sheikh'
         const destChunks = ragService.getDestinationInfo(dest, 'hotels', lang)
         
         let hotelDisplayName = hotelIdentifier

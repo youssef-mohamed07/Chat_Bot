@@ -408,6 +408,193 @@ export class RAGService {
 
  return hotels
  }
+
+ /**
+ * مقارنة فنادق
+ */
+ compareHotels(hotelNames: string[], destination?: string): any[] {
+ this.loadAll()
+ const results: any[] = []
+
+ for (const hotelName of hotelNames) {
+ const lowerName = hotelName.toLowerCase()
+ 
+ // البحث في جميع الوجهات إذا لم تُحدد
+ const destinations = destination 
+ ? [destination]
+ : Array.from(this.offersByDest.keys())
+
+ for (const dest of destinations) {
+ const json = this.offersByDest.get(dest)
+ if (!json?.hotels) continue
+
+ const hotel = json.hotels.find((h: any) => {
+ const nameEn = (h.hotel_name_en || '').toLowerCase()
+ const nameAr = (h.hotel_name_ar || '').toLowerCase()
+ return nameEn.includes(lowerName) || nameAr.includes(lowerName) || 
+ lowerName.includes(nameEn) || lowerName.includes(nameAr)
+ })
+
+ if (hotel) {
+ results.push({
+ ...hotel,
+ destination: dest,
+ location: json.location || dest
+ })
+ break
+ }
+ }
+ }
+
+ return results
+ }
+
+ /**
+ * الحصول على توصيات بناءً على التفضيلات
+ */
+ getRecommendations(preferences: {
+ destination?: string
+ budget?: 'low' | 'medium' | 'high'
+ stars?: number
+ amenities?: string[]
+ travelType?: 'family' | 'couple' | 'solo' | 'group'
+ }, language: Language = 'ar'): any[] {
+ this.loadAll()
+ 
+ let hotels: any[] = []
+
+ // جمع الفنادق من الوجهات
+ const destinations = preferences.destination
+ ? [preferences.destination]
+ : Array.from(this.offersByDest.keys())
+
+ for (const dest of destinations) {
+ const json = this.offersByDest.get(dest)
+ if (json?.hotels) {
+ hotels.push(...json.hotels.map((h: any) => ({
+ ...h,
+ destination: dest,
+ location: json.location || dest
+ })))
+ }
+ }
+
+ // تطبيق الفلاتر
+ if (preferences.stars) {
+ hotels = hotels.filter(h => h.stars === preferences.stars)
+ }
+
+ // فلترة حسب الميزانية
+ if (preferences.budget) {
+ hotels = hotels.filter(h => {
+ const price = h.price_egp || h.prices_egp?.double || 0
+ if (preferences.budget === 'low') return price < 8000
+ if (preferences.budget === 'medium') return price >= 8000 && price <= 15000
+ if (preferences.budget === 'high') return price > 15000
+ return true
+ })
+ }
+
+ // فلترة حسب نوع السفر
+ if (preferences.travelType === 'family') {
+ // تفضيل الفنادق 4-5 نجوم مع أنشطة عائلية
+ hotels = hotels.filter(h => h.stars >= 4)
+ }
+ if (preferences.travelType === 'couple') {
+ // تفضيل الفنادق الرومانسية 5 نجوم
+ hotels = hotels.filter(h => h.stars === 5)
+ }
+
+ // ترتيب حسب التقييم والسعر
+ hotels.sort((a, b) => {
+ // ترتيب حسب النجوم أولاً
+ if (a.stars !== b.stars) return b.stars - a.stars
+ // ثم حسب السعر
+ const priceA = a.price_egp || a.prices_egp?.double || 0
+ const priceB = b.price_egp || b.prices_egp?.double || 0
+ return priceA - priceB
+ })
+
+ // إرجاع أفضل 5 نتائج
+ return hotels.slice(0, 5)
+ }
+
+ /**
+ * الإجابة على الأسئلة العامة
+ */
+ answerGeneralQuestion(question: string, language: Language = 'ar'): string | null {
+ const lowerQuestion = question.toLowerCase()
+
+ // أسئلة عن التأشيرات
+ if (/(visa|تأشيرة|فيزا)/i.test(lowerQuestion)) {
+ if (language === 'ar') {
+ return 'معظم الوجهات المصرية (شرم الشيخ، الغردقة، دهب) لا تحتاج تأشيرة للمصريين. بالنسبة للوجهات الدولية مثل بالي واسطنبول، يرجى الاتصال بنا لمعرفة متطلبات التأشيرة.'
+ } else {
+ return 'Most Egyptian destinations (Sharm El Sheikh, Hurghada, Dahab) do not require a visa for Egyptians. For international destinations like Bali and Istanbul, please contact us for visa requirements.'
+ }
+ }
+
+ // أسئلة عن الطقس
+ if (/(weather|طقس|جو)/i.test(lowerQuestion)) {
+ if (language === 'ar') {
+ return 'الطقس في شهري نوفمبر وديسمبر معتدل ومثالي للسفر في جميع الوجهات المصرية. درجة الحرارة تتراوح بين 20-28 درجة مئوية.'
+ } else {
+ return 'Weather in November and December is moderate and ideal for travel in all Egyptian destinations. Temperature ranges between 20-28°C.'
+ }
+ }
+
+ // أسئلة عن طرق الدفع
+ if (/(payment|دفع|طرق الدفع)/i.test(lowerQuestion)) {
+ if (language === 'ar') {
+ return 'نقبل جميع طرق الدفع: نقداً، بطاقات الائتمان، التحويل البنكي، وفودافون كاش.'
+ } else {
+ return 'We accept all payment methods: Cash, Credit Cards, Bank Transfer, and Vodafone Cash.'
+ }
+ }
+
+ // أسئلة عن السفر مع الأطفال
+ if (/(kids|children|أطفال|اطفال)/i.test(lowerQuestion)) {
+ if (language === 'ar') {
+ return 'نوفر عروض خاصة للعائلات مع الأطفال. الأطفال تحت سن معينة يحصلون على خصومات. يرجى التواصل معنا لمعرفة التفاصيل.'
+ } else {
+ return 'We offer special packages for families with children. Children under a certain age get discounts. Please contact us for details.'
+ }
+ }
+
+ // أسئلة عن الإلغاء
+ if (/(cancel|refund|إلغاء|استرجاع)/i.test(lowerQuestion)) {
+ if (language === 'ar') {
+ return 'سياسة الإلغاء تعتمد على الفندق والباقة المختارة. يرجى التواصل معنا لمعرفة التفاصيل.'
+ } else {
+ return 'Cancellation policy depends on the hotel and selected package. Please contact us for details.'
+ }
+ }
+
+ return null
+ }
+
+ /**
+ * بحث ذكي مع دعم الأخطاء الإملائية
+ */
+ smartSearch(query: string, options?: RAGQueryOptions): RAGResult {
+ // تصحيح الأخطاء الشائعة
+ const corrections: Record<string, string> = {
+ 'شرم': 'sharm',
+ 'غردقه': 'hurghada',
+ 'الغرده': 'hurghada',
+ 'دهاب': 'dahab',
+ 'اسطمبول': 'istanbul',
+ 'استنبول': 'istanbul',
+ 'بيروت': 'beirut',
+ }
+
+ let correctedQuery = query
+ for (const [wrong, correct] of Object.entries(corrections)) {
+ correctedQuery = correctedQuery.replace(new RegExp(wrong, 'gi'), correct)
+ }
+
+ return this.retrieve(correctedQuery, options || { lang: 'ar' })
+ }
 }
 
 // Singleton instance
