@@ -15,7 +15,8 @@
       "room_type_en": "Harris Room + Breakfast",
       "room_type_ar": "غرفة هاريس + إفطار",
       "price_egp": 17500,
-      "price_usd_reference": 350
+      "price_usd_reference": 350,
+      "image_url": "https://images.unsplash.com/photo-1571896349842-33c89424de2d?w=800&q=80"
     },
     {
       "hotel_name_en": "KajaNe Yangloni",
@@ -25,7 +26,8 @@
       "room_type_en": "Deluxe Room + Breakfast",
       "room_type_ar": "غرفة ديلوكس + إفطار",
       "price_egp": 31000,
-      "price_usd_reference": 620
+      "price_usd_reference": 620,
+      "image_url": "https://images.unsplash.com/photo-1566073771259-6a8506099945?w=800&q=80"
     },
     {
       "hotel_name_en": "Mercure Kuta Bali",
@@ -35,7 +37,8 @@
       "room_type_en": "Superior Double Room + Breakfast",
       "room_type_ar": "غرفة مزدوجة سوبيريور + إفطار",
       "price_egp": 26500,
-      "price_usd_reference": 530
+      "price_usd_reference": 530,
+      "image_url": "https://images.unsplash.com/photo-1582719508461-905c673771fd?w=800&q=80"
     },
     {
       "hotel_name_en": "Montigo Resorts Seminyak",
@@ -45,7 +48,8 @@
       "room_type_en": "Deluxe Room + Breakfast",
       "room_type_ar": "غرفة ديلوكس + إفطار",
       "price_egp": 30000,
-      "price_usd_reference": 600
+      "price_usd_reference": 600,
+      "image_url": "https://images.unsplash.com/photo-1520250497591-112f2f40a3f4?w=800&q=80"
     },
     {
       "hotel_name_en": "Ramayana Suites and Resort",
@@ -55,7 +59,8 @@
       "room_type_en": "Deluxe Room + Breakfast",
       "room_type_ar": "غرفة ديلوكس + إفطار",
       "price_egp": 32750,
-      "price_usd_reference": 655
+      "price_usd_reference": 655,
+      "image_url": "https://images.unsplash.com/photo-1551882547-ff40c63fe5fa?w=800&q=80"
     }
   ],
   "includes": {

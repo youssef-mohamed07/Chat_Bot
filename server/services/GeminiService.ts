@@ -1,6 +1,6 @@
 import fetch from 'node-fetch'
-import type { ChatMessage, GeminiResponse, Language } from '../types/index.js'
-import { config } from '../config/index.js'
+import type { ChatMessage, GeminiResponse, Language } from '../shared.js'
+import { config } from '../shared.js'
 import { PromptService } from './PromptService.js'
 
 interface FunctionCall {

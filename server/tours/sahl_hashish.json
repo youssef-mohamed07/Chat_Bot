@@ -22,7 +22,8 @@
         "triple": null
       },
       "price_egp": 8750,
-      "price_usd_reference": 292
+      "price_usd_reference": 292,
+      "image_url": "https://images.unsplash.com/photo-1571896349842-33c89424de2d?w=800&q=80"
     },
     {
       "hotel_name_en": "Jasmine Palace Resort And Spa",
@@ -39,7 +40,8 @@
         "triple": null
       },
       "price_egp": 8700,
-      "price_usd_reference": 290
+      "price_usd_reference": 290,
+      "image_url": "https://images.unsplash.com/photo-1566073771259-6a8506099945?w=800&q=80"
     },
     {
       "hotel_name_en": "Gravity Hotels & Aqua Park",
@@ -56,7 +58,8 @@
         "triple": null
       },
       "price_egp": 14050,
-      "price_usd_reference": 468
+      "price_usd_reference": 468,
+      "image_url": "https://images.unsplash.com/photo-1582719508461-905c673771fd?w=800&q=80"
     },
     {
       "hotel_name_en": "Tropitel Sahl Hasheesh",
@@ -73,7 +76,8 @@
         "triple": null
       },
       "price_egp": 13180,
-      "price_usd_reference": 439
+      "price_usd_reference": 439,
+      "image_url": "https://images.unsplash.com/photo-1520250497591-112f2f40a3f4?w=800&q=80"
     },
     {
       "hotel_name_en": "KaiSol Romance Hotel (Adults only)",
@@ -90,7 +94,8 @@
         "triple": null
       },
       "price_egp": 11700,
-      "price_usd_reference": 390
+      "price_usd_reference": 390,
+      "image_url": "https://images.unsplash.com/photo-1551882547-ff40c63fe5fa?w=800&q=80"
     },
     {
       "hotel_name_en": "Old Palace Resort",
@@ -107,7 +112,8 @@
         "triple": null
       },
       "price_egp": 20300,
-      "price_usd_reference": 677
+      "price_usd_reference": 677,
+      "image_url": "https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?w=800&q=80"
     },
     {
       "hotel_name_en": "Premier Le Reve Hotel (Adults only)",
@@ -124,7 +130,8 @@
         "triple": null
       },
       "price_egp": 13560,
-      "price_usd_reference": 452
+      "price_usd_reference": 452,
+      "image_url": "https://images.unsplash.com/photo-1568495248636-6432b97bd949?w=800&q=80"
     },
     {
       "hotel_name_en": "Premier Le Reve Hotel (Adults only)",
@@ -141,7 +148,8 @@
         "triple": null
       },
       "price_egp": 21600,
-      "price_usd_reference": 720
+      "price_usd_reference": 720,
+      "image_url": "https://images.unsplash.com/photo-1564501049412-61c2a3083791?w=800&q=80"
     }
   ],
   "includes": {

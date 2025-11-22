@@ -21,7 +21,8 @@
         "triple": 4400
       },
       "price_egp": 5250,
-      "price_usd_reference": 175
+      "price_usd_reference": 175,
+      "image_url": "https://images.unsplash.com/photo-1571896349842-33c89424de2d?w=800&q=80"
     },
     {
       "hotel_name_en": "Happy Life Village",
@@ -38,7 +39,8 @@
         "triple": 4925
       },
       "price_egp": 5000,
-      "price_usd_reference": 167
+      "price_usd_reference": 167,
+      "image_url": "https://images.unsplash.com/photo-1566073771259-6a8506099945?w=800&q=80"
     },
     {
       "hotel_name_en": "Tropitel Dahab Oasis",
@@ -55,7 +57,8 @@
         "triple": 5380
       },
       "price_egp": 5450,
-      "price_usd_reference": 182
+      "price_usd_reference": 182,
+      "image_url": "https://images.unsplash.com/photo-1582719508461-905c673771fd?w=800&q=80"
     },
     {
       "hotel_name_en": "Dahab Lagoon Club",
@@ -72,7 +75,8 @@
         "triple": 8850
       },
       "price_egp": 8850,
-      "price_usd_reference": 295
+      "price_usd_reference": 295,
+      "image_url": "https://images.unsplash.com/photo-1520250497591-112f2f40a3f4?w=800&q=80"
     },
     {
       "hotel_name_en": "Ecotel Dahab Sea View",
@@ -89,7 +93,8 @@
         "triple": 6370
       },
       "price_egp": 7350,
-      "price_usd_reference": 245
+      "price_usd_reference": 245,
+      "image_url": "https://images.unsplash.com/photo-1551882547-ff40c63fe5fa?w=800&q=80"
     },
     {
       "hotel_name_en": "Swiss Inn Resort Dahab",
@@ -106,7 +111,8 @@
         "triple": 8675
       },
       "price_egp": 8820,
-      "price_usd_reference": 294
+      "price_usd_reference": 294,
+      "image_url": "https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?w=800&q=80"
     },
     {
       "hotel_name_en": "Retac Dahab Resort",
@@ -123,7 +129,8 @@
         "triple": 6800
       },
       "price_egp": 6950,
-      "price_usd_reference": 232
+      "price_usd_reference": 232,
+      "image_url": "https://images.unsplash.com/photo-1568495248636-6432b97bd949?w=800&q=80"
     },
     {
       "hotel_name_en": "SAFIR DAHAB RESORT",
@@ -140,7 +147,8 @@
         "triple": 8450
       },
       "price_egp": 8730,
-      "price_usd_reference": 291
+      "price_usd_reference": 291,
+      "image_url": "https://images.unsplash.com/photo-1564501049412-61c2a3083791?w=800&q=80"
     }
   ],
   "includes": {

@@ -17,7 +17,8 @@
       "room_type_en": "Standard Room + Breakfast",
       "room_type_ar": "غرفة قياسية + إفطار",
       "price_egp": 7950,
-      "price_usd_reference": 159
+      "price_usd_reference": 159,
+      "image_url": "https://images.unsplash.com/photo-1571896349842-33c89424de2d?w=800&q=80"
     },
     {
       "hotel_name_en": "Klas Hotel Old City",
@@ -27,7 +28,8 @@
       "room_type_en": "Standard Room + Breakfast",
       "room_type_ar": "غرفة قياسية + إفطار",
       "price_egp": 10250,
-      "price_usd_reference": 205
+      "price_usd_reference": 205,
+      "image_url": "https://images.unsplash.com/photo-1566073771259-6a8506099945?w=800&q=80"
     },
     {
       "hotel_name_en": "Feronya Hotel Taksim",
@@ -37,7 +39,8 @@
       "room_type_en": "Standard Room + Breakfast",
       "room_type_ar": "غرفة قياسية + إفطار",
       "price_egp": 11950,
-      "price_usd_reference": 239
+      "price_usd_reference": 239,
+      "image_url": "https://images.unsplash.com/photo-1582719508461-905c673771fd?w=800&q=80"
     },
     {
       "hotel_name_en": "Central Palace Taksim",
@@ -47,7 +50,8 @@
       "room_type_en": "Standard Room + Breakfast",
       "room_type_ar": "غرفة قياسية + إفطار",
       "price_egp": 12500,
-      "price_usd_reference": 250
+      "price_usd_reference": 250,
+      "image_url": "https://images.unsplash.com/photo-1520250497591-112f2f40a3f4?w=800&q=80"
     },
     {
       "hotel_name_en": "Ramada by Wyndham Pera",
@@ -57,7 +61,8 @@
       "room_type_en": "Standard Room + Breakfast",
       "room_type_ar": "غرفة قياسية + إفطار",
       "price_egp": 16250,
-      "price_usd_reference": 325
+      "price_usd_reference": 325,
+      "image_url": "https://images.unsplash.com/photo-1551882547-ff40c63fe5fa?w=800&q=80"
     },
     {
       "hotel_name_en": "Point Hotel Taksim",
@@ -67,7 +72,8 @@
       "room_type_en": "Standard Room + Breakfast",
       "room_type_ar": "غرفة قياسية + إفطار",
       "price_egp": 20000,
-      "price_usd_reference": 400
+      "price_usd_reference": 400,
+      "image_url": "https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?w=800&q=80"
     }
   ],
   "includes": {

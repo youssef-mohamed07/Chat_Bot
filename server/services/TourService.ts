@@ -1,5 +1,5 @@
 import { ragService } from './RAGService.js'
-import type { Language } from '../types/index.js'
+import type { Language } from '../shared.js'
 
 export class TourService {
  // Get all available destinations

@@ -1,4 +1,4 @@
-import type { ChatMessage } from '../types/index.js'
+import type { ChatMessage } from '../shared.js'
 
 export class SessionManager {
  private sessions = new Map<string, ChatMessage[]>()
@@ -12,7 +12,7 @@ export class SessionManager {
  endDate?: string
  pax?: number
  budget?: number | string
- step?: 'initial' | 'destination_selected' | 'dates_selected' | 'travelers_selected' | 'budget_selected' | 'ready_for_offers' | 'hotel_selected' | 'meal_selected' | 'room_selected' | 'booking_confirmed' | 'booking_modification' | 'support_contact' | 'general_inquiry'
+ step?: 'initial' | 'destination_selected' | 'dates_selected' | 'travelers_selected' | 'budget_selected' | 'ready_for_offers' | 'hotel_selected' | 'meal_selected' | 'room_selected' | 'contact_info' | 'booking_confirmed' | 'booking_modification' | 'support_contact' | 'general_inquiry'
  hasSeenDestinationButtons?: boolean
  selectedHotel?: string
  mealPlan?: string
@@ -21,6 +21,10 @@ export class SessionManager {
  filter_mealPlans?: string
  filter_areas?: string
  previousStep?: string
+ customerName?: string
+ customerPhone?: string
+ customerEmail?: string
+ preferredLanguage?: 'ar' | 'en'
  }>()
 
  getSession(userId: string): ChatMessage[] {
@@ -57,7 +61,7 @@ export class SessionManager {
  endDate?: string
  pax?: number
  budget?: number | string
- step?: 'initial' | 'destination_selected' | 'dates_selected' | 'travelers_selected' | 'budget_selected' | 'ready_for_offers' | 'hotel_selected' | 'meal_selected' | 'room_selected' | 'booking_confirmed' | 'booking_modification' | 'support_contact' | 'general_inquiry'
+ step?: 'initial' | 'destination_selected' | 'dates_selected' | 'travelers_selected' | 'budget_selected' | 'ready_for_offers' | 'hotel_selected' | 'meal_selected' | 'room_selected' | 'contact_info' | 'booking_confirmed' | 'booking_modification' | 'support_contact' | 'general_inquiry'
  hasSeenDestinationButtons?: boolean
  selectedHotel?: string
  mealPlan?: string
@@ -66,6 +70,10 @@ export class SessionManager {
  filter_mealPlans?: string
  filter_areas?: string
  previousStep?: string
+ customerName?: string
+ customerPhone?: string
+ customerEmail?: string
+ preferredLanguage?: 'ar' | 'en'
  } {
  if (!this.metadata.has(userId)) {
  this.metadata.set(userId, {})
@@ -83,7 +91,7 @@ export class SessionManager {
  endDate?: string
  pax?: number
  budget?: number | string
- step?: 'initial' | 'destination_selected' | 'dates_selected' | 'travelers_selected' | 'budget_selected' | 'ready_for_offers' | 'hotel_selected' | 'meal_selected' | 'room_selected' | 'booking_confirmed' | 'booking_modification' | 'support_contact' | 'general_inquiry'
+ step?: 'initial' | 'destination_selected' | 'dates_selected' | 'travelers_selected' | 'budget_selected' | 'ready_for_offers' | 'hotel_selected' | 'meal_selected' | 'room_selected' | 'contact_info' | 'booking_confirmed' | 'booking_modification' | 'support_contact' | 'general_inquiry'
  hasSeenDestinationButtons?: boolean
  selectedHotel?: string
  mealPlan?: string
@@ -92,6 +100,10 @@ export class SessionManager {
  filter_mealPlans?: string
  filter_areas?: string
  previousStep?: string
+ customerName?: string
+ customerPhone?: string
+ customerEmail?: string
+ preferredLanguage?: 'ar' | 'en'
  }>): void {
  const current = this.getMeta(userId)
  this.metadata.set(userId, { ...current, ...updates })

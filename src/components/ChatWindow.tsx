@@ -1,7 +1,7 @@
-import type { Language, ChatMessage, ButtonOption } from '../types'
-import { ChatHeader, ChatFooter } from './ChatComponents'
-import { MessagesList } from './MessagesList'
-import { SupportModal } from './FormComponents'
+import type { Language, ChatMessage, ButtonOption } from '../shared'
+import { ChatHeader, ChatFooter } from './ChatUI'
+import { MessagesList } from './ChatMessages'
+import { SupportModal } from './ChatUI'
 
 interface ChatWindowProps {
  lang: Language

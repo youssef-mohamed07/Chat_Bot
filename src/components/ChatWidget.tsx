@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import type { Language, ContactInfo } from '../types'
+import type { Language, ContactInfo } from '../shared'
 import { useChatWidget, useSupportModal } from '../hooks/useChatWidget'
 import { LanguageSelector, ContactInfo as ContactInfoComponent, ToggleButton, ChatWindow, ChatEndedState, ChatHeader } from './index'
 
@@ -36,9 +36,17 @@ export const ChatWidget = ({ initialOpen = false, className }: ChatWidgetProps) 
  } = useSupportModal()
 
  const handleLanguageSelect = (selected: Language) => {
+ console.log('🌍 Language selected:', selected, 'Contact info:', contactInfo)
  setLang(selected)
  setCurrentStep('chat')
+ // ✅ إرسال بيانات العميل مع handleSelectLang
+ if (contactInfo) {
+ console.log('✅ Calling handleSelectLang with contact info from state')
+ handleSelectLang(selected, contactInfo)
+ } else {
+ console.warn('⚠️ Contact info not found in state!')
  handleSelectLang(selected)
+ }
  }
 
  const handleSuggestionClick = (btn: { text: string; value: string }) => {
@@ -46,6 +54,7 @@ export const ChatWidget = ({ initialOpen = false, className }: ChatWidgetProps) 
  }
 
  const handleContactSubmit = (contact: ContactInfo) => {
+ console.log('📝 Contact info submitted:', contact)
  setContactInfo(contact)
  setCurrentStep('language')
  }

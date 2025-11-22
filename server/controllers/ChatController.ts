@@ -1,36 +1,58 @@
 import type { Request, Response } from 'express'
-import type { ChatRequest, ChatResponse, Language } from '../types/index.js'
+import type { ChatRequest, ChatResponse, Language } from '../shared.js'
 import { GeminiService } from '../services/GeminiService.js'
 import { SessionManager } from '../services/SessionManager.js'
 import { ragService } from '../services/RAGService.js'
 import { PromptService } from '../services/PromptService.js'
+import { WhatsAppService } from '../services/WhatsAppService.js'
 
 export class ChatController {
   private geminiService: GeminiService
   private sessionManager: SessionManager
+  private whatsappService: WhatsAppService
 
   constructor() {
     this.geminiService = new GeminiService()
     this.sessionManager = new SessionManager()
+    this.whatsappService = new WhatsAppService()
   }
 
   // Main chat handler - 100% AI-driven
   async handleChat(req: Request, res: Response): Promise<void> {
     try {
-      const { message, userId = 'default-user', lang = 'en' }: ChatRequest = req.body
+      const { message, userId = 'default-user', lang = 'en', customerInfo }: ChatRequest = req.body
+      
+      console.log(`\n📥 [${userId}] Message: "${message}" (${lang})`)
       
       if (!message || message.trim() === '') {
         res.status(400).json({ error: 'Message is required' })
         return
       }
 
-      console.log(`\n📥 [${userId}] Message: "${message}" (${lang})`)
-
       const history = this.sessionManager.getSession(userId)
       const meta = this.sessionManager.getMeta(userId)
 
       // Special case: initialization
       if (message.trim() === '__init__') {
+        console.log(`🔍 __init__ called with customerInfo:`, customerInfo)
+        // Save customer info if provided
+        if (customerInfo) {
+          console.log(`💾 Saving customer info: ${customerInfo.name}, ${customerInfo.phone}, ${customerInfo.email}`)
+          this.sessionManager.updateMeta(userId, {
+            customerName: customerInfo.name,
+            customerPhone: customerInfo.phone,
+            customerEmail: customerInfo.email
+          })
+          // Verify saved data
+          const savedMeta = this.sessionManager.getMeta(userId)
+          console.log(`✅ Verified saved data:`, {
+            customerName: savedMeta.customerName,
+            customerPhone: savedMeta.customerPhone,
+            customerEmail: savedMeta.customerEmail
+          })
+        } else {
+          console.warn(`⚠️ __init__ called WITHOUT customerInfo!`)
+        }
         await this.handleInit(res, lang as Language, userId)
         return
       }
@@ -185,9 +207,66 @@ export class ChatController {
         userMessage = lang === 'ar'
           ? `اخترت ${this.getRoomTypeName(roomType, lang)}`
           : `I chose ${this.getRoomTypeName(roomType, lang)}`
+      } else if (message.startsWith('contact_info:')) {
+        // Parse customer contact info: contact_info:name|phone|email
+        const contactData = message.replace('contact_info:', '')
+        const [name, phone, email] = contactData.split('|')
+        console.log(`📋 Customer info received: ${name}, ${phone}, ${email}`)
+        this.sessionManager.updateMeta(userId, { 
+          customerName: name,
+          customerPhone: phone,
+          customerEmail: email,
+          step: 'contact_info',
+          previousStep
+        })
+        userMessage = lang === 'ar' 
+          ? `شكراً ${name}! سنتواصل معك قريباً`
+          : `Thank you ${name}! We'll contact you soon`
       } else if (message === 'confirm_booking') {
         console.log(`✅ User confirmed booking`)
         this.sessionManager.updateMeta(userId, { step: 'booking_confirmed', previousStep })
+        
+        // Get customer data from session
+        const meta = this.sessionManager.getMeta(userId)
+        
+        console.log('📋 Customer data from session:', {
+          name: meta.customerName,
+          phone: meta.customerPhone,
+          email: meta.customerEmail
+        })
+        
+        // CRITICAL: Check if customer data exists
+        if (!meta.customerName || !meta.customerPhone || !meta.customerEmail) {
+          console.error('❌ CUSTOMER DATA MISSING FROM SESSION!')
+          console.error('Full meta:', JSON.stringify(meta, null, 2))
+        }
+        
+        // Send WhatsApp notification with booking details
+        const bookingSummary = {
+          destination: meta.lastDest || 'unknown',
+          hotel: meta.selectedHotel || 'Hotel',
+          mealPlan: this.getMealPlanName(meta.mealPlan || '', lang),
+          roomType: this.getRoomTypeName(meta.roomType || '', lang),
+          travelers: meta.pax || 1,
+          startDate: meta.startDate,
+          endDate: meta.endDate,
+          budget: typeof meta.budget === 'object' ? meta.budget : undefined,
+          customerName: meta.customerName || 'عميل',
+          customerPhone: meta.customerPhone || '201145389973',
+          customerEmail: meta.customerEmail || 'booking@quickair.com'
+        }
+        
+        // Send WhatsApp notification (non-blocking)
+        this.whatsappService.sendBookingSummary(bookingSummary)
+          .then(sent => {
+            if (sent) {
+              console.log('✅ WhatsApp notification sent successfully')
+            } else {
+              console.warn('⚠️  WhatsApp notification failed')
+            }
+          })
+          .catch(err => console.error('❌ WhatsApp error:', err))
+        
         userMessage = lang === 'ar' ? 'أريد تأكيد الحجز' : 'I want to confirm the booking'
       } else if (message === 'modify_booking') {
         console.log(`✏️ User wants to modify booking`)
@@ -887,10 +966,17 @@ export class ChatController {
       }
     }
 
-    // Room type selected - Show booking summary
+    // Room type selected - Show booking summary directly (skip contact info)
     if (meta.roomType && meta.step === 'room_selected') {
       const dest = meta.lastDest || 'unknown'
       const hotelName = meta.selectedHotel || 'Hotel'
+      console.log('📋 Showing booking summary')
+      console.log('   Customer data from meta:', { 
+        name: meta.customerName, 
+        phone: meta.customerPhone, 
+        email: meta.customerEmail 
+      })
+      console.log('   Full meta object:', meta)
       
       return {
         type: 'bookingSummary',
@@ -909,7 +995,10 @@ export class ChatController {
             travelers: meta.pax || 1,
             startDate: meta.startDate,
             endDate: meta.endDate,
-            budget: meta.budget
+            budget: meta.budget,
+            customerName: meta.customerName,
+            customerPhone: meta.customerPhone,
+            customerEmail: meta.customerEmail
           },
           actions: [
             {
@@ -919,16 +1008,9 @@ export class ChatController {
               variant: 'primary'
             },
             {
-              text_ar: '📞 التواصل مع الدعم',
-              text_en: '📞 Contact Support',
-              value: 'contact_support',
-              variant: 'secondary'
-            },
-            {
-              text_ar: '🔄 تعديل الاختيارات',
-              text_en: '🔄 Modify Choices',
-              value: 'modify_booking',
-              variant: 'outline'
+              text_ar: '✏️ تعديل الحجز',
+              text_en: '✏️ Modify Booking',
+              value: 'modify_booking'
             }
           ]
         }
@@ -1016,6 +1098,7 @@ export class ChatController {
                            userMessage.startsWith('budget:') || 
                            userMessage.startsWith('set_dates:') || 
                            userMessage.startsWith('set_pax:') ||
+                           userMessage.startsWith('contact_info:') ||
                            userMessage.startsWith('ask_') ||
                            userMessage.startsWith('filter:') ||
                            userMessage === 'contact_support'
@@ -1383,12 +1466,13 @@ export class ChatController {
       return { blocks }
     }
 
-    // 8️⃣ After room type - Show final booking summary
+    // 8️⃣ After room type - Show booking summary directly (customer info already collected at start)
     if (step === 'room_selected') {
+      console.log('📋 Room selected - showing booking summary')
       const dest = meta.lastDest || 'unknown'
       const hotelName = meta.selectedHotel || 'Hotel'
-      const mealPlan = this.getMealPlanName(meta.mealPlan, lang)
-      const roomType = this.getRoomTypeName(meta.roomType, lang)
+      const mealPlan = this.getMealPlanName(meta.mealPlan || '', lang)
+      const roomType = this.getRoomTypeName(meta.roomType || '', lang)
       
       blocks.push({
         type: 'bookingSummary',
@@ -1402,11 +1486,13 @@ export class ChatController {
           travelers: meta.pax,
           startDate: meta.startDate,
           endDate: meta.endDate,
-          budget: meta.budget
+          budget: meta.budget,
+          customerName: meta.customerName,
+          customerPhone: meta.customerPhone,
+          customerEmail: meta.customerEmail
         },
         actions: [
           { text_ar: '✅ تأكيد الحجز', text_en: '✅ Confirm Booking', value: 'confirm_booking', variant: 'primary' },
-          { text_ar: '📞 واتساب', text_en: '📞 WhatsApp', value: 'whatsapp', variant: 'secondary' },
           { text_ar: '🔙 تعديل', text_en: '🔙 Modify', value: 'modify_booking', variant: 'outline' }
         ]
       })

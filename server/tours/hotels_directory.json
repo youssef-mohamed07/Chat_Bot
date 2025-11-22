@@ -1,0 +1,462 @@
+{
+  "hotels": [
+    {
+      "hotel_name": "Palmera El Sokhna",
+      "stars": 4,
+      "location": "Ain Sokhna",
+      "country": "Egypt"
+    },
+    {
+      "hotel_name": "Retal View El-Sokhna Hotel",
+      "stars": 4,
+      "location": "Ain Sokhna",
+      "country": "Egypt"
+    },
+    {
+      "hotel_name": "Marina Wadi Degla",
+      "stars": 4,
+      "location": "Ain Sokhna",
+      "country": "Egypt"
+    },
+    {
+      "hotel_name": "Swiss Inn Teda Hotel",
+      "stars": 4,
+      "location": "Ain Sokhna",
+      "country": "Egypt"
+    },
+    {
+      "hotel_name": "Al Masa Hotel El Sokhna",
+      "stars": 4,
+      "location": "Ain Sokhna",
+      "country": "Egypt"
+    },
+    {
+      "hotel_name": "Cancun Resort",
+      "stars": 4,
+      "location": "Ain Sokhna",
+      "country": "Egypt"
+    },
+    {
+      "hotel_name": "Tolip El Galala Heights",
+      "stars": 5,
+      "location": "Ain Sokhna",
+      "country": "Egypt"
+    },
+    {
+      "hotel_name": "Stella Grand",
+      "stars": 5,
+      "location": "Ain Sokhna",
+      "country": "Egypt"
+    },
+    {
+      "hotel_name": "Tolip Majestic El Galala",
+      "stars": 5,
+      "location": "Ain Sokhna",
+      "country": "Egypt"
+    },
+    {
+      "hotel_name": "Tolip Resort El Galala Hills",
+      "stars": 5,
+      "location": "Ain Sokhna",
+      "country": "Egypt"
+    },
+    {
+      "hotel_name": "Coral Sea Beach Resort & Aqua Park",
+      "stars": 5,
+      "location": "Ain Sokhna",
+      "country": "Egypt"
+    },
+    {
+      "hotel_name": "TANOAK Resort",
+      "stars": 5,
+      "location": "Ain Sokhna",
+      "country": "Egypt"
+    },
+    {
+      "hotel_name": "Grand Ocean Hotel",
+      "stars": 5,
+      "location": "Ain Sokhna",
+      "country": "Egypt"
+    },
+    {
+      "hotel_name": "Harris Hotel Seminyak",
+      "stars": 4,
+      "location": "Seminyak, Bali",
+      "country": "Indonesia"
+    },
+    {
+      "hotel_name": "KajaNe Yangloni",
+      "stars": 4,
+      "location": "Ubud, Bali",
+      "country": "Indonesia"
+    },
+    {
+      "hotel_name": "Mercure Kuta Bali",
+      "stars": 4,
+      "location": "Kuta, Bali",
+      "country": "Indonesia"
+    },
+    {
+      "hotel_name": "Montigo Resorts Seminyak",
+      "stars": 5,
+      "location": "Seminyak, Bali",
+      "country": "Indonesia"
+    },
+    {
+      "hotel_name": "Ramayana Suites and Resort",
+      "stars": 5,
+      "location": "Kuta, Bali",
+      "country": "Indonesia"
+    },
+    {
+      "hotel_name": "Caramel Boutique Hotel",
+      "stars": 3,
+      "location": "Beirut",
+      "country": "Lebanon"
+    },
+    {
+      "hotel_name": "Hotel Cavalier",
+      "stars": 4,
+      "location": "Beirut",
+      "country": "Lebanon"
+    },
+    {
+      "hotel_name": "Crowne Plaza Beirut",
+      "stars": 5,
+      "location": "Beirut",
+      "country": "Lebanon"
+    },
+    {
+      "hotel_name": "Movenpick Hotel Beirut",
+      "stars": 5,
+      "location": "Beirut",
+      "country": "Lebanon"
+    },
+    {
+      "hotel_name": "Daniela Diving Resort",
+      "stars": 3,
+      "location": "Dahab",
+      "country": "Egypt"
+    },
+    {
+      "hotel_name": "Happy Life Village",
+      "stars": 3,
+      "location": "Dahab",
+      "country": "Egypt"
+    },
+    {
+      "hotel_name": "Tropitel Dahab Oasis",
+      "stars": 3,
+      "location": "Dahab",
+      "country": "Egypt"
+    },
+    {
+      "hotel_name": "Dahab Lagoon Club",
+      "stars": 4,
+      "location": "Dahab",
+      "country": "Egypt"
+    },
+    {
+      "hotel_name": "Ecotel Dahab Sea View",
+      "stars": 4,
+      "location": "Dahab",
+      "country": "Egypt"
+    },
+    {
+      "hotel_name": "Swiss Inn Resort Dahab",
+      "stars": 4,
+      "location": "Dahab",
+      "country": "Egypt"
+    },
+    {
+      "hotel_name": "Retac Dahab Resort",
+      "stars": 5,
+      "location": "Dahab",
+      "country": "Egypt"
+    },
+    {
+      "hotel_name": "SAFIR DAHAB RESORT",
+      "stars": 5,
+      "location": "Dahab",
+      "country": "Egypt"
+    },
+    {
+      "hotel_name": "Dexon Roma Hotel",
+      "stars": 3,
+      "location": "Hurghada",
+      "country": "Egypt"
+    },
+    {
+      "hotel_name": "Minamark Beach",
+      "stars": 3,
+      "location": "Hurghada",
+      "country": "Egypt"
+    },
+    {
+      "hotel_name": "Sphinx Aqua Park",
+      "stars": 3,
+      "location": "Hurghada",
+      "country": "Egypt"
+    },
+    {
+      "hotel_name": "Sunny Days El Palacio",
+      "stars": 4,
+      "location": "Hurghada",
+      "country": "Egypt"
+    },
+    {
+      "hotel_name": "Seagull Resort",
+      "stars": 4,
+      "location": "Hurghada",
+      "country": "Egypt"
+    },
+    {
+      "hotel_name": "Sentido Mamlouk",
+      "stars": 5,
+      "location": "Hurghada",
+      "country": "Egypt"
+    },
+    {
+      "hotel_name": "Swiss Inn Resort",
+      "stars": 5,
+      "location": "Hurghada",
+      "country": "Egypt"
+    },
+    {
+      "hotel_name": "Titanic Palace",
+      "stars": 5,
+      "location": "Hurghada",
+      "country": "Egypt"
+    },
+    {
+      "hotel_name": "Sunrise Royal Makadi",
+      "stars": 5,
+      "location": "Hurghada",
+      "country": "Egypt"
+    },
+    {
+      "hotel_name": "Meraki Resort (Adults Only)",
+      "stars": 5,
+      "location": "Hurghada",
+      "country": "Egypt"
+    },
+    {
+      "hotel_name": "Continental Hotel",
+      "stars": 5,
+      "location": "Hurghada",
+      "country": "Egypt"
+    },
+    {
+      "hotel_name": "Pickalbatros White Beach Resort",
+      "stars": 5,
+      "location": "Hurghada",
+      "country": "Egypt"
+    },
+    {
+      "hotel_name": "Rixos Premium Magawish Suites & Villas",
+      "stars": 5,
+      "location": "Hurghada",
+      "country": "Egypt"
+    },
+    {
+      "hotel_name": "Grand Liza Hotel",
+      "stars": 3,
+      "location": "Fatih, Istanbul",
+      "country": "Turkey"
+    },
+    {
+      "hotel_name": "Klas Hotel Old City",
+      "stars": 4,
+      "location": "Fatih, Istanbul",
+      "country": "Turkey"
+    },
+    {
+      "hotel_name": "Feronya Hotel Taksim",
+      "stars": 4,
+      "location": "Taksim, Istanbul",
+      "country": "Turkey"
+    },
+    {
+      "hotel_name": "Central Palace Taksim",
+      "stars": 4,
+      "location": "Taksim, Istanbul",
+      "country": "Turkey"
+    },
+    {
+      "hotel_name": "Ramada by Wyndham Pera",
+      "stars": 5,
+      "location": "Taksim, Istanbul",
+      "country": "Turkey"
+    },
+    {
+      "hotel_name": "Point Hotel Taksim",
+      "stars": 5,
+      "location": "Taksim, Istanbul",
+      "country": "Turkey"
+    },
+    {
+      "hotel_name": "Zen Resort Sahl Hasheesh",
+      "stars": 4,
+      "location": "Sahl Hasheesh",
+      "country": "Egypt"
+    },
+    {
+      "hotel_name": "Jasmine Palace Resort And Spa",
+      "stars": 4,
+      "location": "Sahl Hasheesh",
+      "country": "Egypt"
+    },
+    {
+      "hotel_name": "Gravity Hotels & Aqua Park",
+      "stars": 4,
+      "location": "Sahl Hasheesh",
+      "country": "Egypt"
+    },
+    {
+      "hotel_name": "Tropitel Sahl Hasheesh",
+      "stars": 4,
+      "location": "Sahl Hasheesh",
+      "country": "Egypt"
+    },
+    {
+      "hotel_name": "KaiSol Romance Hotel (Adults only)",
+      "stars": 5,
+      "location": "Sahl Hasheesh",
+      "country": "Egypt"
+    },
+    {
+      "hotel_name": "Old Palace Resort",
+      "stars": 5,
+      "location": "Sahl Hasheesh",
+      "country": "Egypt"
+    },
+    {
+      "hotel_name": "Premier Le Reve Hotel (Adults only)",
+      "stars": 5,
+      "location": "Sahl Hasheesh",
+      "country": "Egypt"
+    },
+    {
+      "hotel_name": "Sharm Club Beach Resort",
+      "stars": 4,
+      "location": "Sharm El Sheikh",
+      "country": "Egypt"
+    },
+    {
+      "hotel_name": "Xperience St. George",
+      "stars": 4,
+      "location": "Sharm El Sheikh",
+      "country": "Egypt"
+    },
+    {
+      "hotel_name": "Dreams Vacation Resort",
+      "stars": 4,
+      "location": "Sharm El Sheikh",
+      "country": "Egypt"
+    },
+    {
+      "hotel_name": "JAZ Neo Naama Bay",
+      "stars": 4,
+      "location": "Sharm El Sheikh",
+      "country": "Egypt"
+    },
+    {
+      "hotel_name": "Club Reef Resort",
+      "stars": 4,
+      "location": "Sharm El Sheikh",
+      "country": "Egypt"
+    },
+    {
+      "hotel_name": "Albatros Sharm Resort",
+      "stars": 4,
+      "location": "Sharm El Sheikh",
+      "country": "Egypt"
+    },
+    {
+      "hotel_name": "Charmillion Sea Life",
+      "stars": 4,
+      "location": "Sharm El Sheikh",
+      "country": "Egypt"
+    },
+    {
+      "hotel_name": "Marina Sharm Hotel",
+      "stars": 4,
+      "location": "Sharm El Sheikh",
+      "country": "Egypt"
+    },
+    {
+      "hotel_name": "Tamra Beach Resort",
+      "stars": 4,
+      "location": "Sharm El Sheikh",
+      "country": "Egypt"
+    },
+    {
+      "hotel_name": "MOVENPICK Resort",
+      "stars": 5,
+      "location": "Sharm El Sheikh",
+      "country": "Egypt"
+    },
+    {
+      "hotel_name": "Parrotel Lagoon Waterpark Resort",
+      "stars": 5,
+      "location": "Sharm El Sheikh",
+      "country": "Egypt"
+    },
+    {
+      "hotel_name": "Concorde El Salam Front Hotel",
+      "stars": 5,
+      "location": "Sharm El Sheikh",
+      "country": "Egypt"
+    },
+    {
+      "hotel_name": "Charmillion Club Aqua Park",
+      "stars": 5,
+      "location": "Sharm El Sheikh",
+      "country": "Egypt"
+    },
+    {
+      "hotel_name": "Xperience Kiroseiz Parkland",
+      "stars": 5,
+      "location": "Sharm El Sheikh",
+      "country": "Egypt"
+    },
+    {
+      "hotel_name": "Dreams Beach Resort",
+      "stars": 5,
+      "location": "Sharm El Sheikh",
+      "country": "Egypt"
+    },
+    {
+      "hotel_name": "Cleopatra Luxury Sharm El Sheikh",
+      "stars": 5,
+      "location": "Sharm El Sheikh",
+      "country": "Egypt"
+    },
+    {
+      "hotel_name": "SUNRISE Diamond Beach Resort",
+      "stars": 5,
+      "location": "Sharm El Sheikh",
+      "country": "Egypt"
+    },
+    {
+      "hotel_name": "Pickalbatros Aqua Park",
+      "stars": 5,
+      "location": "Sharm El Sheikh",
+      "country": "Egypt"
+    }
+  ],
+  "summary": {
+    "total_hotels": 79,
+    "by_country": {
+      "Egypt": 69,
+      "Indonesia": 5,
+      "Lebanon": 4,
+      "Turkey": 6
+    },
+    "by_stars": {
+      "3_stars": 9,
+      "4_stars": 30,
+      "5_stars": 40
+    }
+  }
+}

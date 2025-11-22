@@ -1,6 +1,6 @@
 "use client"
 import { useState } from 'react'
-import type { Language, ContactInfo } from '../types'
+import type { Language, ContactInfo } from '../shared'
 import { useChatWidget, useSupportModal } from '../hooks/useChatWidget'
 import { 
  LanguageSelector,
@@ -21,8 +21,7 @@ import {
 export default function StandaloneChatWidget({ initialOpen = false }: { initialOpen?: boolean }) {
  const [isOpen, setIsOpen] = useState(initialOpen)
  const [lang, setLang] = useState<Language | null>(null)
- const [contactInfo, setContactInfo] = useState<ContactInfo | null>(null)
- const [currentStep, setCurrentStep] = useState<'contact' | 'language' | 'chat' | 'ended'>('contact')
+ const [currentStep, setCurrentStep] = useState<'language' | 'contact' | 'chat' | 'ended'>('language')
 
  const {
  messages,
@@ -46,28 +45,36 @@ export default function StandaloneChatWidget({ initialOpen = false }: { initialO
  } = useSupportModal()
 
  const handleLanguageSelect = (selected: Language) => {
+ console.log('🌍 Language selected (no customer info yet):', selected)
  setLang(selected)
+ setCurrentStep('contact')
+ // ❌ لا نستدعي handleSelectLang هنا - سننتظر حتى يملأ المستخدم النموذج
+ }
+
+ const handleContactSubmit = (contact: ContactInfo) => {
+ console.log('📝 Customer info submitted:', contact)
+ console.log('📤 Will send to backend with lang:', lang, 'and contact:', contact)
  setCurrentStep('chat')
- handleSelectLang(selected)
+ // ✅ الآن نستدعي handleSelectLang مع بيانات العميل
+ if (lang) {
+ console.log('✅ Calling handleSelectLang with complete customer info')
+ handleSelectLang(lang, contact)
+ } else {
+ console.error('❌ ERROR: Language not set!')
+ }
  }
 
  const handleSuggestionClick = (btn: { text: string; value: string }) => {
  handleButtonOption(btn)
  }
 
- const handleContactSubmit = (contact: ContactInfo) => {
- setContactInfo(contact)
- setCurrentStep('language')
- }
-
  const handleEndChat = () => setCurrentStep('ended')
- const handleRestartChat = () => { setCurrentStep('contact'); setContactInfo(null); setLang(null) }
+ const handleRestartChat = () => { setCurrentStep('language'); setLang(null) }
 
  const handleSupportSubmit = async (data: { name: string; email: string; phone: string; message: string }) => {
  setIsSupportSending(true)
  try {
- const supportData = contactInfo ? { ...data, email: contactInfo.email, phone: contactInfo.phone } : data
- await sendSupportRequest(supportData)
+ await sendSupportRequest(data)
  setIsSupportOpen(false)
  resetForm()
  } finally {
@@ -81,11 +88,14 @@ export default function StandaloneChatWidget({ initialOpen = false }: { initialO
  {isOpen && (
  <div className="relative">
  <div className="w-full md:w-[400px] lg:w-[420px] h-screen md:h-[600px] lg:h-[650px] bg-white md:rounded-2xl shadow-2xl border border-gray-100 overflow-hidden flex flex-col">
- {currentStep === 'contact' && (
- <ContactInfoComponent onContactSubmit={handleContactSubmit} lang={lang || 'en'} />
- )}
  {currentStep === 'language' && (
  <LanguageSelector onSelectLanguage={handleLanguageSelect} />
+ )}
+ {currentStep === 'contact' && lang && (
+ <div className="flex flex-col h-full">
+ <ChatHeader onClose={() => setIsOpen(false)} isChatEnded={false} />
+ <ContactInfoComponent onContactSubmit={handleContactSubmit} lang={lang} />
+ </div>
  )}
  {currentStep === 'chat' && lang && (
  <ChatWindow
@@ -103,7 +113,6 @@ export default function StandaloneChatWidget({ initialOpen = false }: { initialO
  onSendSupport={handleSupportSubmit}
  isSupportOpen={isSupportOpen}
  isSupportSending={isSupportSending}
- contactInfo={contactInfo || undefined}
  onButtonClick={handleSuggestionClick}
  />
  )}

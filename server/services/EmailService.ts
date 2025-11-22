@@ -1,7 +1,6 @@
 import nodemailer from 'nodemailer'
-import type { EmailConfig } from '../types/index.js'
-import { config } from '../config/index.js'
-import { EMAIL_TEMPLATES } from '../utils/index.js'
+import type { EmailConfig } from '../shared.js'
+import { config, EMAIL_TEMPLATES } from '../shared.js'
 
 export class EmailService {
  private transporter?: nodemailer.Transporter

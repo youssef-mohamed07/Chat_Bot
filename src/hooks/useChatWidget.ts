@@ -1,7 +1,6 @@
 import { useState, useRef, useEffect } from 'react'
-import type { ChatMessage, Language, SupportRequest, ButtonOption } from '../types'
-import { API_ENDPOINTS, LABELS, generateUserId, eventBus } from '../utils'
-import Plugins from '../plugins'
+import type { ChatMessage, Language, SupportRequest, ButtonOption } from '../shared'
+import { API_ENDPOINTS, LABELS, generateUserId, eventBus, Plugins } from '../shared'
 
 export const useChatWidget = () => {
  const [isOpen, setIsOpen] = useState(false)
@@ -40,11 +39,12 @@ export const useChatWidget = () => {
  return () => { offNew(); offAttach() }
  }, [])
 
- const handleSelectLang = (selected: Language) => {
+ const handleSelectLang = (selected: Language, customerInfo?: { name: string; phone: string; email: string }) => {
+ console.log('🌍 Language selected:', selected, 'Customer info:', customerInfo)
  setLang(selected)
  const text = selected === 'ar'
- ? 'مرحباً! أنا مساعد السفر الذكي من Quick Air. لنبدأ التخطيط لرحلتك خطوة بخطوة.'
- : "Hello! I'm your Quick Air intelligent travel assistant. Let's plan your trip step by step."
+ ? `مرحباً ${customerInfo?.name || ''}! أنا مساعد السفر الذكي من Quick Air. لنبدأ التخطيط لرحلتك خطوة بخطوة.`
+ : `Hello ${customerInfo?.name || ''}! I'm your Quick Air intelligent travel assistant. Let's plan your trip step by step.`
 
  // DON'T replace messages - append to existing
  setMessages(prev => [...prev, { text, isUser: false, timestamp: new Date() }])
@@ -53,11 +53,16 @@ export const useChatWidget = () => {
  const ctx = { lang: selected, setLang, pushMessage: (m: ChatMessage) => setMessages(prev => [...prev, m]) }
  Plugins.list().forEach(p => { try { p.init?.(ctx as any) } catch {} })
  
- // Auto-initialize AI suggestions
+ // ✅ Auto-initialize AI suggestions ONLY if customer info is provided
+ if (customerInfo) {
+ console.log('✅ Sending __init__ with customer info:', customerInfo)
  ;(async () => {
- const initMsg = await sendToAPI('__init__', selected)
+ const initMsg = await sendToAPI('__init__', selected, customerInfo)
  if (initMsg) setMessages(prev => [...prev, initMsg])
  })()
+ } else {
+ console.warn('⚠️ handleSelectLang called WITHOUT customer info - skipping __init__')
+ }
  }
 
  const detectLanguage = (message: string): Language => {
@@ -69,9 +74,11 @@ export const useChatWidget = () => {
  // Request full response (no streaming) for a cleaner UX
  const sendToAPI = async (
  message: string,
- lang: Language
+ lang: Language,
+ customerInfo?: { name: string; phone: string; email: string }
  ): Promise<ChatMessage | null> => {
  try {
+ console.log('📤 Sending to API:', { message, lang, userId: userId, customerInfo })
  const response = await fetch('/chat', {
  method: 'POST',
  headers: {
@@ -79,10 +86,13 @@ export const useChatWidget = () => {
  },
  body: JSON.stringify({
  message,
- userId: 'web-user',
- lang
+ userId: userId,
+ lang,
+ customerInfo
  })
  })
+
+ console.log('📥 API Response status:', response.status)
 
  if (!response.ok) {
  throw new Error(`HTTP error! status: ${response.status}`)
@@ -146,6 +156,20 @@ export const useChatWidget = () => {
  title_en: b.title_en,
  data: b.data,
  actions: b.actions
+ }
+ }
+ })
+ } else if (b.type === 'contactInfo') {
+ console.log('📝 Mapping contact info widget')
+ mapped.push({
+ text: '',
+ isUser: false,
+ timestamp: new Date(),
+ meta: {
+ source: 'system',
+ contactInfo: {
+ title_ar: b.title_ar,
+ title_en: b.title_en
  }
  }
  })

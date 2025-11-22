@@ -1,4 +1,4 @@
-import type { Language } from '../types/index.js'
+import type { Language } from '../shared.js'
 
 export interface FunctionDefinition {
  name: string

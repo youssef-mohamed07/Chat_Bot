@@ -22,7 +22,8 @@
         "triple": 3750
       },
       "price_egp": 3970,
-      "price_usd_reference": 132
+      "price_usd_reference": 132,
+      "image_url": "https://images.unsplash.com/photo-1571896349842-33c89424de2d?w=800&q=80"
     },
     {
       "hotel_name_en": "Retal View El-Sokhna Hotel",
@@ -39,7 +40,8 @@
         "triple": 4165
       },
       "price_egp": 4270,
-      "price_usd_reference": 142
+      "price_usd_reference": 142,
+      "image_url": "https://images.unsplash.com/photo-1566073771259-6a8506099945?w=800&q=80"
     },
     {
       "hotel_name_en": "Marina Wadi Degla",
@@ -56,7 +58,8 @@
         "triple": 4270
       },
       "price_egp": 4410,
-      "price_usd_reference": 147
+      "price_usd_reference": 147,
+      "image_url": "https://images.unsplash.com/photo-1582719508461-905c673771fd?w=800&q=80"
     },
     {
       "hotel_name_en": "Swiss Inn Teda Hotel",
@@ -73,7 +76,8 @@
         "triple": 5160
       },
       "price_egp": 5750,
-      "price_usd_reference": 192
+      "price_usd_reference": 192,
+      "image_url": "https://images.unsplash.com/photo-1520250497591-112f2f40a3f4?w=800&q=80"
     },
     {
       "hotel_name_en": "Al Masa Hotel El Sokhna",
@@ -90,7 +94,8 @@
         "triple": 8400
       },
       "price_egp": 8850,
-      "price_usd_reference": 295
+      "price_usd_reference": 295,
+      "image_url": "https://images.unsplash.com/photo-1551882547-ff40c63fe5fa?w=800&q=80"
     },
     {
       "hotel_name_en": "Cancun Resort",
@@ -107,7 +112,8 @@
         "triple": 4900
       },
       "price_egp": 5595,
-      "price_usd_reference": 187
+      "price_usd_reference": 187,
+      "image_url": "https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?w=800&q=80"
     },
     {
       "hotel_name_en": "Tolip El Galala Heights",
@@ -124,7 +130,8 @@
         "triple": 6490
       },
       "price_egp": 7200,
-      "price_usd_reference": 240
+      "price_usd_reference": 240,
+      "image_url": "https://images.unsplash.com/photo-1568495248636-6432b97bd949?w=800&q=80"
     },
     {
       "hotel_name_en": "Stella Grand",
@@ -141,7 +148,8 @@
         "triple": 5880
       },
       "price_egp": 7350,
-      "price_usd_reference": 245
+      "price_usd_reference": 245,
+      "image_url": "https://images.unsplash.com/photo-1564501049412-61c2a3083791?w=800&q=80"
     },
     {
       "hotel_name_en": "Tolip Majestic El Galala",
@@ -158,7 +166,8 @@
         "triple": 5100
       },
       "price_egp": 5960,
-      "price_usd_reference": 199
+      "price_usd_reference": 199,
+      "image_url": "https://images.unsplash.com/photo-1571003123894-1f0594d2b5d9?w=800&q=80"
     },
     {
       "hotel_name_en": "Tolip Resort El Galala Hills",
@@ -175,7 +184,8 @@
         "triple": 6030
       },
       "price_egp": 6615,
-      "price_usd_reference": 221
+      "price_usd_reference": 221,
+      "image_url": "https://images.unsplash.com/photo-1445019980597-93fa8acb246c?w=800&q=80"
     },
     {
       "hotel_name_en": "Coral Sea Beach Resort & Aqua Park",
@@ -192,7 +202,8 @@
         "triple": 8490
       },
       "price_egp": 8150,
-      "price_usd_reference": 272
+      "price_usd_reference": 272,
+      "image_url": "https://images.unsplash.com/photo-1553653924-39b70295f8da?w=800&q=80"
     },
     {
       "hotel_name_en": "TANOAK Resort",
@@ -209,7 +220,8 @@
         "triple": 13530
       },
       "price_egp": 13820,
-      "price_usd_reference": 461
+      "price_usd_reference": 461,
+      "image_url": "https://images.unsplash.com/photo-1587474260584-136574528ed5?w=800&q=80"
     },
     {
       "hotel_name_en": "Grand Ocean Hotel",
@@ -224,7 +236,8 @@
         "single": null,
         "double": null,
         "triple": null
-      }
+      },
+      "image_url": "https://images.unsplash.com/photo-1602002418082-a4443e081dd1?w=800&q=80"
     }
   ],
   "includes": {

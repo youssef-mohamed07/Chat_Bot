@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import type { Language } from '../types'
+import type { Language } from '../shared'
 
 // Helper to format date as YYYY-MM-DD
 const formatDate = (date: Date): string => {
@@ -758,9 +758,18 @@ export const HotelCardsWidget = ({ hotels, lang, onSelectHotel, responsive }: Ho
                   src={hotel.image}
                   alt={lang === 'ar' ? hotel.hotel_name_ar : hotel.hotel_name_en}
                   className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
-                  loading={hotel.lazy ? 'lazy' : 'eager'}
+                  loading="eager"
+                  crossOrigin="anonymous"
+                  onLoad={() => console.log('✅ Image loaded:', hotel.image)}
                   onError={(e) => {
-                    (e.target as HTMLImageElement).style.display = 'none'
+                    console.error('❌ Image failed to load:', hotel.image)
+                    const img = e.target as HTMLImageElement
+                    // Try loading without params
+                    if (img.src.includes('?')) {
+                      img.src = img.src.split('?')[0]
+                    } else {
+                      img.style.display = 'none'
+                    }
                   }}
                 />
               ) : (
@@ -863,6 +872,9 @@ export const BookingSummaryWidget = ({
     startDate?: string
     endDate?: string
     budget?: any
+    customerName?: string
+    customerPhone?: string
+    customerEmail?: string
   }
   actions?: Array<{ text_ar: string; text_en: string; value: string; variant?: string }>
   lang: Language
@@ -970,6 +982,19 @@ export const BookingSummaryWidget = ({
             </div>
           </div>
         )}
+
+        {/* Customer Info */}
+        {data.customerName && (
+          <div className="flex items-start gap-2 bg-gradient-to-r from-blue-50 to-indigo-50 rounded-lg p-2 shadow-sm border border-blue-100">
+            <span className="text-lg">👤</span>
+            <div className="flex-1">
+              <p className="text-[9px] text-gray-500 mb-0.5">{lang === 'ar' ? 'بيانات الحجز' : 'Booking Details'}</p>
+              <p className="font-semibold text-[10px] text-gray-800">{data.customerName}</p>
+              {data.customerPhone && <p className="text-[9px] text-gray-600">📱 {data.customerPhone}</p>}
+              {data.customerEmail && <p className="text-[9px] text-gray-600">✉️ {data.customerEmail}</p>}
+            </div>
+          </div>
+        )}
       </div>
 
       {/* Actions */}
@@ -997,6 +1022,149 @@ export const BookingSummaryWidget = ({
           })}
         </div>
       )}
+    </div>
+  )
+}
+
+// Contact Info Widget - لجمع بيانات العميل
+export const ContactInfoWidget = ({
+  title_ar,
+  title_en,
+  lang,
+  onSubmit
+}: {
+  title_ar?: string
+  title_en?: string
+  lang: Language
+  onSubmit: (data: { name: string; phone: string; email: string }) => void
+}) => {
+  const [name, setName] = useState('')
+  const [phone, setPhone] = useState('')
+  const [email, setEmail] = useState('')
+  const [errors, setErrors] = useState<{ name?: string; phone?: string; email?: string }>({})
+
+  const validate = () => {
+    const newErrors: { name?: string; phone?: string; email?: string } = {}
+    
+    if (!name.trim()) {
+      newErrors.name = lang === 'ar' ? 'الاسم مطلوب' : 'Name is required'
+    }
+    
+    if (!phone.trim()) {
+      newErrors.phone = lang === 'ar' ? 'رقم الهاتف مطلوب' : 'Phone is required'
+    } else if (phone.replace(/[^0-9]/g, '').length < 10) {
+      newErrors.phone = lang === 'ar' ? 'رقم غير صحيح (10 أرقام على الأقل)' : 'Invalid phone (min 10 digits)'
+    }
+    
+    if (!email.trim()) {
+      newErrors.email = lang === 'ar' ? 'البريد الإلكتروني مطلوب' : 'Email is required'
+    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+      newErrors.email = lang === 'ar' ? 'بريد إلكتروني غير صحيح' : 'Invalid email'
+    }
+    
+    setErrors(newErrors)
+    return Object.keys(newErrors).length === 0
+  }
+
+  const handleSubmit = () => {
+    if (validate()) {
+      onSubmit({ name: name.trim(), phone: phone.trim(), email: email.trim() })
+    }
+  }
+
+  return (
+    <div className="mt-3 p-4 border-2 rounded-xl shadow-sm" style={{
+      borderColor: '#7A0C2E20',
+      background: 'linear-gradient(135deg, #FFF5F7 0%, #ffffff 100%)'
+    }} dir={lang === 'ar' ? 'rtl' : 'ltr'}>
+      {/* Header */}
+      <div className="flex items-center gap-2 mb-3">
+        <div className="bg-gradient-to-br from-[#7A0C2E] to-[#991B1B] p-1.5 rounded-lg">
+          <svg className="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+          </svg>
+        </div>
+        <h3 className="text-sm font-bold" style={{ color: '#7A0C2E' }}>
+          {lang === 'ar' ? (title_ar || 'بياناتك للتواصل') : (title_en || 'Your Contact Details')}
+        </h3>
+      </div>
+
+      <p className="text-xs text-gray-600 mb-3">
+        {lang === 'ar' 
+          ? 'نحتاج بعض البيانات للتواصل معك وتأكيد الحجز'
+          : 'We need some details to contact you and confirm the booking'}
+      </p>
+
+      {/* Form Fields */}
+      <div className="space-y-3">
+        {/* Name */}
+        <div>
+          <label className="block text-xs font-medium mb-1" style={{ color: '#374151' }}>
+            {lang === 'ar' ? '👤 الاسم الكامل' : '👤 Full Name'}
+          </label>
+          <input
+            type="text"
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+            placeholder={lang === 'ar' ? 'أحمد محمد' : 'John Doe'}
+            className="w-full border-2 rounded-lg px-3 py-2 text-sm focus:ring-2 transition-all"
+            style={{
+              borderColor: errors.name ? '#DC2626' : '#7A0C2E40',
+              outlineColor: '#7A0C2E'
+            }}
+          />
+          {errors.name && <p className="text-[10px] text-red-600 mt-1">{errors.name}</p>}
+        </div>
+
+        {/* Phone */}
+        <div>
+          <label className="block text-xs font-medium mb-1" style={{ color: '#374151' }}>
+            {lang === 'ar' ? '📱 رقم الهاتف' : '📱 Phone Number'}
+          </label>
+          <input
+            type="tel"
+            value={phone}
+            onChange={(e) => setPhone(e.target.value)}
+            placeholder={lang === 'ar' ? '01012345678' : '+20 1012345678'}
+            className="w-full border-2 rounded-lg px-3 py-2 text-sm focus:ring-2 transition-all"
+            style={{
+              borderColor: errors.phone ? '#DC2626' : '#7A0C2E40',
+              outlineColor: '#7A0C2E'
+            }}
+          />
+          {errors.phone && <p className="text-[10px] text-red-600 mt-1">{errors.phone}</p>}
+        </div>
+
+        {/* Email */}
+        <div>
+          <label className="block text-xs font-medium mb-1" style={{ color: '#374151' }}>
+            {lang === 'ar' ? '📧 البريد الإلكتروني' : '📧 Email Address'}
+          </label>
+          <input
+            type="email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            placeholder={lang === 'ar' ? 'ahmed@example.com' : 'john@example.com'}
+            className="w-full border-2 rounded-lg px-3 py-2 text-sm focus:ring-2 transition-all"
+            style={{
+              borderColor: errors.email ? '#DC2626' : '#7A0C2E40',
+              outlineColor: '#7A0C2E'
+            }}
+          />
+          {errors.email && <p className="text-[10px] text-red-600 mt-1">{errors.email}</p>}
+        </div>
+
+        {/* Submit Button */}
+        <button
+          onClick={handleSubmit}
+          className="w-full px-4 py-2.5 text-sm font-semibold rounded-lg text-white transition-all shadow-sm hover:shadow-md"
+          style={{ backgroundColor: '#7A0C2E' }}
+          onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#991B1B'}
+          onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#7A0C2E'}
+        >
+          {lang === 'ar' ? '✓ تأكيد البيانات' : '✓ Confirm Details'}
+        </button>
+      </div>
     </div>
   )
 }

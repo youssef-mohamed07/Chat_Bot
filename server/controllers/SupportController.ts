@@ -1,5 +1,5 @@
 import type { Request, Response } from 'express'
-import type { SupportRequest, SupportResponse } from '../types/index.js'
+import type { SupportRequest, SupportResponse } from '../shared.js'
 import { EmailService } from '../services/index.js'
 
 export class SupportController {
