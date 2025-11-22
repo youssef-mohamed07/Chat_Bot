@@ -1,4 +1,4 @@
-import type { Language, ChatMessage, ButtonOption } from '../shared'
+import type { Language, FrontendChatMessage as ChatMessage, ButtonOption } from '@/types/index'
 import { ChatHeader, ChatFooter } from './ChatUI'
 import { MessagesList } from './ChatMessages'
 import { SupportModal } from './ChatUI'

@@ -1,6 +1,6 @@
 "use client"
 import { useState } from 'react'
-import type { Language, ContactInfo } from '../shared'
+import type { Language, ContactInfo } from '@/types/index'
 import { useChatWidget, useSupportModal } from '../hooks/useChatWidget'
 import { 
  LanguageSelector,

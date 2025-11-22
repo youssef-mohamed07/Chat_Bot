@@ -1,6 +1,9 @@
 import { useState, useRef, useEffect } from 'react'
-import type { ChatMessage, Language, SupportRequest, ButtonOption } from '../shared'
-import { API_ENDPOINTS, LABELS, generateUserId, eventBus, Plugins } from '../shared'
+import type { FrontendChatMessage as ChatMessage, Language, SupportRequest, ButtonOption } from '@/types/index'
+import { API_ENDPOINTS, LABELS } from '@/config/index'
+import { generateUserId } from '@/utils/index'
+import { eventBus } from '@/utils/eventBus'
+import { Plugins } from '@/utils/plugins'
 
 export const useChatWidget = () => {
  const [isOpen, setIsOpen] = useState(false)

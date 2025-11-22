@@ -1,4 +1,4 @@
-import type { ChatMessage } from '../shared.js'
+import type { ChatMessage } from '../types/index.js'
 
 export class SessionManager {
  private sessions = new Map<string, ChatMessage[]>()

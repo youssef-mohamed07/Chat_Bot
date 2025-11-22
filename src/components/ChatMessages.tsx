@@ -4,8 +4,8 @@
 // ===================================
 
 import { useEffect, useRef } from 'react'
-import type { ChatMessage, Language, ButtonOption } from '../shared'
-import { formatTime } from '../shared'
+import type { FrontendChatMessage as ChatMessage, Language, ButtonOption } from '@/types/index'
+import { formatTime } from '@/utils/index'
 import { TripCard, SkeletonBubble } from './ChatUI'
 import { 
   DateRangeWidget, 

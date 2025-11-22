@@ -4,8 +4,8 @@
 // ===================================
 
 import { useState, useRef, useEffect } from 'react'
-import type { Language } from '../shared'
-import { PLACEHOLDERS, LABELS } from '../shared'
+import type { Language } from '@/types/index'
+import { PLACEHOLDERS, LABELS } from '@/config/index'
 
 // ============ CHAT COMPONENTS (from ChatComponents.tsx) ============
 

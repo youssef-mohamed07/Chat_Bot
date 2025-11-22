@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import type { Language } from '../shared'
+import type { Language } from '@/types/index'
 
 // Helper to format date as YYYY-MM-DD
 const formatDate = (date: Date): string => {

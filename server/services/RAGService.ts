@@ -1,6 +1,6 @@
 import fs from 'fs'
 import path from 'path'
-import type { RAGChunk, RAGQueryOptions, RAGResult, Language } from '../shared.js'
+import type { RAGChunk, RAGQueryOptions, RAGResult, Language } from '../types/index.js'
 
 type AnyJson = Record<string, any>
 

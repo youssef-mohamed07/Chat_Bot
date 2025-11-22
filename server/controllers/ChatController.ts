@@ -1,5 +1,5 @@
 import type { Request, Response } from 'express'
-import type { ChatRequest, ChatResponse, Language } from '../shared.js'
+import type { ChatRequest, ChatResponse, Language } from '../types/index.js'
 import { GeminiService } from '../services/GeminiService.js'
 import { SessionManager } from '../services/SessionManager.js'
 import { ragService } from '../services/RAGService.js'
@@ -253,7 +253,8 @@ export class ChatController {
           budget: typeof meta.budget === 'object' ? meta.budget : undefined,
           customerName: meta.customerName || 'عميل',
           customerPhone: meta.customerPhone || '201145389973',
-          customerEmail: meta.customerEmail || 'booking@quickair.com'
+          customerEmail: meta.customerEmail || 'booking@quickair.com',
+          language: lang
         }
         
         // Send WhatsApp notification (non-blocking)
@@ -267,7 +268,9 @@ export class ChatController {
           })
           .catch(err => console.error('❌ WhatsApp error:', err))
         
-        userMessage = lang === 'ar' ? 'أريد تأكيد الحجز' : 'I want to confirm the booking'
+        userMessage = lang === 'ar' 
+          ? 'تم تأكيد الحجز بنجاح! سيتواصل معك فريقنا قريباً عبر واتساب لاستكمال الإجراءات.'
+          : 'Booking confirmed successfully! Our team will contact you soon via WhatsApp to complete the process.'
       } else if (message === 'modify_booking') {
         console.log(`✏️ User wants to modify booking`)
         this.sessionManager.updateMeta(userId, { step: 'booking_modification', previousStep })
@@ -1492,8 +1495,7 @@ export class ChatController {
           customerEmail: meta.customerEmail
         },
         actions: [
-          { text_ar: '✅ تأكيد الحجز', text_en: '✅ Confirm Booking', value: 'confirm_booking', variant: 'primary' },
-          { text_ar: '🔙 تعديل', text_en: '🔙 Modify', value: 'modify_booking', variant: 'outline' }
+          { text_ar: '✅ تأكيد الحجز', text_en: '✅ Confirm Booking', value: 'confirm_booking', variant: 'primary' }
         ]
       })
       return { blocks }

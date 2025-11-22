@@ -10,15 +10,24 @@
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true,
     "outDir": "./dist",
-    "rootDir": "./",
     "declaration": true,
     "declarationMap": true,
     "sourceMap": true,
-    "resolveJsonModule": true
+    "resolveJsonModule": true,
+    "baseUrl": ".",
+    "paths": {
+      "@shared/*": ["../shared/*"],
+      "@config/*": ["./config/*"],
+      "@utils/*": ["./utils/*"],
+      "@middleware/*": ["./middleware/*"],
+      "@services/*": ["./services/*"],
+      "@controllers/*": ["./controllers/*"]
+    }
   },
   "include": [
     "**/*.ts",
-    "server.js"
+    "server.js",
+    "../shared/**/*.ts"
   ],
   "exclude": [
     "node_modules",
