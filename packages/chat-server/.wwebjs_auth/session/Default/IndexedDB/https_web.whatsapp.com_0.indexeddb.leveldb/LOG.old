@@ -1,0 +1,24 @@
+2025/11/27-01:27:34.419 3eec Reusing MANIFEST E:\Blur\BOT\Chat_Bot\packages\chat-server\.wwebjs_auth\session\Default\IndexedDB\https_web.whatsapp.com_0.indexeddb.leveldb/MANIFEST-000001
+2025/11/27-01:27:34.422 3eec Recovering log #4959
+2025/11/27-01:27:34.729 3eec Reusing old log E:\Blur\BOT\Chat_Bot\packages\chat-server\.wwebjs_auth\session\Default\IndexedDB\https_web.whatsapp.com_0.indexeddb.leveldb/004959.log 
+2025/11/27-01:27:39.977 82f8 Level-0 table #4999: started
+2025/11/27-01:27:40.051 82f8 Level-0 table #4999: 797403 bytes OK
+2025/11/27-01:27:40.102 82f8 Delete type=0 #4959
+2025/11/27-01:27:40.102 82f8 Manual compaction at level-0 from '\x00W\x00\x00\x00' @ 72057594037927935 : 1 .. '\x00X\x00\x00\x00' @ 0 : 0; will stop at '\x00W\x00\x00\x05' @ 14684037 : 1
+2025/11/27-01:27:40.110 82f8 Compacting 1@0 + 1@1 files
+2025/11/27-01:27:40.274 82f8 Generated table #5000@0: 11073 keys, 219559 bytes
+2025/11/27-01:27:40.310 82f8 Generated table #5001@0: 1126 keys, 129003 bytes
+2025/11/27-01:27:40.351 82f8 Generated table #5002@0: 491 keys, 29743 bytes
+2025/11/27-01:27:40.394 82f8 Generated table #5003@0: 124 keys, 3242 bytes
+2025/11/27-01:27:40.394 82f8 Compacted 1@0 + 1@1 files => 381547 bytes
+2025/11/27-01:27:40.442 82f8 compacted to: files[ 0 4 43 0 0 0 0 ]
+2025/11/27-01:27:40.444 82f8 Delete type=2 #4999
+2025/11/27-01:27:40.444 82f8 Manual compaction at level-0 from '\x00W\x00\x00\x05' @ 14684037 : 1 .. '\x00X\x00\x00\x00' @ 0 : 0; will stop at (end)
+2025/11/27-01:27:44.179 3a48 Compacting 1@1 + 11@2 files
+2025/11/27-01:27:45.170 3a48 Generated table #5004@1: 36963 keys, 2201496 bytes
+2025/11/27-01:27:45.793 3a48 Generated table #5005@1: 18952 keys, 2220076 bytes
+2025/11/27-01:27:46.453 3a48 Generated table #5006@1: 29453 keys, 2328851 bytes
+2025/11/27-01:27:46.896 3a48 Generated table #5007@1: 18402 keys, 2334479 bytes
+2025/11/27-01:27:47.661 3a48 Generated table #5008@1: 19176 keys, 2251380 bytes
+2025/11/27-01:27:48.127 3a48 Generated table #5009@1: 8198 keys, 2131716 bytes
+2025/11/27-01:27:48.712 3a48 Generated table #5010@1: 10034 keys, 2131465 bytes

@@ -1,0 +1,46 @@
+# Source files
+src/
+public/
+
+# Development files
+*.ts
+!dist/**/*.d.ts
+tsconfig.json
+tsconfig.node.json
+vite.config.ts
+tailwind.config.js
+postcss.config.js
+
+# Examples and docs
+index.html
+.env.example
+
+# Build artifacts
+node_modules/
+.vite/
+.cache/
+
+# Git files
+.git/
+.gitignore
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Environment
+.env
+.env.local
+.env.*.local

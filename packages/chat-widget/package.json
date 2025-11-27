@@ -1,0 +1,70 @@
+{
+  "name": "@youssefmohamed07/chat-widget",
+  "version": "1.0.0",
+  "description": "QuickAir AI Chat Widget - React component for customer support",
+  "type": "module",
+  "main": "./dist/chat-widget.umd.js",
+  "module": "./dist/chat-widget.es.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/chat-widget.es.js",
+      "require": "./dist/chat-widget.umd.js"
+    },
+    "./dist/style.css": "./dist/chat-widget.css"
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "prepublishOnly": "npm run build"
+  },
+  "keywords": [
+    "chat",
+    "widget",
+    "chatbot",
+    "react",
+    "customer-support",
+    "ai",
+    "typescript",
+    "travel",
+    "booking"
+  ],
+  "author": "QuickAir",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/youssef-mohamed07/Chat_Bot.git",
+    "directory": "packages/chat-widget"
+  },
+  "homepage": "https://github.com/youssef-mohamed07/Chat_Bot#readme",
+  "bugs": {
+    "url": "https://github.com/youssef-mohamed07/Chat_Bot/issues"
+  },
+  "peerDependencies": {
+    "react": "^18.0.0 || ^19.0.0",
+    "react-dom": "^18.0.0 || ^19.0.0"
+  },
+  "dependencies": {
+    "axios": "^1.13.2",
+    "lucide-react": "^0.554.0"
+  },
+  "devDependencies": {
+    "@tailwindcss/postcss": "^4.1.14",
+    "@types/react": "^19.2.2",
+    "@types/react-dom": "^19.2.1",
+    "@vitejs/plugin-react": "^5.0.4",
+    "autoprefixer": "^10.4.21",
+    "postcss": "^8.5.6",
+    "react": "^19.2.0",
+    "react-dom": "^19.2.0",
+    "tailwindcss": "^4.1.14",
+    "typescript": "~5.9.3",
+    "vite": "^7.1.7",
+    "vite-plugin-dts": "^4.5.4"
+  }
+}

@@ -1,46 +1,21 @@
 {
-  "name": "chatbot",
+  "name": "quickair-chat-monorepo",
+  "version": "1.0.0",
   "private": true,
-  "version": "0.0.0",
   "type": "module",
+  "workspaces": [
+    "packages/*"
+  ],
   "scripts": {
-    "dev": "vite",
-    "build": "tsc && vite build",
-    "preview": "vite preview",
-    "build:server": "tsc --project server/tsconfig.json",
-    "server": "npm run build:server && node server/dist/server.js",
-    "server:dev": "npm run build:server && node --watch server/dist/server.js",
-    "start": "npm run server"
+    "dev:widget": "npm run dev --workspace=packages/chat-widget",
+    "dev:server": "npm run dev --workspace=packages/chat-server",
+    "dev": "concurrently \"npm run dev:widget\" \"npm run dev:server\"",
+    "build:widget": "npm run build --workspace=packages/chat-widget",
+    "build:server": "npm run build --workspace=packages/chat-server",
+    "build": "npm run build:widget && npm run build:server",
+    "start:server": "npm run start --workspace=packages/chat-server"
   },
   "devDependencies": {
-    "@tailwindcss/postcss": "^4.1.14",
-    "@types/cors": "^2.8.17",
-    "@types/express": "^4.17.21",
-    "@types/node": "^20.10.0",
-    "@types/nodemailer": "^6.4.14",
-    "@types/react": "^19.2.2",
-    "@types/react-dom": "^19.2.1",
-    "@vitejs/plugin-react": "^5.0.4",
-    "autoprefixer": "^10.4.21",
-    "pdf-parse": "^2.4.5",
-    "postcss": "^8.5.6",
-    "tailwindcss": "^4.1.14",
-    "typescript": "~5.9.3",
-    "vite": "^7.1.7"
-  },
-  "dependencies": {
-    "@types/sqlite3": "^3.1.11",
-    "axios": "^1.13.2",
-    "body-parser": "^2.2.0",
-    "cors": "^2.8.5",
-    "dotenv": "^17.2.3",
-    "express": "^5.1.0",
-    "lucide-react": "^0.554.0",
-    "node-fetch": "^3.3.2",
-    "nodemailer": "^7.0.9",
-    "pdf2json": "^4.0.0",
-    "react": "^19.2.0",
-    "react-dom": "^19.2.0",
-    "sqlite3": "^5.1.7"
+    "concurrently": "^8.2.2"
   }
 }

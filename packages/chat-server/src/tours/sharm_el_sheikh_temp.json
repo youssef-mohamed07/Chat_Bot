@@ -1,0 +1,363 @@
+{
+  "source": "sharm_el_sheikh_offers_images",
+  "location": "Sharm El Sheikh",
+  "type": "travel_offers",
+  "valid_months": [
+    "November",
+    "December"
+  ],
+  "hotels": [
+    {
+      "hotel_name_en": "Sharm Club Beach Resort",
+      "hotel_name_ar": "Sharm Club Beach Resort",
+      "stars": 4,
+      "area": "Sharm El Sheikh",
+      "room_type_en": "Standard Room - All Inclusive",
+      "room_type_ar": "غرفة قياسية - شامل جميع الوجبات",
+      "valid_from": "01 Nov",
+      "valid_to": "22 Dec",
+      "prices_egp": {
+        "single": 14110,
+        "double": 8820,
+        "triple": 8675
+      },
+      "price_egp": 8820,
+      "price_usd_reference": 294,
+      "image_url": "https://images.unsplash.com/photo-1571896349842-33c89424de2d?w=800&q=80"
+    },
+    {
+      "hotel_name_en": "Xperience St. George",
+      "hotel_name_ar": "Xperience St. George",
+      "stars": 4,
+      "area": "Sharm El Sheikh",
+      "room_type_en": "Standard Room - All Inclusive",
+      "room_type_ar": "غرفة قياسية - شامل جميع الوجبات",
+      "valid_from": "01 Nov",
+      "valid_to": "22 Dec",
+      "prices_egp": {
+        "single": 12465,
+        "double": 7790,
+        "triple": 7700
+      },
+      "price_egp": 7790,
+      "price_usd_reference": 260,
+      "image_url": "https://images.unsplash.com/photo-1566073771259-6a8506099945?w=800&q=80"
+    },
+    {
+      "hotel_name_en": "Dreams Vacation Resort",
+      "hotel_name_ar": "Dreams Vacation Resort",
+      "stars": 4,
+      "area": "Sharm El Sheikh",
+      "room_type_en": "Standard Room - All Inclusive",
+      "room_type_ar": "غرفة قياسية - شامل جميع الوجبات",
+      "valid_from": "01 Nov",
+      "valid_to": "22 Dec",
+      "prices_egp": {
+        "single": 12350,
+        "double": 8250,
+        "triple": 7950
+      },
+      "price_egp": 8250,
+      "price_usd_reference": 275,
+      "image_url": "https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?w=800&q=80"
+    },
+    {
+      "hotel_name_en": "JAZ Neo Naama Bay",
+      "hotel_name_ar": "JAZ Neo Naama Bay (ex. Sol Y Mar Naama Bay)",
+      "stars": 4,
+      "area": "Sharm El Sheikh",
+      "room_type_en": "Standard Room - All Inclusive",
+      "room_type_ar": "غرفة قياسية - شامل جميع الوجبات",
+      "valid_from": "01 Nov",
+      "valid_to": "30 Nov",
+      "prices_egp": {
+        "single": 21645,
+        "double": 15910,
+        "triple": 15630
+      },
+      "price_egp": 15910,
+      "price_usd_reference": 530,
+      "image_url": "https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?w=800&q=80"
+    },
+    {
+      "hotel_name_en": "Club Reef Resort",
+      "hotel_name_ar": "Club Reef Resort",
+      "stars": 4,
+      "area": "Sharm El Sheikh",
+      "room_type_en": "Standard Room - All Inclusive",
+      "room_type_ar": "غرفة قياسية - شامل جميع الوجبات",
+      "valid_from": "01 Nov",
+      "valid_to": "22 Dec",
+      "prices_egp": {
+        "single": 14110,
+        "double": 8820,
+        "triple": 8675
+      },
+      "price_egp": 8820,
+      "price_usd_reference": 294,
+      "image_url": "https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?w=800&q=80"
+    },
+    {
+      "hotel_name_en": "Albatros Sharm Resort",
+      "hotel_name_ar": "Albatros Sharm Resort",
+      "stars": 4,
+      "area": "Sharm El Sheikh",
+      "room_type_en": "Standard Room - All Inclusive",
+      "room_type_ar": "غرفة قياسية - شامل جميع الوجبات",
+      "valid_from": "01 Nov",
+      "valid_to": "22 Dec",
+      "prices_egp": {
+        "single": 24500,
+        "double": 13965,
+        "triple": 13100
+      },
+      "price_egp": 13965,
+      "price_usd_reference": 466,
+      "image_url": "https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?w=800&q=80"
+    },
+    {
+      "hotel_name_en": "Charmillion Sea Life",
+      "hotel_name_ar": "Charmillion Sea Life",
+      "stars": 4,
+      "area": "Sharm El Sheikh",
+      "room_type_en": "Standard Room - All Inclusive",
+      "room_type_ar": "غرفة قياسية - شامل جميع الوجبات",
+      "valid_from": "01 Nov",
+      "valid_to": "30 Nov",
+      "prices_egp": {
+        "single": 21180,
+        "double": 13230,
+        "triple": 13100
+      },
+      "price_egp": 13230,
+      "price_usd_reference": 441,
+      "image_url": "https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?w=800&q=80"
+    },
+    {
+      "hotel_name_en": "Marina Sharm Hotel",
+      "hotel_name_ar": "Marina Sharm Hotel",
+      "stars": 4,
+      "area": "Sharm El Sheikh",
+      "room_type_en": "Standard Room - All Inclusive",
+      "room_type_ar": "غرفة قياسية - شامل جميع الوجبات",
+      "valid_from": "01 Nov",
+      "valid_to": "30 Nov",
+      "prices_egp": {
+        "single": 23520,
+        "double": 14700,
+        "triple": 13820
+      },
+      "price_egp": 14700,
+      "price_usd_reference": 490,
+      "image_url": "https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?w=800&q=80"
+    },
+    {
+      "hotel_name_en": "Tamra Beach Resort",
+      "hotel_name_ar": "Tamra Beach Resort",
+      "stars": 4,
+      "area": "Sharm El Sheikh",
+      "room_type_en": "Standard Room - All Inclusive",
+      "room_type_ar": "غرفة قياسية - شامل جميع الوجبات",
+      "valid_from": "01 Nov",
+      "valid_to": "22 Dec",
+      "prices_egp": {
+        "single": 17640,
+        "double": 11025,
+        "triple": 10880
+      },
+      "price_egp": 11025,
+      "price_usd_reference": 368,
+      "image_url": "https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?w=800&q=80"
+    },
+    {
+      "hotel_name_en": "MOVENPICK Resort",
+      "hotel_name_ar": "MOVENPICK Resort",
+      "stars": 5,
+      "area": "Sharm El Sheikh",
+      "room_type_en": "Standard Room - All Inclusive",
+      "room_type_ar": "غرفة قياسية - شامل جميع الوجبات",
+      "valid_from": "01 Nov",
+      "valid_to": "26 Dec",
+      "prices_egp": {
+        "single": 19990,
+        "double": 12495,
+        "triple": 12450
+      },
+      "price_egp": 12495,
+      "price_usd_reference": 417,
+      "image_url": "https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?w=800&q=80"
+    },
+    {
+      "hotel_name_en": "Parrotel Lagoon Waterpark Resort",
+      "hotel_name_ar": "Parrotel Lagoon Waterpark Resort",
+      "stars": 5,
+      "area": "Sharm El Sheikh",
+      "room_type_en": "Standard Room - All Inclusive",
+      "room_type_ar": "غرفة قياسية - شامل جميع الوجبات",
+      "valid_from": "01 Nov",
+      "valid_to": "29 Dec",
+      "prices_egp": {
+        "single": 14400,
+        "double": 8990,
+        "triple": 8850
+      },
+      "price_egp": 8990,
+      "price_usd_reference": 300,
+      "image_url": "https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?w=800&q=80"
+    },
+    {
+      "hotel_name_en": "Concorde El Salam Front Hotel",
+      "hotel_name_ar": "Concorde El Salam Front Hotel",
+      "stars": 5,
+      "area": "Sharm El Sheikh",
+      "room_type_en": "Standard Room - All Inclusive",
+      "room_type_ar": "غرفة قياسية - شامل جميع الوجبات",
+      "valid_from": "01 Nov",
+      "valid_to": "30 Nov",
+      "prices_egp": {
+        "single": 24700,
+        "double": 15435,
+        "triple": 15300
+      },
+      "price_egp": 15435,
+      "price_usd_reference": 515,
+      "image_url": "https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?w=800&q=80"
+    },
+    {
+      "hotel_name_en": "Charmillion Club Aqua Park",
+      "hotel_name_ar": "Charmillion Club Aqua Park",
+      "stars": 5,
+      "area": "Sharm El Sheikh",
+      "room_type_en": "Standard Room - All Inclusive",
+      "room_type_ar": "غرفة قياسية - شامل جميع الوجبات",
+      "valid_from": "01 Nov",
+      "valid_to": "30 Nov",
+      "prices_egp": {
+        "single": 20730,
+        "double": 12950,
+        "triple": 12790
+      },
+      "price_egp": 12950,
+      "price_usd_reference": 432,
+      "image_url": "https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?w=800&q=80"
+    },
+    {
+      "hotel_name_en": "Xperience Kiroseiz Parkland",
+      "hotel_name_ar": "Xperience Kiroseiz Parkland",
+      "stars": 5,
+      "area": "Sharm El Sheikh",
+      "room_type_en": "Standard Room - All Inclusive",
+      "room_type_ar": "غرفة قياسية - شامل جميع الوجبات",
+      "valid_from": "01 Nov",
+      "valid_to": "22 Dec",
+      "prices_egp": {
+        "single": 18850,
+        "double": 11760,
+        "triple": 11670
+      },
+      "price_egp": 11760,
+      "price_usd_reference": 392,
+      "image_url": "https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?w=800&q=80"
+    },
+    {
+      "hotel_name_en": "Dreams Beach Resort",
+      "hotel_name_ar": "Dreams Beach Resort",
+      "stars": 5,
+      "area": "Sharm El Sheikh",
+      "room_type_en": "Standard Room - All Inclusive",
+      "room_type_ar": "غرفة قياسية - شامل جميع الوجبات",
+      "valid_from": "01 Nov",
+      "valid_to": "22 Dec",
+      "prices_egp": {
+        "single": 14550,
+        "double": 9700,
+        "triple": 9400
+      },
+      "price_egp": 9700,
+      "price_usd_reference": 323,
+      "image_url": "https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?w=800&q=80"
+    },
+    {
+      "hotel_name_en": "Cleopatra Luxury Sharm El Sheikh",
+      "hotel_name_ar": "Cleopatra Luxury Sharm El Sheikh",
+      "stars": 5,
+      "area": "Sharm El Sheikh",
+      "room_type_en": "Standard Room - All Inclusive",
+      "room_type_ar": "غرفة قياسية - شامل جميع الوجبات",
+      "valid_from": "01 Nov",
+      "valid_to": "27 Dec",
+      "prices_egp": {
+        "single": 19990,
+        "double": 12500,
+        "triple": 12450
+      },
+      "price_egp": 12500,
+      "price_usd_reference": 417,
+      "image_url": "https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?w=800&q=80"
+    },
+    {
+      "hotel_name_en": "SUNRISE Diamond Beach Resort",
+      "hotel_name_ar": "SUNRISE Diamond Beach Resort",
+      "stars": 5,
+      "area": "Sharm El Sheikh",
+      "room_type_en": "Standard Room - All Inclusive",
+      "room_type_ar": "غرفة قياسية - شامل جميع الوجبات",
+      "valid_from": "18 Nov",
+      "valid_to": "27 Dec",
+      "prices_egp": {
+        "single": 24255,
+        "double": 16170,
+        "triple": 15876
+      },
+      "price_egp": 16170,
+      "price_usd_reference": 539,
+      "image_url": "https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?w=800&q=80"
+    },
+    {
+      "hotel_name_en": "Pickalbatros Aqua Park",
+      "hotel_name_ar": "Pickalbatros Aqua Park",
+      "stars": 5,
+      "area": "Sharm El Sheikh",
+      "room_type_en": "Standard Room - All Inclusive",
+      "room_type_ar": "غرفة قياسية - شامل جميع الوجبات",
+      "valid_from": "01 Nov",
+      "valid_to": "30 Nov",
+      "prices_egp": {
+        "single": 29585,
+        "double": 16900,
+        "triple": 15780
+      },
+      "price_egp": 16900,
+      "price_usd_reference": 563,
+      "image_url": "https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?w=800&q=80"
+    }
+  ],
+  "includes": {
+    "ar": [
+      "الإقامة بالفندق لمدة 4 أيام / 3 ليالي (مع إمكانية شم النسيم).",
+      "الوجبات (فطار + غداء + عشاء + مشروبات وسناكس)."
+    ],
+    "en": [
+      "Hotel stay for 4 days / 3 nights (Sham El Nessim available).",
+      "Meals include (Breakfast + Lunch + Dinner + Drinks & Snacks)."
+    ]
+  },
+  "not_included": {
+    "ar": [
+      "أي بنود غير مدرجة في البرنامج.",
+      "الانتقالات."
+    ],
+    "en": [
+      "Any items not listed in the program.",
+      "Transportation."
+    ]
+  },
+  "notes": {
+    "ar": "الأسعار قابلة للزيادة طبقاً لخطط أسعار الفنادق و الإمكانية وقت الحجز.",
+    "en": "Prices may increase depending on hotel pricing and room availability at booking time."
+  },
+  "currency": "EGP",
+  "usd_exchange_rate": 50,
+  "offer_type": "travel_package"
+}
+
